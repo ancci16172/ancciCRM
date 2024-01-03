@@ -1,0 +1,78 @@
+.aside {
+  height: calc(100vh - var(--nav-height));
+}
+
+.cuenta__container--title {
+  font-size: 1.1rem;
+  position: relative;
+  display: flex;
+  gap: 2rem;
+}
+
+.cuenta__title {
+  position: relative;
+  display: flex;
+}
+.cuenta__flecha::before {
+  content: "";
+  width: 14px;
+  height: 2px;
+  background-color: #839089;
+  transform: rotate(45deg);
+  position: absolute;
+  margin-top: 1px;
+}
+.cuenta__flecha::after {
+  content: "";
+
+  margin-top: 1px;
+  width: 14px;
+  margin-left: 10.5px;
+  height: 2px;
+  transform: rotate(-45deg);
+  background-color: #839089;
+  position: absolute;
+}
+
+.text--item {
+  font-size: 0.8rem;
+}
+
+.division {
+  background-color: rgb(0, 0, 0, 0.1);
+  height: 0.0625rem;
+  margin: 0.5rem 1.4rem;
+}
+.check--options{
+    outline: none;
+}
+.check--options::before {
+  content: ""; /* Elimina cualquier contenido predeterminado */
+  display: inline-block;
+  width: 16px; /* Ancho deseado del checkbox */
+  height: 16px; /* Altura deseada del checkbox */
+  border: 1px solid #ccc; /* Color del borde del checkbox */
+  background-color: #ececec; /* Color de fondo del checkbox (no seleccionado) */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+.check--options:checked::before {
+  background-color: #27ae60	; /* Color de fondo del checkbox cuando está seleccionado */
+  border-color: #1976D2; /* Color del borde del checkbox cuando está seleccionado */
+}
+
+
+.btn{
+    border: 1px solid black;
+    display: inline-block;
+    padding: 5px;
+    border-radius: .3em;
+    cursor: pointer;
+}
+.btn:hover{
+    opacity: .85;
+}
+.btn--administrar-cuentas{
+    border-color: #3498db;
+    background-color: #81D4FA;
+}

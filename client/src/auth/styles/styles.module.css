@@ -1,0 +1,73 @@
+
+
+
+:root {
+    --primary--pink: white;
+    --color-fondo: #f2f2f2;
+    --tamanio-texto: 16px;
+  }
+
+.container--login{
+    
+    width: 420px;
+
+    margin: auto;
+    background-color: var(--primary--pink);
+    border: 1px solid var(--primary--pink);
+    /* box-shadow: 1px 1px 2px var(--primary--pink); */
+    box-shadow: 2px 2px .4rem gray;
+    display: grid;
+    grid-template-rows: 15% 1fr;
+    border-radius: .4rem;
+    overflow: hidden;
+    padding-inline: 4px;
+    padding-bottom: 4px;
+    min-height: 360px;
+    
+
+}
+.container--login__header{
+    display: grid;
+    
+    place-items: center;
+    font-size: 1.6rem;
+    color: black;
+    /* text-shadow: 1px 1px 6px gray; */
+    font-weight:bold;
+}
+
+.container--login__form{
+    padding: 12px 1rem 1rem;
+    border-radius: .8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: whitesmoke;
+}
+
+
+.container--login__input{
+    display: block;
+    width: 100%;
+    padding: .2em .5em;
+    border-radius: .25em;
+    border: 1px solid #AAA;
+    outline: none;
+    /* box-shadow: 1px 1px 2px lightskyblue; */
+}
+
+
+.container--login__input--submit{
+    margin-top: auto;
+    box-shadow: 2px 2px 2px 1px rgb(198, 198, 198);
+    /* background:linear-gradient(white 60%,rgb(246, 246, 246)); */
+    background : #333333;
+    color: white;
+    border-radius: 8px;
+    padding: .3rem;
+
+}
+.container--login__input--submit:hover{
+    box-shadow: 1px 1px 2px 1px rgb(198, 198, 198);
+    background: #555555;
+}

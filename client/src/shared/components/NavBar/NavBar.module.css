@@ -1,0 +1,18 @@
+
+.navbar--main{
+    /* box-shadow: 0px -2px 10px gray; */
+    height: var(--nav-height);
+    padding: 6px 2rem;
+    border-bottom: 2px solid #333;
+}
+
+.navbar--main__center{
+    color: #839089;
+}
+.navbar--main__left__circle{
+    background-color: #27AE60;
+    border-radius: 50%;
+    display: inline-block;
+    aspect-ratio: 1 / 1;
+    width: 2rem;
+}
