@@ -12,8 +12,8 @@ export const registrarUsuarioRequest = async ({usuario,contrasenia}) => {
 
 }
 export const getUsuario = async (searchObject) => {
-    const [response] = await pool.query(`SELECT * FROM usuarios where ?`,[searchObject])
-    return response[0]
+    const [response,query] = await pool.query(`SELECT * FROM usuarios where ?`,[searchObject]);
+    return response[0];
 }
 
 
