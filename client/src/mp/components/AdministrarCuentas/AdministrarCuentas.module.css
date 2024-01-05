@@ -1,0 +1,20 @@
+.container--appear {
+  position: absolute;
+  margin: auto;
+  width: 680px;
+  height: 436px;
+  inset: 0;
+  background-color: #fff;
+  transition: top .5s;
+}
+ 
+  .container--item__item {
+    height: 76.68px;
+  }
+
+.container--item__item__btn--editar {
+  color: var(--blue);
+}
+.container--item__item__btn--eliminar {
+  color: var(--red);
+}

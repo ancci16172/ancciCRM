@@ -29,9 +29,9 @@ export function MercadoPagoProvider({ children }) {
   const getPagos = async (values) => {
     try {
       const pagos = await getPagosRequest(values);
-      setPagos(pagos);
+      setPagos(pagos.data);
 
-      console.log(pagos);
+      console.log(pagos.data);
     } catch (error) {
       console.log(error);
     }

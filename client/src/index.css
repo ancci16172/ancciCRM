@@ -2,7 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{
-    --nav-height : 48px   
+:root {
+    --nav-height: 48px;
+    --blue: #3498DB;
+    --red : #E74C3C;
+    --light--green : #93d6af;
+    --green : #27ae60	;
 }
-
+.oculto{
+    top: -200vh;
+}

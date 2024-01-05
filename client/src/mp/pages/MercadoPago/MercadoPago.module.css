@@ -2,3 +2,9 @@
     padding: 1rem;
     padding-left: calc(12rem  + 1rem);
 }
+
+.list--pagos{
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}

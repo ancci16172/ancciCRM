@@ -1,0 +1,25 @@
+.container--appear {
+    position: absolute;
+    margin: auto;
+    width: 680px;
+    height: 436px;
+    inset: 0;
+    background-color: #fff;
+    transition: top .5s;
+  }
+
+  .container--items > *:nth-child(odd) {
+    background-color: #f9f9f9;
+  }
+  .container--items > *:nth-child(even) {
+    background-color: #f0f0f0;
+  }
+
+  .btn--green {
+    background-color: var(--light--green);
+  }
+  
+  .btn--green:hover {
+    opacity: 0.9;
+  }
+  

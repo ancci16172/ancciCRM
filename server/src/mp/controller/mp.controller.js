@@ -22,7 +22,8 @@ export const getPagos = async (req, res) => {
             operation_type : pago.operation_type,
             transaction_details : pago.transaction_details,
             payer_id  : pago.payer_id,
-            status : pago.status
+            status : pago.status,
+            payer : pago.payer
         })))
 
     } catch (error) {
