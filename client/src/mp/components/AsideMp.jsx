@@ -30,7 +30,7 @@ export function AsideMp() {
 
       <div className="mt-auto my-5 text-center">
         <div
-          className={styles["btn"] + " " + styles["btn--administrar-cuentas"]}
+          className={styles["btn"] + " " + styles["btn--celeste"]}
           onClick={(e) => setShowAdmin(true)}
         >
           Administrar cuentas

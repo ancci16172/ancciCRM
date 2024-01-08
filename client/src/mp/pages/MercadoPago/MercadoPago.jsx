@@ -13,6 +13,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import locale from "date-fns/locale/es";
 import { format } from "date-fns";
 import { CiCalendar } from "react-icons/ci";
+import { DateSelector } from "../../components/ui/DateSelector.jsx";
 
 export function Mercadopago() {
   const { pagos, getPagos } = useMercadoPago();
@@ -54,14 +55,10 @@ export function Mercadopago() {
 
           <div className="flex gap-3 ">
             <div className="relative">
-              <div
-                className="border border-slate-300 p-1 px-2 cursor-pointer grid items-center grid-flow-col gap-2 text-lg"
-                onClick={() => setShowDateRange(!showDateRange)}
-              >
+              <DateSelector onClick={() => setShowDateRange(!showDateRange)}>
                 {format(selectedDates.startDate, "dd/MM/yy")} -{" "}
                 {format(selectedDates.endDate, "dd/MM/yy")}
-                <CiCalendar />
-              </div>
+              </DateSelector>
               <div
                 className={
                   styles.dateSelector + " " + (showDateRange || "hidden")
@@ -76,7 +73,7 @@ export function Mercadopago() {
                 />
               </div>
             </div>
-            <span>Boton</span>
+            <span className="bg-celeste ">Consultar</span>
           </div>
         </div>
 
