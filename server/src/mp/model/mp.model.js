@@ -1,5 +1,6 @@
 import {getBody} from "../constants/AXIOS_BODY.js";
 import axios from "axios";
+import pool from "../../shared/model/mysql-pool.js";
 
 export const getPayments = async ({ MP_TOKEN = "APP_USR-1480419045433997-010116-082925371a6bdb414c95811e543c5e35-759250915", START, END, filtered = false }) => {
     try {
@@ -22,4 +23,33 @@ export const getPayments = async ({ MP_TOKEN = "APP_USR-1480419045433997-010116-
         throw new Error(error);
     }
 
+}
+
+
+
+export const getCuentasDisponibles = async () => {
+    try {
+        const [cuentas] = await pool.query(`SELECT * FROM mercadopago where ACTIVO = 1`);
+        return cuentas
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export const insertarCuentaDB = async ({ALIAS,TOKEN}) => {
+    try {
+        const [resultado] = await pool.query(`INSERT INTO mercadopago (ALIAS,TOKEN) VALUES (?,?) `,[ALIAS,TOKEN]);
+        return resultado
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export const editarCuentaDB = async (values,{ID_MP}) => {
+    try {
+        const [resultado] = await pool.query(`UPDATE mercadopago SET ? WHERE ? `,[values,{ID_MP}]);
+        return resultado
+    } catch (error) {
+        throw new Error(error)
+    }
 }

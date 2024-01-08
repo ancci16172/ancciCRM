@@ -1,6 +1,12 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { getPagosRequest } from "../api/mp.api";
+import {
+  editarCuentaRequest,
+  eliminarCuentaRequest,
+  getCuentasRequest,
+  getPagosRequest,
+  insertarCuentaRequest,
+} from "../api/mp.api";
 
 export const MercadoPagoContext = createContext();
 
@@ -14,17 +20,12 @@ export const useMercadoPago = () => {
 };
 
 export function MercadoPagoProvider({ children }) {
-  const [cuentas, setCuentas] = useState([
-    {
-      ALIAS: "Rodrigo",
-    },
-    {
-      ALIAS: "Alberto",
-    },
-  ]);
-  const [pagos,setPagos] = useState([]);
-  const [data,setData] = useState({MES : null,CUENTA : null})
-  
+  const [cuentas, setCuentas] = useState([]);
+  const [cuentaEdit, setCuentaEdit] = useState({});
+  const [pagos, setPagos] = useState([]);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [showAdd, setShowAdd] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const getPagos = async (values) => {
     try {
@@ -35,9 +36,48 @@ export function MercadoPagoProvider({ children }) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const getCuentas = async () => {
+    console.log("CONSULTANDO CUENTAS");
+    try {
+      const cuentas = await getCuentasRequest();
+      setCuentas(cuentas.data);
+    } catch (error) {
+      console.log("Error al consultar cuentas");
+      console.log(error);
+    }
+  };
+
+  const insertarCuenta = async (values) => {
+    try {
+      const resultado = await insertarCuentaRequest(values);
+      getCuentas();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const eliminarCuenta = async (values) => {
+    try {
+      const resultado = await eliminarCuentaRequest(values.ID_MP);
+      getCuentas();
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const editCuenta = async (values) => {
+    try {
+      const resultado = await editarCuentaRequest(values);
+      getCuentas();
+    } catch (error) {
+      console.log("error", error);
+    }
   }
 
-  
+  useEffect(() => {
+    getCuentas();
+  }, []);
 
   return (
     <MercadoPagoContext.Provider
@@ -45,10 +85,21 @@ export function MercadoPagoProvider({ children }) {
         cuentas,
         getPagos,
         pagos,
-        setData
+        showAdmin,
+        setShowAdmin,
+        getCuentas,
+        showAdd,
+        setShowAdd,
+        insertarCuenta,
+        eliminarCuenta,
+        showEdit,
+        setShowEdit,
+        cuentaEdit,
+        setCuentaEdit,
+        editCuenta
       }}
     >
-      <Outlet/>
+      <Outlet />
     </MercadoPagoContext.Provider>
   );
 }

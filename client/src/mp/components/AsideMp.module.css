@@ -1,7 +1,11 @@
 .aside {
   height: calc(100vh - var(--nav-height));
 }
-
+.container--cuentas{
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 50%;
+}
 .cuenta__container--title {
   font-size: 1.1rem;
   position: relative;
@@ -11,31 +15,48 @@
 
 .cuenta__title {
   position: relative;
-  display: flex;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+}
+
+.cuenta__flecha::before, .cuenta__flecha::after{
+  content: "";
+  width: 14px;
+  margin-top: 1px;
+  position: absolute;
+  position: absolute;
+  background-color: #839089;
+  height: 2px;
+  transition: transform .4s;
+
 }
 .cuenta__flecha::before {
-  content: "";
-  width: 14px;
-  height: 2px;
-  background-color: #839089;
+  right: 10.5px;
   transform: rotate(45deg);
-  position: absolute;
-  margin-top: 1px;
 }
 .cuenta__flecha::after {
-  content: "";
-
-  margin-top: 1px;
-  width: 14px;
-  margin-left: 10.5px;
-  height: 2px;
+  right: 0;
   transform: rotate(-45deg);
-  background-color: #839089;
-  position: absolute;
+}
+.cuenta__flecha--up::before{
+  transform: rotate(-45deg);
+
+}
+.cuenta__flecha--up::after{
+  transform: rotate(45deg);
 }
 
 .text--item {
   font-size: 0.8rem;
+}
+.cuenta .text--item {
+  display: none;
+}
+
+.cuenta .text--item--show {
+  display: block;
+  animation: appear .5s ease-out;
 }
 
 .division {
@@ -43,8 +64,8 @@
   height: 0.0625rem;
   margin: 0.5rem 1.4rem;
 }
-.check--options{
-    outline: none;
+.check--options {
+  outline: none;
 }
 .check--options::before {
   content: ""; /* Elimina cualquier contenido predeterminado */
@@ -57,22 +78,30 @@
 }
 
 .check--options:checked::before {
-  background-color: #27ae60	; /* Color de fondo del checkbox cuando está seleccionado */
-  border-color: #1976D2; /* Color del borde del checkbox cuando está seleccionado */
+  background-color: #27ae60; /* Color de fondo del checkbox cuando está seleccionado */
+  border-color: #1976d2; /* Color del borde del checkbox cuando está seleccionado */
 }
 
+.btn {
+  border: 1px solid black;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+.btn:hover {
+  opacity: 0.85;
+}
+.btn--administrar-cuentas {
+  border-color: #3498db;
+  background-color: #81d4fa;
+}
 
-.btn{
-    border: 1px solid black;
-    display: inline-block;
-    padding: 5px;
-    border-radius: .3em;
-    cursor: pointer;
-}
-.btn:hover{
-    opacity: .85;
-}
-.btn--administrar-cuentas{
-    border-color: #3498db;
-    background-color: #81D4FA;
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

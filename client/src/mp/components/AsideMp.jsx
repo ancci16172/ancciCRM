@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
 import { useMercadoPago } from "../context/MercadoPagoContext";
 import styles from "./AsideMp.module.css";
-export function AsideMp({ setShowAdmin }) {
-  const { cuentas } = useMercadoPago();
+import { AsideMpCuenta } from "./AsideMpCuenta.jsx";
+
+export function AsideMp() {
+  const { cuentas, setShowAdmin } = useMercadoPago();
 
   return (
     <aside
@@ -11,29 +12,13 @@ export function AsideMp({ setShowAdmin }) {
         styles.aside
       }
     >
-      <div>
-        <h2 className="text-center text-2xl my-2 mb-2">Cuentas</h2>
-
-        <div className={"px-7 " + styles["cuenta"]}>
-          <div className={" " + styles["cuenta__container--title"]}>
-            <span className={styles["cuenta__title"]}>Rodrigo</span>
-            <span className={styles["cuenta__flecha"] + " my-auto"}></span>
-          </div>
-
-          <ul className={styles["text--item"]}>
-            <li className="my-2">
-              <Link to="/MercadoPago?CUENTA=Rodrigo&MES=2024-01">Enero</Link>
-            </li>
-            <li className="my-2">
-              <Link to="/MercadoPago?CUENTA=Rodrigo&MES=2023-12">
-                Diciembre
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div className={styles.division} />
+      <h2 className="text-center text-2xl my-2 mb-2">Cuentas</h2>
+      <div className={styles["container--cuentas"]}>
+        {cuentas.map((cuenta) => (
+          <AsideMpCuenta cuenta={cuenta} key={cuenta.ID_MP} />
+        ))}
       </div>
+      <div className={styles.division} />
 
       <div>
         <h2 className="text-center text-2xl my-2 mb-2">Opciones</h2>

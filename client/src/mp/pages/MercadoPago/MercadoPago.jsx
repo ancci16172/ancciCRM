@@ -3,41 +3,87 @@ import { AsideMp } from "../../components/AsideMp";
 import styles from "./MercadoPago.module.css";
 import { useMercadoPago } from "../../context/MercadoPagoContext";
 import { useEffect, useState } from "react";
-import {PagoMp} from "../../components/PagoMp.jsx";
+import { PagoMp } from "../../components/PagoMp.jsx";
 import { AdministrarCuentas } from "../../components/AdministrarCuentas/AdministrarCuentas.jsx";
 import { AgregarCuentas } from "../../components/AdministrarCuentas/AgregarCuentas.jsx";
-
+import { EditarCuenta } from "../../components/AdministrarCuentas/EditarCuentas.jsx";
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import locale from "date-fns/locale/es";
+import { format } from "date-fns";
+import { CiCalendar } from "react-icons/ci";
 
 export function Mercadopago() {
-  const { pagos, getPagos, setData } = useMercadoPago();
+  const { pagos, getPagos } = useMercadoPago();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const CUENTA = query.get("CUENTA");
   const MES = query.get("MES");
 
-  const [showAdmin,setShowAdmin] = useState(false);
-  const [showAdd,setShowAdd] = useState(true);
-
   useEffect(() => {
     getPagos({ MES });
   }, [CUENTA, MES]);
 
-
-
+  const [selectedDates, setSelectedDates] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+  const handleDateSelect = (values) => {
+    console.log("valores de las fechas", values);
+    setSelectedDates(values.selection);
+  };
+  const [showDateRange, setShowDateRange] = useState(false);
 
   return (
-    <main >
-      <AsideMp setShowAdmin={setShowAdmin}/>
-      <AdministrarCuentas showAdmin={showAdmin} setShowAdmin={setShowAdmin}/>
-      <AgregarCuentas showAdd={showAdd} setShowAdd={setShowAdd}/>
-      
+    <main>
+      <AsideMp />
+      <AdministrarCuentas />
+      <AgregarCuentas />
+      <EditarCuenta />
+
       <section className={styles.section}>
-        <div>Menu de busqueda y filtro de fechas</div>
+        <h2 className="text-3xl mb-1 flex justify-between">
+          <span>{CUENTA}</span>
+          <span>$20.000</span>
+        </h2>
+
+        <div className="flex justify-between">
+          <div>Barra de busqueda</div>
+
+          <div className="flex gap-3 ">
+            <div className="relative">
+              <div
+                className="border border-slate-300 p-1 px-2 cursor-pointer grid items-center grid-flow-col gap-2 text-lg"
+                onClick={() => setShowDateRange(!showDateRange)}
+              >
+                {format(selectedDates.startDate, "dd/MM/yy")} -{" "}
+                {format(selectedDates.endDate, "dd/MM/yy")}
+                <CiCalendar />
+              </div>
+              <div
+                className={
+                  styles.dateSelector + " " + (showDateRange || "hidden")
+                }
+              >
+                <DateRange
+                  ranges={[selectedDates]}
+                  onChange={handleDateSelect}
+                  locale={locale}
+                  minDate={new Date("2024-01-01")}
+                  maxDate={new Date("2024-05-01")}
+                />
+              </div>
+            </div>
+            <span>Boton</span>
+          </div>
+        </div>
 
         <div className={styles["list--pagos"]}>
-
-          {pagos.map((pago,i) => <PagoMp key={i}/>)}
-
+          {pagos.map((pago, i) => (
+            <PagoMp key={i} />
+          ))}
         </div>
       </section>
     </main>
