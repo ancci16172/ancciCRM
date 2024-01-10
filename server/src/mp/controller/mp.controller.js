@@ -1,13 +1,41 @@
 
 import { limitDates } from "../../shared/lib/dates.js";
 import { editarCuentaDB, getCuentasDisponibles, getPayments, insertarCuentaDB } from "../model/mp.model.js";
-
-
+import { MercadoPagoConfig, Payment, PaymentMethod } from "mercadopago"
+import fs from "fs"
 //recibe
 /*{
     user
 } */
+
 export const getPagos = async (req, res) => {
+
+    const accessToken = "APP_USR-1480419045433997-010116-082925371a6bdb414c95811e543c5e35-759250915"
+    const client = new MercadoPagoConfig({ accessToken });
+    const payment = new Payment(client);
+    const { START, END } = limitDates("2023-12");
+
+    
+    const payments = await payment.search({
+        options : {begin_date : START,end_date : END , limit : 200}
+    })
+
+    const resultados = payments.results.map(pago => ({
+        id: pago.id,
+        date_created: pago.date_created,
+        date_approved: pago.date_approved,
+        operation_type: pago.operation_type,
+        transaction_details: pago.transaction_details,
+        payer_id: pago.payer_id,
+        status: pago.status,
+        payer: pago.payer,
+    }));
+    console.log("termino");
+    res.status(200).json(resultados)
+
+}
+
+export const getPagosViejo = async (req, res) => {
     try {
 
         const { MES } = req.body;
