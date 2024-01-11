@@ -1,6 +1,7 @@
 import { useMercadoPago } from "../context/MercadoPagoContext";
 import styles from "./AsideMp.module.css";
 import { AsideMpCuenta } from "./AsideMpCuenta.jsx";
+import { BtnCeleste } from "./ui/BtnCeleste.jsx";
 
 export function AsideMp() {
   const { cuentas, setShowAdmin } = useMercadoPago();
@@ -29,12 +30,9 @@ export function AsideMp() {
       </div>
 
       <div className="mt-auto my-5 text-center">
-        <div
-          className={styles["btn"] + " " + styles["btn--celeste"]}
-          onClick={(e) => setShowAdmin(true)}
-        >
+        <BtnCeleste onClick={(e) => setShowAdmin(true)}>
           Administrar cuentas
-        </div>
+        </BtnCeleste>
       </div>
     </aside>
   );

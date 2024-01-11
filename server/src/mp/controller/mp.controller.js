@@ -1,6 +1,6 @@
 
 import { limitDates } from "../../shared/lib/dates.js";
-import { editarCuentaDB, getCuentasDisponibles, getPayments, insertarCuentaDB } from "../model/mp.model.js";
+import { editarCuentaDB, getCuentasDisponibles, insertarCuentaDB } from "../model/mp.model.js";
 import { MercadoPagoConfig, Payment, PaymentMethod } from "mercadopago"
 import fs from "fs"
 //recibe
@@ -10,40 +10,23 @@ import fs from "fs"
 
 export const getPagos = async (req, res) => {
 
-    const accessToken = "APP_USR-1480419045433997-010116-082925371a6bdb414c95811e543c5e35-759250915"
-    const client = new MercadoPagoConfig({ accessToken });
-    const payment = new Payment(client);
-    const { START, END } = limitDates("2023-12");
 
-    
-    const payments = await payment.search({
-        options : {begin_date : START,end_date : END , limit : 200}
-    })
-
-    const resultados = payments.results.map(pago => ({
-        id: pago.id,
-        date_created: pago.date_created,
-        date_approved: pago.date_approved,
-        operation_type: pago.operation_type,
-        transaction_details: pago.transaction_details,
-        payer_id: pago.payer_id,
-        status: pago.status,
-        payer: pago.payer,
-    }));
-    console.log("termino");
-    res.status(200).json(resultados)
-
-}
-
-export const getPagosViejo = async (req, res) => {
     try {
+        const { CUENTA, START_DATE, END_DATE } = req.body;
+        const [accounts] = await getCuentasDisponibles([`ID_MP = ${CUENTA}`] );
+        if(!accounts)
+            return res.status(404).json({msg : "No se encontro la cuenta"})
+        
 
-        const { MES } = req.body;
-        const { START, END } = limitDates(MES);
-        const { results: pagos } = await getPayments({ START, END });
+        const client = new MercadoPagoConfig({ accessToken : accounts.TOKEN });
+        const payment = new Payment(client);
 
 
-        res.json(pagos.map(pago => ({
+        const payments = await payment.search({
+            options: { begin_date: new Date(START_DATE).toISOString(), end_date: new Date(END_DATE).toISOString(), limit: 200 }
+        })
+
+        const resultados = payments.results.map(pago => ({
             id: pago.id,
             date_created: pago.date_created,
             date_approved: pago.date_approved,
@@ -51,13 +34,17 @@ export const getPagosViejo = async (req, res) => {
             transaction_details: pago.transaction_details,
             payer_id: pago.payer_id,
             status: pago.status,
-            payer: pago.payer
-        })))
+            payer: pago.payer,
+        }));
+        res.status(200).json(resultados)
 
     } catch (error) {
-        console.log(error);
-        res.send("error")
+        console.log("error:", error)
+        res.status(500).json({ msg: "Error al consultar los pagos de la cuenta" })
     }
+
+    console.log("termino");
+
 }
 
 

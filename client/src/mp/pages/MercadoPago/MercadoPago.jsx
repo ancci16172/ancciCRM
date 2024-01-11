@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AsideMp } from "../../components/AsideMp";
 import styles from "./MercadoPago.module.css";
 import { useMercadoPago } from "../../context/MercadoPagoContext";
@@ -14,17 +14,20 @@ import locale from "date-fns/locale/es";
 import { format } from "date-fns";
 import { CiCalendar } from "react-icons/ci";
 import { DateSelector } from "../../components/ui/DateSelector.jsx";
+import { SearchBar } from "../../../shared/components/Search/SeachBar.jsx";
+import { BtnCeleste } from "../../components/ui/BtnCeleste.jsx";
 
 export function Mercadopago() {
-  const { pagos, getPagos } = useMercadoPago();
+  const { pagos, getPagos, cuenta } = useMercadoPago();
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const CUENTA = query.get("CUENTA");
-  const MES = query.get("MES");
-
+  const START_DATE = query.get("START_DATE");
+  const END_DATE = query.get("END_DATE");
+  const navigate = useNavigate();
   useEffect(() => {
-    getPagos({ MES });
-  }, [CUENTA, MES]);
+    getPagos({ CUENTA, START_DATE, END_DATE });
+  }, [CUENTA, START_DATE, END_DATE]);
 
   const [selectedDates, setSelectedDates] = useState({
     startDate: new Date(),
@@ -32,7 +35,6 @@ export function Mercadopago() {
     key: "selection",
   });
   const handleDateSelect = (values) => {
-    console.log("valores de las fechas", values);
     setSelectedDates(values.selection);
   };
   const [showDateRange, setShowDateRange] = useState(false);
@@ -45,16 +47,16 @@ export function Mercadopago() {
       <EditarCuenta />
 
       <section className={styles.section}>
-        <h2 className="text-3xl mb-1 flex justify-between">
+        <h2 className="text-3xl mb-2 flex justify-between">
           <span>{CUENTA}</span>
           <span>$20.000</span>
         </h2>
 
-        <div className="flex justify-between">
-          <div>Barra de busqueda</div>
+        <div className="flex justify-between gap-3 mb-3">
+          <SearchBar />
 
           <div className="flex gap-3 ">
-            <div className="relative">
+            <div className="relative z-10">
               <DateSelector onClick={() => setShowDateRange(!showDateRange)}>
                 {format(selectedDates.startDate, "dd/MM/yy")} -{" "}
                 {format(selectedDates.endDate, "dd/MM/yy")}
@@ -73,13 +75,26 @@ export function Mercadopago() {
                 />
               </div>
             </div>
-            <span className="bg-celeste ">Consultar</span>
+            <BtnCeleste
+              onClick={() => {
+                setShowDateRange(false);
+                navigate(
+                  `/Mercadopago?CUENTA=${CUENTA}&START_DATE=${
+                    selectedDates.startDate.toISOString().split("T")[0]
+                  }&END_DATE=${
+                    selectedDates.endDate.toISOString().split("T")[0]
+                  }`
+                );
+              }}
+            >
+              Consultar
+            </BtnCeleste>
           </div>
         </div>
 
         <div className={styles["list--pagos"]}>
           {pagos.map((pago, i) => (
-            <PagoMp key={i} />
+            <PagoMp key={i} pago={pago} />
           ))}
         </div>
       </section>
