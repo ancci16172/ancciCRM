@@ -1,5 +1,21 @@
-.pago{
+.pago {
     box-shadow: 1px 1px 3px 2px lightgray;
     padding: 5px 4px;
     border-radius: 3px;
-}   
+}
+
+.pagoAprobado {
+    background-color: #bef1d3;
+
+}
+
+.pagoEnProceso {
+    background-color: #ffffb9;
+}
+
+.pagoRechazado{
+    background-color: #ffc6c6cf;
+}
+.pagoReintegrado{
+    background: blue;
+}
