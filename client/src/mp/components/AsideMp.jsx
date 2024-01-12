@@ -2,6 +2,7 @@ import { useMercadoPago } from "../context/MercadoPagoContext";
 import styles from "./AsideMp.module.css";
 import { AsideMpCuenta } from "./AsideMpCuenta.jsx";
 import { BtnCeleste } from "./ui/BtnCeleste.jsx";
+import { OptionsCheckBox } from "./ui/OptionsCheckBox.jsx";
 
 export function AsideMp() {
   const { cuentas, setShowAdmin } = useMercadoPago();
@@ -23,10 +24,8 @@ export function AsideMp() {
 
       <div>
         <h2 className="text-center text-2xl my-2 mb-2">Opciones</h2>
-        <div className={styles["text--item"] + " flex px-7"}>
-          <input type="checkbox" className={styles["check--options"]} />
-          <span className="text-xs pl-2">Mostrar titulares</span>
-        </div>
+          <OptionsCheckBox>Mostrar titulares</OptionsCheckBox>
+          <OptionsCheckBox>Mostrar egresos</OptionsCheckBox>
       </div>
 
       <div className="mt-auto my-5 text-center">

@@ -59,7 +59,6 @@ export function AuthProvider({ children }) {
   }, [errors]);
 
   useEffect(() => {
-    console.log({ user, isAuthenticated });
     const checkLogin = async () => {
       const cookies = Cookies.get();
 

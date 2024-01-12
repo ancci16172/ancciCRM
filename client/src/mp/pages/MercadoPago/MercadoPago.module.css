@@ -1,6 +1,7 @@
 .section{
     padding: .5rem 1rem;
     padding-left: calc(12rem  + 1rem);
+    /* max-height: calc(100vh - 50px); */
 }
 
 .list--pagos{

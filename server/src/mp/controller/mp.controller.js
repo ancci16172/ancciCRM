@@ -13,17 +13,18 @@ export const getPagos = async (req, res) => {
 
     try {
         const { CUENTA, START_DATE, END_DATE } = req.body;
-        const [accounts] = await getCuentasDisponibles([`ID_MP = ${CUENTA}`] );
-        if(!accounts)
-            return res.status(404).json({msg : "No se encontro la cuenta"})
-        
+        const [accounts] = await getCuentasDisponibles([`ID_MP = ${CUENTA}`]);
+        if (!accounts)
+            return res.status(404).json({ msg: "No se encontro la cuenta" })
 
-        const client = new MercadoPagoConfig({ accessToken : accounts.TOKEN });
+
+        const client = new MercadoPagoConfig({ accessToken: accounts.TOKEN });
         const payment = new Payment(client);
 
-
+        const endDateObj = new Date(END_DATE);
+        endDateObj.setUTCDate(endDateObj.getUTCDate() + 1);
         const payments = await payment.search({
-            options: { begin_date: new Date(START_DATE).toISOString(), end_date: new Date(END_DATE).toISOString(), limit: 200 }
+            options: { criteria: "desc", begin_date: new Date(START_DATE).toISOString(), end_date: endDateObj.toISOString(), limit: 200 }
         })
 
         const resultados = payments.results.map(pago => ({
@@ -36,6 +37,8 @@ export const getPagos = async (req, res) => {
             status: pago.status,
             payer: pago.payer,
         }));
+
+        console.log("resultados.map(r => r.status):", JSON.stringify(resultados.map(r => r.status)))
         res.status(200).json(resultados)
 
     } catch (error) {
@@ -43,7 +46,6 @@ export const getPagos = async (req, res) => {
         res.status(500).json({ msg: "Error al consultar los pagos de la cuenta" })
     }
 
-    console.log("termino");
 
 }
 
@@ -57,7 +59,7 @@ export const getCuentas = async (req, res) => {
         res.status(200).json(cuentas);
 
     } catch (error) {
-        console.log(error);
+        console.log("getCuentasError", error);
         res.status(404).json({ msg: "No se pudieron consultar las cuentas disponibles" });
     }
 }

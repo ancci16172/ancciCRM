@@ -4,7 +4,7 @@
 import styles from "./PagoMp.module.css"
 
 export function PagoMp({pago}) {
-    const {id,date_created,net_received_amount,payer,transaction_details} = pago;
+    const {id,date_created,payer,transaction_details,status} = pago;
 
     return (
         <div className={styles.pago}>
@@ -14,7 +14,7 @@ export function PagoMp({pago}) {
             </div>
             <div>CUIL {payer?.identification.number}</div>
             <div>{date_created}</div>
-            <div>Estado: Aprobado</div>
+            <div>Estado: {status}</div>
         </div>
     )
 

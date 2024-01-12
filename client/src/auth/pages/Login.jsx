@@ -24,7 +24,6 @@ function Login() {
 
   const onSubmit = handleSubmit(async (values) => {
     console.log("trySubmit");
-    console.log(values);
     signIn(values);
 
     return;

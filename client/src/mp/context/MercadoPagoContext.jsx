@@ -26,23 +26,23 @@ export function MercadoPagoProvider({ children }) {
   const [showAdmin, setShowAdmin] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [filtro, setFiltro] = useState("");
+  const [isLoading, setLoading] = useState(true);
 
   const getPagos = async (values) => {
     try {
       const pagos = await getPagosRequest(values);
       setPagos(pagos.data);
-
-      console.log(pagos.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   const getCuentas = async () => {
-    console.log("CONSULTANDO CUENTAS");
     try {
       const cuentas = await getCuentasRequest();
       setCuentas(cuentas.data);
+      setLoading(false);
     } catch (error) {
       console.log("Error al consultar cuentas");
       console.log(error);
@@ -69,11 +69,11 @@ export function MercadoPagoProvider({ children }) {
   const editCuenta = async (values) => {
     try {
       const resultado = await editarCuentaRequest(values);
-      getCuentas();
+      await getCuentas();
     } catch (error) {
       console.log("error", error);
     }
-  }
+  };
 
   useEffect(() => {
     getCuentas();
@@ -96,10 +96,13 @@ export function MercadoPagoProvider({ children }) {
         setShowEdit,
         cuentaEdit,
         setCuentaEdit,
-        editCuenta
+        editCuenta,
+        setFiltro,
+        filtro,
+        isLoading,
       }}
     >
-      <Outlet />
+      {!isLoading ? <Outlet /> : <div>Cargando...</div>}
     </MercadoPagoContext.Provider>
   );
 }
