@@ -1,3 +1,4 @@
+import { getQuery } from "../../shared/lib/params.js";
 import { useMercadoPago } from "../context/MercadoPagoContext";
 import styles from "./AsideMp.module.css";
 import { AsideMpCuenta } from "./AsideMpCuenta.jsx";
@@ -5,7 +6,7 @@ import { BtnCeleste } from "./ui/BtnCeleste.jsx";
 import { OptionsCheckBox } from "./ui/OptionsCheckBox.jsx";
 
 export function AsideMp() {
-  const { cuentas, setShowAdmin } = useMercadoPago();
+  const { cuentas, setShowAdmin, setParams } = useMercadoPago();
 
   return (
     <aside
@@ -24,8 +25,17 @@ export function AsideMp() {
 
       <div>
         <h2 className="text-center text-2xl my-2 mb-2">Opciones</h2>
-          <OptionsCheckBox>Mostrar titulares</OptionsCheckBox>
-          <OptionsCheckBox>Mostrar egresos</OptionsCheckBox>
+        <OptionsCheckBox>Mostrar titulares</OptionsCheckBox>
+        <OptionsCheckBox
+          onChange={(e) =>
+            setParams((prev) => {
+              const query = getQuery(prev);
+              return { ...query, mostrarEgresos: 0 };
+            })
+          }
+        >
+          Mostrar egresos
+        </OptionsCheckBox>
       </div>
 
       <div className="mt-auto my-5 text-center">

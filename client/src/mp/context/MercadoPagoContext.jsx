@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useSearchParams } from "react-router-dom";
 import {
   editarCuentaRequest,
   eliminarCuentaRequest,
@@ -7,6 +7,7 @@ import {
   getPagosRequest,
   insertarCuentaRequest,
 } from "../api/mp.api";
+import { getQuery } from "../../shared/lib/params";
 
 export const MercadoPagoContext = createContext();
 
@@ -19,7 +20,7 @@ export const useMercadoPago = () => {
   return context;
 };
 
-export function MercadoPagoProvider({ children }) {
+export function MercadoPagoProvider({}) {
   const [cuentas, setCuentas] = useState([]);
   const [cuentaEdit, setCuentaEdit] = useState({});
   const [pagos, setPagos] = useState([]);
@@ -28,10 +29,12 @@ export function MercadoPagoProvider({ children }) {
   const [showEdit, setShowEdit] = useState(false);
   const [filtro, setFiltro] = useState("");
   const [isLoading, setLoading] = useState(true);
+  const [params, setParams] = useSearchParams();
 
   const getPagos = async (values) => {
     try {
       const pagos = await getPagosRequest(values);
+      console.log({"pagos" : pagos});
       setPagos(pagos.data);
     } catch (error) {
       console.log(error);
@@ -78,6 +81,19 @@ export function MercadoPagoProvider({ children }) {
   useEffect(() => {
     getCuentas();
   }, []);
+  let query = {};
+  useEffect(() => {
+    query = getQuery(params);
+    const { START_DATE, END_DATE, CUENTA } = query;
+    if (START_DATE && END_DATE && CUENTA)
+      getPagos(query);
+    
+  }, [params]);
+
+  const getCuentaSeleccionada = () => {
+    const query = getQuery(params);
+    return cuentas.filter((cuenta) => cuenta.ID_MP == query.CUENTA)[0];
+  };
 
   return (
     <MercadoPagoContext.Provider
@@ -100,6 +116,9 @@ export function MercadoPagoProvider({ children }) {
         setFiltro,
         filtro,
         isLoading,
+        setParams,
+        getCuentaSeleccionada,
+        query,
       }}
     >
       {!isLoading ? <Outlet /> : <div>Cargando...</div>}

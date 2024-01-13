@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { AsideMp } from "../../components/AsideMp";
 import styles from "./MercadoPago.module.css";
 import { useMercadoPago } from "../../context/MercadoPagoContext";
@@ -11,29 +11,18 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import locale from "date-fns/locale/es";
-import { format, getTime } from "date-fns";
+import { format } from "date-fns";
 import { DateSelector } from "../../components/ui/DateSelector.jsx";
 import { SearchBar } from "../../../shared/components/Search/SeachBar.jsx";
 import { BtnCeleste } from "../../components/ui/BtnCeleste.jsx";
 import { getToday } from "../../../../../server/src/lib/dates.js";
+import { getQuery } from "../../../shared/lib/params.js";
 
 export function Mercadopago() {
   const { todayDate: today } = getToday();
-  const { pagos, getPagos, filtro, setFiltro, cuentas} = useMercadoPago();
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  
-  const [CUENTA] = query.get("CUENTA")
-    ? cuentas.filter((cuenta) => cuenta.ID_MP == query.get("CUENTA"))
-    : [{ ALIAS: null, ID_MP: null }];
-  const START_DATE = query.get("START_DATE");
-  const END_DATE = query.get("END_DATE");
-  const buscandoPagos = START_DATE && END_DATE && query.get("CUENTA");
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (buscandoPagos) getPagos({ CUENTA: CUENTA.ID_MP, START_DATE, END_DATE });
-  }, [CUENTA, START_DATE, END_DATE]);
+  const { pagos, filtro, setFiltro, getCuentaSeleccionada, setParams, query } =
+    useMercadoPago();
+  const CUENTA = getCuentaSeleccionada();
 
   const [selectedDates, setSelectedDates] = useState({
     startDate: new Date(),
@@ -56,9 +45,9 @@ export function Mercadopago() {
       <AgregarCuentas />
       <EditarCuenta />
 
-      <section className={styles.section }>
+      <section className={styles.section}>
         <h2 className="text-3xl mb-2 flex justify-between">
-          <span>{CUENTA.ALIAS}</span>
+          <span>{CUENTA ? CUENTA.ALIAS : "Sin cuenta evaluada"}</span>
           <span>
             $
             {pagos
@@ -104,13 +93,18 @@ export function Mercadopago() {
             <BtnCeleste
               onClick={() => {
                 setShowDateRange(false);
-                navigate(
-                  `/Mercadopago?CUENTA=${CUENTA.ID_MP}&START_DATE=${
-                    selectedDates.startDate.toISOString().split("T")[0]
-                  }&END_DATE=${
-                    selectedDates.endDate.toISOString().split("T")[0]
-                  }`
-                );
+                  setParams((prev) => {
+                    const query = getQuery(prev);
+                    return {
+                      ...query,
+                      START_DATE: selectedDates.startDate
+                        .toISOString()
+                        .split("T")[0],
+                      END_DATE: selectedDates.endDate
+                        .toISOString()
+                        .split("T")[0],
+                    };
+                  });
               }}
             >
               Consultar
@@ -118,7 +112,7 @@ export function Mercadopago() {
           </div>
         </div>
 
-        {!pagosFiltrados.length && buscandoPagos && (
+        {!pagosFiltrados.length && (
           <div>
             No se han encontrado pagos que coincidan con su búsqueda actual.
             <br />
@@ -126,7 +120,7 @@ export function Mercadopago() {
             resultados.
           </div>
         )}
-        
+
         <div className={styles["list--pagos"]}>
           {pagosFiltrados.map((pago) => (
             <PagoMp key={pago.id} pago={pago} />

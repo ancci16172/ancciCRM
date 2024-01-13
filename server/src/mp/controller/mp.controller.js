@@ -12,7 +12,11 @@ export const getPagos = async (req, res) => {
 
 
     try {
-        const { CUENTA, START_DATE, END_DATE } = req.body;
+        const { CUENTA, START_DATE, END_DATE, } = req.body;
+        //Transformar en middleware parseIntMiddleware
+        const mostrarIngresos = req.body.mostrarIngresos ? parseInt(req.body.mostrarIngresos) : true;
+        const mostrarEgresos = req.body.mostrarEgresos ? parseInt(req.body.mostrarEgresos) : true;
+        console.log("body", req.body);
         const [accounts] = await getCuentasDisponibles([`ID_MP = ${CUENTA}`]);
         if (!accounts)
             return res.status(404).json({ msg: "No se encontro la cuenta" })
@@ -27,18 +31,26 @@ export const getPagos = async (req, res) => {
             options: { criteria: "desc", begin_date: new Date(START_DATE).toISOString(), end_date: endDateObj.toISOString(), limit: 200 }
         })
 
-        const resultados = payments.results.map(pago => ({
-            id: pago.id,
-            date_created: pago.date_created,
-            date_approved: pago.date_approved,
-            operation_type: pago.operation_type,
-            transaction_details: pago.transaction_details,
-            payer_id: pago.payer_id,
-            status: pago.status,
-            payer: pago.payer,
-        }));
-
-        console.log("resultados.map(r => r.status):", JSON.stringify(resultados.map(r => r.status)))
+        console.log({mostrarEgresos,mostrarIngresos});
+        const resultados = payments.results.filter(pago => {
+            if (!mostrarEgresos && pago.payer_id) return false;
+            if (!mostrarIngresos && !pago.payer_id) return false;
+            return true;
+        }).map(pago => {
+            const { id, date_created, date_approved, operation_type, transaction_details, payer_id, status, payer } = pago;
+            const date_createdDate = new Date(date_created);
+            const date_approvedDate = new Date(date_approved);
+            date_approvedDate.setUTCHours(date_approvedDate.getUTCHours() - 3)
+            date_createdDate.setUTCHours(date_createdDate.getUTCHours() - 3)
+            return {
+                id,
+                date_created: date_createdDate.toISOString(),
+                date_approved: date_approvedDate.toISOString(),
+                operation_type, transaction_details, payer_id, status, payer
+            }
+        }
+        );
+        console.log(resultados.length);
         res.status(200).json(resultados)
 
     } catch (error) {

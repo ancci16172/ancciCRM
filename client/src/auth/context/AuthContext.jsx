@@ -40,6 +40,7 @@ export function AuthProvider({ children }) {
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
+      console.log(error);
       setErrors(error.response.data);
     }
   };

@@ -4,7 +4,8 @@
 import styles from "./PagoMp.module.css"
 
 export function PagoMp({ pago }) {
-    const { id, date_created, payer, transaction_details, status } = pago;
+    const { id, date_created, payer, transaction_details, status,payer_id } = pago;
+    console.log("pago",pago);
     const stylesPagoContainer = {
         "approved": styles.pagoAprobado,
         "inprocess": styles.pagoEnProceso,
@@ -14,12 +15,11 @@ export function PagoMp({ pago }) {
         "refunded": styles.pagoReintegrado,
         "chargedback": styles.pagoReintegrado,
     }
-    console.log(status);
     return (
         <div className={styles.pago + " " + (stylesPagoContainer[status] || stylesPagoContainer["approved"])}>
             <div className="flex justify-between">
                 <span>{id}</span>
-                <span className="font-bold">${transaction_details.total_paid_amount}</span>
+                <span className={`font-bold ${payer_id ?  "text-[#ff8181]" : ""}`}>${transaction_details.total_paid_amount}</span>
             </div>
             <div>CUIL {payer?.identification.number}</div>
             <div>{date_created}</div>
