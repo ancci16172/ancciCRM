@@ -15,15 +15,21 @@ import {
 import { Cruz } from "../../../shared/icons/Cruz/Cruz.jsx";
 
 export function AgregarCuentas() {
-  const { showAdd, setShowAdd, insertarCuenta, getCuentas } = useMercadoPago();
+  const {
+    showAdd,
+    setShowAdd,
+    insertarCuenta,
+    getCuentas,
+    errors: errorsDb,
+  } = useMercadoPago();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  
   const onSubmit = async (values) => await insertarCuenta(values);
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,6 +69,12 @@ export function AgregarCuentas() {
           </div>
         </FormContainerItems>
         <FormContainerBottom>
+          {errorsDb.map((error) => (
+            <div className="justify-self-start px-4 text-rojo font-semibold ">
+              *{error.msg}
+            </div>
+          ))}
+
           <FormButton>Agregar nueva cuenta</FormButton>
         </FormContainerBottom>
       </FormContainer>

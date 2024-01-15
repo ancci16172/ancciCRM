@@ -18,10 +18,23 @@ import { BtnCeleste } from "../../components/ui/BtnCeleste.jsx";
 import { getToday } from "../../../../../server/src/lib/dates.js";
 import { getQuery } from "../../../shared/lib/params.js";
 
+/*
+  Local Storage for inputs:
+  mostrarTitulares : false
+  mostrarEgresos : false
+  mostrarIngresos : false   
+*/
+
 export function Mercadopago() {
   const { todayDate: today } = getToday();
-  const { pagos, filtro, setFiltro, getCuentaSeleccionada, setParams, query } =
-    useMercadoPago();
+  const {
+    pagos,
+    filtro,
+    setFiltro,
+    getCuentaSeleccionada,
+    setParams,
+    options,isLoadingPagos
+  } = useMercadoPago();
   const CUENTA = getCuentaSeleccionada();
 
   const [selectedDates, setSelectedDates] = useState({
@@ -33,13 +46,21 @@ export function Mercadopago() {
     setSelectedDates(values.selection);
   };
   const [showDateRange, setShowDateRange] = useState(false);
-
-  const pagosFiltrados = pagos.filter((pago) =>
-    JSON.stringify(pago).includes(filtro)
-  );
+  const [pagosFiltrados, setPagosFiltrados] = useState(pagos);
+  useEffect(() => {
+    setPagosFiltrados(
+      pagos.filter(
+        pago =>
+          JSON.stringify(pago).toLowerCase().includes(filtro.toLowerCase()) &&
+          ((pago.esIngreso && options.mostrarIngresos) ||
+            (pago.esEgreso && options.mostrarEgresos))
+      )
+    );
+    console.log(pagos);
+  }, [options,filtro,pagos]);
 
   return (
-    <main>
+    <main className={isLoadingPagos ?  "cursor-wait" : ""}>
       <AsideMp />
       <AdministrarCuentas />
       <AgregarCuentas />
@@ -93,18 +114,16 @@ export function Mercadopago() {
             <BtnCeleste
               onClick={() => {
                 setShowDateRange(false);
-                  setParams((prev) => {
-                    const query = getQuery(prev);
-                    return {
-                      ...query,
-                      START_DATE: selectedDates.startDate
-                        .toISOString()
-                        .split("T")[0],
-                      END_DATE: selectedDates.endDate
-                        .toISOString()
-                        .split("T")[0],
-                    };
-                  });
+                setParams((prev) => {
+                  const query = getQuery(prev);
+                  return {
+                    ...query,
+                    START_DATE: selectedDates.startDate
+                      .toISOString()
+                      .split("T")[0],
+                    END_DATE: selectedDates.endDate.toISOString().split("T")[0],
+                  };
+                });
               }}
             >
               Consultar
@@ -112,18 +131,24 @@ export function Mercadopago() {
           </div>
         </div>
 
-        {!pagosFiltrados.length && (
-          <div>
+        {!pagosFiltrados.length && !isLoadingPagos && (
+          <div className="my-2">
             No se han encontrado pagos que coincidan con su búsqueda actual.
             <br />
-            Le sugerimos ampliar el rango de búsqueda para obtener mas
+            Le sugerimos ampliar el rango de búsqueda o quitar filtros para obtener mas
             resultados.
+          </div>
+        )}
+
+        {isLoadingPagos && (
+          <div className="my-2">
+            Cargando pagos...
           </div>
         )}
 
         <div className={styles["list--pagos"]}>
           {pagosFiltrados.map((pago) => (
-            <PagoMp key={pago.id} pago={pago} />
+            <PagoMp key={pago.id} pago={pago} mostrarTitulares={options.mostrarTitulares} />
           ))}
         </div>
       </section>

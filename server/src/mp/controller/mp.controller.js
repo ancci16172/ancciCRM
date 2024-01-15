@@ -1,56 +1,22 @@
 
-import { limitDates } from "../../shared/lib/dates.js";
-import { editarCuentaDB, getCuentasDisponibles, insertarCuentaDB } from "../model/mp.model.js";
-import { MercadoPagoConfig, Payment, PaymentMethod } from "mercadopago"
-import fs from "fs"
-//recibe
-/*{
-    user
-} */
+import { editarCuentaDB, getCuentasDisponibles, insertarCuentaDB, searchPagosEnCuenta } from "../model/mp.model.js";
+import {formatPayments} from "../lib/formatPayments.js";
 
 export const getPagos = async (req, res) => {
 
-
     try {
-        const { CUENTA, START_DATE, END_DATE, } = req.body;
+        const { CUENTA, START_DATE, END_DATE } = req.body;
         //Transformar en middleware parseIntMiddleware
-        const mostrarIngresos = req.body.mostrarIngresos ? parseInt(req.body.mostrarIngresos) : true;
-        const mostrarEgresos = req.body.mostrarEgresos ? parseInt(req.body.mostrarEgresos) : true;
-        console.log("body", req.body);
         const [accounts] = await getCuentasDisponibles([`ID_MP = ${CUENTA}`]);
         if (!accounts)
             return res.status(404).json({ msg: "No se encontro la cuenta" })
+        const payments = await searchPagosEnCuenta({START_DATE,END_DATE,TOKEN : accounts.TOKEN });
+        const mostrarTitulares = req.body.mostrarTitulares ? JSON.parse(req.body.mostrarTitulares) : false;
+        const resultados = await formatPayments(payments.results,mostrarTitulares);
 
 
-        const client = new MercadoPagoConfig({ accessToken: accounts.TOKEN });
-        const payment = new Payment(client);
 
-        const endDateObj = new Date(END_DATE);
-        endDateObj.setUTCDate(endDateObj.getUTCDate() + 1);
-        const payments = await payment.search({
-            options: { criteria: "desc", begin_date: new Date(START_DATE).toISOString(), end_date: endDateObj.toISOString(), limit: 200 }
-        })
-
-        console.log({mostrarEgresos,mostrarIngresos});
-        const resultados = payments.results.filter(pago => {
-            if (!mostrarEgresos && pago.payer_id) return false;
-            if (!mostrarIngresos && !pago.payer_id) return false;
-            return true;
-        }).map(pago => {
-            const { id, date_created, date_approved, operation_type, transaction_details, payer_id, status, payer } = pago;
-            const date_createdDate = new Date(date_created);
-            const date_approvedDate = new Date(date_approved);
-            date_approvedDate.setUTCHours(date_approvedDate.getUTCHours() - 3)
-            date_createdDate.setUTCHours(date_createdDate.getUTCHours() - 3)
-            return {
-                id,
-                date_created: date_createdDate.toISOString(),
-                date_approved: date_approvedDate.toISOString(),
-                operation_type, transaction_details, payer_id, status, payer
-            }
-        }
-        );
-        console.log(resultados.length);
+        console.log("pagos encontrado ", resultados.length);
         res.status(200).json(resultados)
 
     } catch (error) {
@@ -60,8 +26,6 @@ export const getPagos = async (req, res) => {
 
 
 }
-
-
 
 
 export const getCuentas = async (req, res) => {
@@ -77,8 +41,7 @@ export const getCuentas = async (req, res) => {
 }
 
 export const insertarCuenta = async (req, res) => {
-    /*req.body = {ALIAS : 'Juan', TOKEN : 'asdasñdhuojasd'}
-    */
+
     try {
 
         const resultado = await insertarCuentaDB(req.body);

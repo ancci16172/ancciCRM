@@ -8,6 +8,7 @@ import {
   insertarCuentaRequest,
 } from "../api/mp.api";
 import { getQuery } from "../../shared/lib/params";
+import { getParsedLs } from "../../shared/lib/storage";
 
 export const MercadoPagoContext = createContext();
 
@@ -29,15 +30,37 @@ export function MercadoPagoProvider({}) {
   const [showEdit, setShowEdit] = useState(false);
   const [filtro, setFiltro] = useState("");
   const [isLoading, setLoading] = useState(true);
+  const [isLoadingPagos, setLoadingPagos] = useState(false);
   const [params, setParams] = useSearchParams();
+  /*Los erros de mercado pagos siempre deben llegar como [{msg : "nombre del error"}] */
+  const [errors, setErrors] = useState([]);
+  const [options, setOptions] = useState(
+    getParsedLs("options") || {
+      mostrarEgresos: false,
+      mostrarIngresos: true,
+      mostrarTitulares: false,
+    }
+  );
 
+  useEffect(() => {
+    localStorage.setItem("options", JSON.stringify(options));
+  }, [options]);
+
+  useEffect(() => {
+    setTimeout(()=>setErrors([]),3000);
+  },[errors])
+
+  
   const getPagos = async (values) => {
     try {
+      setLoadingPagos(true);
       const pagos = await getPagosRequest(values);
-      console.log({"pagos" : pagos});
       setPagos(pagos.data);
     } catch (error) {
+      setErrors(error)
       console.log(error);
+    } finally {
+      setLoadingPagos(false);
     }
   };
 
@@ -81,14 +104,13 @@ export function MercadoPagoProvider({}) {
   useEffect(() => {
     getCuentas();
   }, []);
-  let query = {};
+
   useEffect(() => {
-    query = getQuery(params);
+    const query = getQuery(params);
     const { START_DATE, END_DATE, CUENTA } = query;
     if (START_DATE && END_DATE && CUENTA)
-      getPagos(query);
-    
-  }, [params]);
+      getPagos({ ...query, mostrarTitulares: options.mostrarTitulares });
+  }, [params, options.mostrarTitulares]);
 
   const getCuentaSeleccionada = () => {
     const query = getQuery(params);
@@ -118,7 +140,10 @@ export function MercadoPagoProvider({}) {
         isLoading,
         setParams,
         getCuentaSeleccionada,
-        query,
+        options,
+        setOptions,
+        errors,
+        isLoadingPagos,
       }}
     >
       {!isLoading ? <Outlet /> : <div>Cargando...</div>}
