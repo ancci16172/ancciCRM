@@ -24,6 +24,11 @@ export function DashBoard() {
     {
       header : "Usuarios",
       text : "Crea nuevos usuarios o gestiona los permisos del personal"
+    },
+    {
+      header : "Facturador",
+      text : "Generar facturas en afip"
+
     }
   ];
   const [servicios, setServicios] = useState(servicios_disponibles);
