@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Cruz } from "../../../shared/icons/Cruz/Cruz";
 import { useMercadoPago } from "../../context/MercadoPagoContext.jsx";
 import { FormButton } from "../ui/FormButton.jsx";
@@ -10,6 +11,9 @@ import styles from "./AdministrarCuentas.module.css";
 export function AdministrarCuentas() {
   const { showAdmin, setShowAdmin, setShowAdd,setShowEdit, cuentas, eliminarCuenta ,setCuentaEdit} =
     useMercadoPago();
+
+  const [message,setMessage] = useState("");
+
 
   return (
     <FormContainer visible={showAdmin}>

@@ -13,23 +13,41 @@ import {
   FormHeader,
 } from "../ui/index.js";
 import { Cruz } from "../../../shared/icons/Cruz/Cruz.jsx";
+import { useEffect, useState } from "react";
+import { ErrorMessage, SuccessMessage } from "./Messages.jsx";
 
 export function AgregarCuentas() {
-  const {
-    showAdd,
-    setShowAdd,
-    insertarCuenta,
-    getCuentas,
-    errors: errorsDb,
-  } = useMercadoPago();
+  const { showAdd, setShowAdd, insertarCuenta, getCuentas } = useMercadoPago();
+  const [messages, setMessages] = useState([]);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
-  
-  const onSubmit = async (values) => await insertarCuenta(values);
+  const onSubmit = async (values) => {
+    const msg = await insertarCuenta(values);
+    console.log({ msg });
+    setMessages([...messages, msg]);
+  };
+  useEffect(() => {
+    console.log("useEfect");
+    if (messages.length && !messages[messages.length - 1].error) {
+      reset();
+    }
+    const intervalID = setInterval(() => {
+      setMessages((prevMensajes) =>
+        (prevMensajes.length > 1 ? prevMensajes.slice(1) : [])
+      );
+    }, 2000);
+    return () => clearInterval(intervalID);
+    // if (messages.length) {
+    //   setTimeout(() => {
+    //     setMessages(messages.slice(0, -1));
+    //   }, 1000);
+    // }
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,11 +87,14 @@ export function AgregarCuentas() {
           </div>
         </FormContainerItems>
         <FormContainerBottom>
-          {errorsDb.map((error) => (
-            <div className="justify-self-start px-4 text-rojo font-semibold ">
-              *{error.msg}
-            </div>
-          ))}
+          {messages.map((message, i) => {
+            console.log({ message });
+            return message.error ? (
+              <ErrorMessage key={i}>*{message.msg}</ErrorMessage>
+            ) : (
+              <SuccessMessage key={i}>*{message.msg}</SuccessMessage>
+            );
+          })}
 
           <FormButton>Agregar nueva cuenta</FormButton>
         </FormContainerBottom>

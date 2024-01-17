@@ -47,17 +47,16 @@ export function MercadoPagoProvider({}) {
   }, [options]);
 
   useEffect(() => {
-    setTimeout(()=>setErrors([]),3000);
-  },[errors])
+    setTimeout(() => setErrors([]), 3000);
+  }, [errors]);
 
-  
   const getPagos = async (values) => {
     try {
       setLoadingPagos(true);
       const pagos = await getPagosRequest(values);
       setPagos(pagos.data);
     } catch (error) {
-      setErrors(error)
+      setErrors(error);
       console.log(error);
     } finally {
       setLoadingPagos(false);
@@ -79,6 +78,8 @@ export function MercadoPagoProvider({}) {
     try {
       const resultado = await insertarCuentaRequest(values);
       getCuentas();
+      console.log("agrega cuenta",resultado.data);
+      return {error :true , msg : resultado.data.msg};
     } catch (error) {
       console.log("error", error);
     }
@@ -87,8 +88,10 @@ export function MercadoPagoProvider({}) {
     try {
       const resultado = await eliminarCuentaRequest(values.ID_MP);
       getCuentas();
+      console.log("Elimina cuenta", resultado.data);
+      return {error :true , msg : resultado.data.msg};
     } catch (error) {
-      console.log("error", error);
+      console.log("error al eliminar cuenta", error);
     }
   };
 

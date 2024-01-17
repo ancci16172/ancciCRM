@@ -56,7 +56,6 @@ export function Mercadopago() {
             (pago.esEgreso && options.mostrarEgresos))
       )
     );
-    console.log(pagos);
   }, [options,filtro,pagos]);
 
   return (

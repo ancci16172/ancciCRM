@@ -22,14 +22,14 @@ export function DashBoard() {
       text : "Envia una lista de difucion masiva via whatsapp"      
     },
     {
-      header : "Usuarios",
-      text : "Crea nuevos usuarios o gestiona los permisos del personal"
-    },
-    {
       header : "Facturador",
       text : "Generar facturas en afip"
 
-    }
+    },
+    {
+      header : "Usuarios",
+      text : "Crea nuevos usuarios o gestiona los permisos del personal"
+    },
   ];
   const [servicios, setServicios] = useState(servicios_disponibles);
   const filtrarServicios = (valor) => {
