@@ -14,7 +14,8 @@ import {
 } from "../ui/index.js";
 import { Cruz } from "../../../shared/icons/Cruz/Cruz.jsx";
 import { useEffect, useState } from "react";
-import { ErrorMessage, SuccessMessage } from "./Messages.jsx";
+import { ErrorMessage, Message, SuccessMessage } from "./Messages.jsx";
+import { MessagesContainer } from "./MessagesContainer.jsx";
 
 export function AgregarCuentas() {
   const { showAdd, setShowAdd, insertarCuenta, getCuentas } = useMercadoPago();
@@ -31,23 +32,6 @@ export function AgregarCuentas() {
     console.log({ msg });
     setMessages([...messages, msg]);
   };
-  useEffect(() => {
-    console.log("useEfect");
-    if (messages.length && !messages[messages.length - 1].error) {
-      reset();
-    }
-    const intervalID = setInterval(() => {
-      setMessages((prevMensajes) =>
-        (prevMensajes.length > 1 ? prevMensajes.slice(1) : [])
-      );
-    }, 2000);
-    return () => clearInterval(intervalID);
-    // if (messages.length) {
-    //   setTimeout(() => {
-    //     setMessages(messages.slice(0, -1));
-    //   }, 1000);
-    // }
-  }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -87,15 +71,15 @@ export function AgregarCuentas() {
           </div>
         </FormContainerItems>
         <FormContainerBottom>
-          {messages.map((message, i) => {
-            console.log({ message });
-            return message.error ? (
-              <ErrorMessage key={i}>*{message.msg}</ErrorMessage>
-            ) : (
-              <SuccessMessage key={i}>*{message.msg}</SuccessMessage>
-            );
-          })}
-
+          <MessagesContainer>
+            {messages.map((message, i) => {
+              return (
+                <Message key={i} type={message.error ? "error" : "success"}>
+                  {message.msg}
+                </Message>
+              );
+            })}
+          </MessagesContainer>
           <FormButton>Agregar nueva cuenta</FormButton>
         </FormContainerBottom>
       </FormContainer>

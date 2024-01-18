@@ -45,7 +45,7 @@ export const insertarCuenta = async (req, res) => {
     try {
 
         const resultado = await insertarCuentaDB(req.body);
-        res.status(200).json({ msg: "Cuentas insertadas correctamente" })
+        res.status(200).json({ msg: `Cuenta ${req.body.ALIAS} insertada correctamente` })
     } catch (error) {
         console.log(error);
         res.status(404).json({ msg: "No se pudo insertar la nueva cuenta" });
@@ -58,7 +58,7 @@ export const eliminarCuenta = async (req, res) => {
     try {
 
         const resultado = await editarCuentaDB({ ACTIVO: 0 }, { ID_MP });
-        res.status(200).json({ msg: "Cuentas eliminadas correctamente" })
+        res.status(200).json({ msg: "Cuenta eliminada correctamente" })
 
     } catch (error) {
         console.log(error);

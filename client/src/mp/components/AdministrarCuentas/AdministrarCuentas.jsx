@@ -7,14 +7,26 @@ import { FormContainerBottom } from "../ui/FormContainerBottom.jsx";
 import { FormContainerItems } from "../ui/FormContainerItems.jsx";
 import { FormHeader } from "../ui/FormHeader.jsx";
 import styles from "./AdministrarCuentas.module.css";
+import { Message } from "./Messages.jsx";
+import { MessagesContainer } from "./MessagesContainer.jsx";
 
 export function AdministrarCuentas() {
-  const { showAdmin, setShowAdmin, setShowAdd,setShowEdit, cuentas, eliminarCuenta ,setCuentaEdit} =
-    useMercadoPago();
+  const {
+    showAdmin,
+    setShowAdmin,
+    setShowAdd,
+    setShowEdit,
+    cuentas,
+    eliminarCuenta,
+    setCuentaEdit,
+  } = useMercadoPago();
 
-  const [message,setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
-
+  const handleDelete = (cuenta) => async () => {
+    const msg = await eliminarCuenta({ ID_MP: cuenta.ID_MP });
+    setMessages([...messages, msg]);
+  };
   return (
     <FormContainer visible={showAdmin}>
       <FormHeader>
@@ -49,7 +61,7 @@ export function AdministrarCuentas() {
                   styles["container--item__item__btn--eliminar"] +
                   " cursor-pointer"
                 }
-                onClick={() => eliminarCuenta({ ID_MP: cuenta.ID_MP })}
+                onClick={handleDelete(cuenta)}
               >
                 Borrar
               </span>
@@ -58,6 +70,15 @@ export function AdministrarCuentas() {
         ))}
       </FormContainerItems>
       <FormContainerBottom>
+        <MessagesContainer>
+          {messages.map((message, i) => {
+            return (
+              <Message key={i} type={message.error ? "error" : "success"}>
+                {message.msg}
+              </Message>
+            );
+          })}
+        </MessagesContainer>
         <FormButton onClick={(e) => setShowAdd(true)}>
           Agregar nueva cuenta
         </FormButton>

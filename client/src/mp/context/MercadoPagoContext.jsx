@@ -78,10 +78,10 @@ export function MercadoPagoProvider({}) {
     try {
       const resultado = await insertarCuentaRequest(values);
       getCuentas();
-      console.log("agrega cuenta",resultado.data);
-      return {error :true , msg : resultado.data.msg};
+      return {error :false , msg : resultado.data.msg};
     } catch (error) {
       console.log("error", error);
+      return {error: true,msg : error.response.data.msg}
     }
   };
   const eliminarCuenta = async (values) => {
