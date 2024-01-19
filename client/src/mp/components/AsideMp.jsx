@@ -30,8 +30,8 @@ export function AsideMp() {
         ))}
 
         <LinkConsultarMes
-          MonthString={"2023-01"}
-          cuenta={{ ALIAS: "a", ID_MP: -1 }}
+          MonthString={new Date().toISOString().substring(0,7)}
+          cuenta={{ ALIAS: "General", ID_MP: -1 }}
           
         ><div className="text-center hover:text-celeste">Ver todo</div></LinkConsultarMes>
       </div>

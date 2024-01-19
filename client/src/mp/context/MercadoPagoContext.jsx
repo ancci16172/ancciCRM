@@ -56,6 +56,7 @@ export function MercadoPagoProvider({}) {
       setErrors([]);
       setPagos([]);
       const pagos = await getPagosRequest(values);
+      console.log({pagos});
       setPagos(pagos.data);
     } catch (error) {
       console.log("Error al consultar los pagos",error);
@@ -68,7 +69,7 @@ export function MercadoPagoProvider({}) {
   const getCuentas = async () => {
     try {
       const cuentas = await getCuentasRequest();
-      setCuentas(cuentas.data);
+      setCuentas(cuentas.data)
       setLoading(false);
     } catch (error) {
       console.log("Error al consultar cuentas");
@@ -125,7 +126,8 @@ export function MercadoPagoProvider({}) {
 
   const getCuentaSeleccionada = () => {
     const query = getQuery(params);
-    return cuentas.filter((cuenta) => cuenta.ID_MP == query.CUENTA)[0];
+    if(query.CUENTA == -1) return {CUENTA : -1, ALIAS : "General"}
+    return cuentas.find((cuenta) => cuenta.ID_MP == query.CUENTA);
   };
 
   return (

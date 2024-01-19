@@ -4,7 +4,7 @@ import { getContribuyente } from "../model/afip.model.js";
 
 // PUEDE EJECUTAR UN THROW
 // FORMATEA LOS PAGOS Y AGREGA LOS TITULARES EN CASO QUE HAGA FALTA
-export const formatPayments = async (results, mostrarTitulares = false) => {
+export const formatPayments = async (results, mostrarTitulares = false,alias) => {
 
     const resultado = [];
     for (const pago of results) {
@@ -24,7 +24,8 @@ export const formatPayments = async (results, mostrarTitulares = false) => {
             date_approved: date_approvedDate.toISOString(),
             operation_type, transaction_details, payer_id, status, payer,
             esIngreso: !payer_id, esEgreso: !!payer_id,
-            titular: (CUIT && mostrarTitulares) ? nomPropio(contribuyente.nombre) : null
+            titular: (CUIT && mostrarTitulares) ? nomPropio(contribuyente.nombre) : null,
+            alias 
         })
 
 
