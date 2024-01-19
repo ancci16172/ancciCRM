@@ -33,7 +33,9 @@ export function Mercadopago() {
     setFiltro,
     getCuentaSeleccionada,
     setParams,
-    options,isLoadingPagos
+    options,
+    isLoadingPagos,
+    errors,
   } = useMercadoPago();
   const CUENTA = getCuentaSeleccionada();
 
@@ -50,16 +52,16 @@ export function Mercadopago() {
   useEffect(() => {
     setPagosFiltrados(
       pagos.filter(
-        pago =>
+        (pago) =>
           JSON.stringify(pago).toLowerCase().includes(filtro.toLowerCase()) &&
           ((pago.esIngreso && options.mostrarIngresos) ||
             (pago.esEgreso && options.mostrarEgresos))
       )
     );
-  }, [options,filtro,pagos]);
+  }, [options, filtro, pagos]);
 
   return (
-    <main className={isLoadingPagos ?  "cursor-wait" : ""}>
+    <main className={isLoadingPagos ? "cursor-wait" : ""}>
       <AsideMp />
       <AdministrarCuentas />
       <AgregarCuentas />
@@ -129,25 +131,28 @@ export function Mercadopago() {
             </BtnCeleste>
           </div>
         </div>
-
-        {!pagosFiltrados.length && !isLoadingPagos && (
+        {errors.length > 0 &&
+          errors.map((error,i) => 
+           <div key={i} className="my-2 text-rojo font-semibold">{error.msg}</div>
+        )}
+        { errors.length == 0 && !pagosFiltrados.length && !isLoadingPagos && (
           <div className="my-2">
             No se han encontrado pagos que coincidan con su búsqueda actual.
             <br />
-            Le sugerimos ampliar el rango de búsqueda o quitar filtros para obtener mas
-            resultados.
+            Le sugerimos ampliar el rango de búsqueda o quitar filtros para
+            obtener mas resultados.
           </div>
         )}
 
-        {isLoadingPagos && (
-          <div className="my-2">
-            Cargando pagos...
-          </div>
-        )}
+        {isLoadingPagos && <div className="my-2">Cargando pagos...</div>}
 
         <div className={styles["list--pagos"]}>
           {pagosFiltrados.map((pago) => (
-            <PagoMp key={pago.id} pago={pago} mostrarTitulares={options.mostrarTitulares} />
+            <PagoMp
+              key={pago.id}
+              pago={pago}
+              mostrarTitulares={options.mostrarTitulares}
+            />
           ))}
         </div>
       </section>

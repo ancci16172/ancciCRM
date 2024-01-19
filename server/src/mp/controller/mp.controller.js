@@ -1,18 +1,21 @@
 
 import { editarCuentaDB, getCuentasDisponibles, insertarCuentaDB, searchPagosEnCuenta } from "../model/mp.model.js";
-import {formatPayments} from "../lib/formatPayments.js";
+import { formatPayments } from "../lib/formatPayments.js";
+import { searchPayments } from "../lib/searchPayments.js";
 
 export const getPagos = async (req, res) => {
 
     try {
         const { CUENTA, START_DATE, END_DATE } = req.body;
+        const mostrarTitulares = req.body.mostrarTitulares && JSON.parse(req.body.mostrarTitulares);
         //Transformar en middleware parseIntMiddleware
-        const [accounts] = await getCuentasDisponibles([`ID_MP = ${CUENTA}`]);
-        if (!accounts)
-            return res.status(404).json({ msg: "No se encontro la cuenta" })
-        const payments = await searchPagosEnCuenta({START_DATE,END_DATE,TOKEN : accounts.TOKEN });
-        const mostrarTitulares = req.body.mostrarTitulares ? JSON.parse(req.body.mostrarTitulares) : false;
-        const resultados = await formatPayments(payments.results,mostrarTitulares);
+        const accounts = CUENTA == -1 ? await getCuentasDisponibles() : await getCuentasDisponibles([`ID_MP = ${CUENTA}`]);
+        console.log("cuentas",accounts.length);
+        if (!accounts.length)
+            return res.status(404).json({ msg: "La cuenta buscada no existe." })
+
+        const resultados = await searchPayments({START_DATE,END_DATE,accounts,mostrarTitulares })
+
 
 
 
@@ -71,7 +74,7 @@ export const editarCuenta = async (req, res) => {
 
     try {
         const resultado = await editarCuentaDB({ ALIAS, TOKEN }, { ID_MP });
-        res.status(200).json({ msg: "Cuentas editada correctamente" })
+        res.status(200).json({ msg: "Cuenta editada correctamente" })
 
     } catch (error) {
         console.log(error);

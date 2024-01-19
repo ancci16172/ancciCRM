@@ -4,6 +4,7 @@ import { useMercadoPago } from "../context/MercadoPagoContext";
 import styles from "./AsideMp.module.css";
 import { AsideMpCuenta } from "./AsideMpCuenta.jsx";
 import { BtnCeleste } from "./ui/BtnCeleste.jsx";
+import { LinkConsultarMes } from "./ui/LinkConsultarMes.jsx";
 import { OptionsCheckBox } from "./ui/OptionsCheckBox.jsx";
 
 export function AsideMp() {
@@ -27,12 +28,17 @@ export function AsideMp() {
         {cuentas.map((cuenta) => (
           <AsideMpCuenta cuenta={cuenta} key={cuenta.ID_MP} />
         ))}
+
+        <LinkConsultarMes
+          MonthString={"2023-01"}
+          cuenta={{ ALIAS: "a", ID_MP: -1 }}
+          
+        ><div className="text-center hover:text-celeste">Ver todo</div></LinkConsultarMes>
       </div>
       <div className={styles.division} />
 
       <div>
         <h2 className="text-center text-2xl my-2 mb-2">Opciones</h2>
-        {/* <OptionsCheckBox>Mostrar titulares</OptionsCheckBox> */}
         <OptionsCheckBox
           onChange={handleCheckBox("mostrarEgresos")}
           checked={options.mostrarEgresos}

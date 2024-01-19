@@ -14,8 +14,7 @@ import {
 } from "../ui/index.js";
 import { Cruz } from "../../../shared/icons/Cruz/Cruz.jsx";
 import { useEffect, useState } from "react";
-import { ErrorMessage, Message, SuccessMessage } from "./Messages.jsx";
-import { MessagesContainer } from "./MessagesContainer.jsx";
+import { ErrorMessage, Message, MessagesContainer, SuccessMessage } from "./Messages.jsx";
 
 export function AgregarCuentas() {
   const { showAdd, setShowAdd, insertarCuenta, getCuentas } = useMercadoPago();

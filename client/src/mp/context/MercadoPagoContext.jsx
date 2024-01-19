@@ -46,18 +46,20 @@ export function MercadoPagoProvider({}) {
     localStorage.setItem("options", JSON.stringify(options));
   }, [options]);
 
-  useEffect(() => {
-    setTimeout(() => setErrors([]), 3000);
-  }, [errors]);
+  // useEffect(() => {
+  //   // console.log("errors",errors);
+  // }, [errors]);
 
   const getPagos = async (values) => {
     try {
       setLoadingPagos(true);
+      setErrors([]);
+      setPagos([]);
       const pagos = await getPagosRequest(values);
       setPagos(pagos.data);
     } catch (error) {
-      setErrors(error);
-      console.log(error);
+      console.log("Error al consultar los pagos",error);
+      setErrors([error.response.data]);
     } finally {
       setLoadingPagos(false);
     }
@@ -89,18 +91,24 @@ export function MercadoPagoProvider({}) {
       const resultado = await eliminarCuentaRequest(values.ID_MP);
       getCuentas();
       console.log("Elimina cuenta", resultado.data);
-      return {error :true , msg : resultado.data.msg};
+      return {error :false , msg : resultado.data.msg};
     } catch (error) {
       console.log("error al eliminar cuenta", error);
+      return {error: true,msg : error.response.data.msg}
+
     }
   };
 
   const editCuenta = async (values) => {
     try {
       const resultado = await editarCuentaRequest(values);
-      await getCuentas();
+      getCuentas();
+      return {error :false , msg : resultado.data.msg};
     } catch (error) {
+
       console.log("error", error);
+      return {error: true,msg : error.response.data.msg}
+
     }
   };
 

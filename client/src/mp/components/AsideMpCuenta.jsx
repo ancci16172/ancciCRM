@@ -7,6 +7,7 @@ import {
   meses,
   addMonth,
 } from "../../../../server/src/lib/dates.js";
+import { LinkConsultarMes } from "./ui/LinkConsultarMes.jsx";
 
 export function AsideMpCuenta({ cuenta }) {
   const [showItem, setShowItem] = useState(false);
@@ -41,18 +42,5 @@ export function AsideMpCuenta({ cuenta }) {
         )}
       </ul>
     </div>
-  );
-}
-
-function LinkConsultarMes({ MonthString,cuenta }) {
-  const { END_DATE, START_DATE } = getLimitDates({ MONTH: MonthString });
-  return (
-    <li className="my-2">
-      <Link
-        to={`/MercadoPago?CUENTA=${cuenta.ID_MP}&START_DATE=${START_DATE}&END_DATE=${END_DATE}`}
-      >
-        {meses[new Date(START_DATE).getUTCMonth()]}
-      </Link>
-    </li>
   );
 }

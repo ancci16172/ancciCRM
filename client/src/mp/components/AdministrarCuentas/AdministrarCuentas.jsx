@@ -7,8 +7,7 @@ import { FormContainerBottom } from "../ui/FormContainerBottom.jsx";
 import { FormContainerItems } from "../ui/FormContainerItems.jsx";
 import { FormHeader } from "../ui/FormHeader.jsx";
 import styles from "./AdministrarCuentas.module.css";
-import { Message } from "./Messages.jsx";
-import { MessagesContainer } from "./MessagesContainer.jsx";
+import { Message, MessagesContainer } from "./Messages.jsx";
 
 export function AdministrarCuentas() {
   const {

@@ -33,3 +33,8 @@ export function SuccessMessage({ children }) {
     </div>
   );
 }
+
+
+export function MessagesContainer({ children }) {
+  return <div className="max-h-32 w-full overflow-y-auto ">{children}</div>;
+}

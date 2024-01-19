@@ -11,7 +11,8 @@ import {
   FormHeader,
 } from "../ui/index.js";
 import { Cruz } from "../../../shared/icons/Cruz/Cruz.jsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Message, MessagesContainer } from "./Messages.jsx";
 
 export function EditarCuenta() {
   const {
@@ -24,17 +25,20 @@ export function EditarCuenta() {
     register,
     handleSubmit,
     reset,
-    formState: { errors,isDirty },
+    formState: { errors, isDirty },
   } = useForm();
-
   
-  const onSubmit = async (values) =>
-    await editCuenta({ ...values, ID_MP: cuenta.ID_MP });
+  const [messages,setMessage] = useState([]);
+
+
+  const onSubmit = async (values) =>{
+    const msg = await editCuenta({ ...values, ID_MP: cuenta.ID_MP });
+    setMessage([...messages,msg])
+  }
 
   useEffect(() => {
-    if(isDirty) reset();    
-  },[cuenta])
-
+    if (isDirty) reset();
+  }, [cuenta]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,6 +80,15 @@ export function EditarCuenta() {
           </div>
         </FormContainerItems>
         <FormContainerBottom>
+          <MessagesContainer>
+            {messages.map((message, i) => {
+              return (
+                <Message key={i} type={message.error ? "error" : "success"}>
+                  {message.msg}
+                </Message>
+              );
+            })}
+          </MessagesContainer>
           <FormButton>Editar cuenta</FormButton>
         </FormContainerBottom>
       </FormContainer>
