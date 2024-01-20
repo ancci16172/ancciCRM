@@ -10,16 +10,11 @@ export const getPagos = async (req, res) => {
         const mostrarTitulares = req.body.mostrarTitulares && JSON.parse(req.body.mostrarTitulares);
         //Transformar en middleware parseIntMiddleware
         const accounts = CUENTA == -1 ? await getCuentasDisponibles() : await getCuentasDisponibles([`ID_MP = ${CUENTA}`]);
-        console.log("cuentas",accounts.length);
         if (!accounts.length)
             return res.status(404).json({ msg: "La cuenta buscada no existe." })
 
         const resultados = await searchPayments({START_DATE,END_DATE,accounts,mostrarTitulares })
 
-
-
-
-        console.log("pagos encontrado ", resultados.length);
         res.status(200).json(resultados)
 
     } catch (error) {
