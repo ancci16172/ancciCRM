@@ -4,18 +4,25 @@ export function Message({ children, type }) {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    console.log("UseEffect mensaje",type);
     setTimeout(() => setShow(false), 2000);
     return () => clearTimeout;
-  },[]);
+  }, []);
 
   //Los dipos disponibles en la propiedad type
   const availableTypes = {
-    error: <ErrorMessage>*{children}</ErrorMessage>,
-    success: <SuccessMessage>*{children}</SuccessMessage>,
+    error: ErrorMessage,
+    success: SuccessMessage,
   };
+  const SelectedType = availableTypes[type];
 
-  return show ? availableTypes[type] : null;
+  if (!show) return null;
+
+  if (Array.isArray(children))
+    return children.map((msg, i) => (
+      <SelectedType key={i}>*{msg}</SelectedType>
+    ));
+
+  return <SelectedType>*{children}</SelectedType>;
 }
 
 export function ErrorMessage({ children }) {
@@ -33,7 +40,6 @@ export function SuccessMessage({ children }) {
     </div>
   );
 }
-
 
 export function MessagesContainer({ children }) {
   return <div className="max-h-32 w-full overflow-y-auto ">{children}</div>;

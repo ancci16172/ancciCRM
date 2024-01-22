@@ -32,6 +32,7 @@ export const editarCuentaDB = async (values, { ID_MP }) => {
     }
 }
 
+//Puede recibir Tipo date o bien tipo string
 export const searchPagosEnCuenta = async ({ TOKEN, END_DATE, START_DATE }) => {
 
     const client = new MercadoPagoConfig({ accessToken: TOKEN });

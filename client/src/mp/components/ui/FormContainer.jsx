@@ -5,7 +5,7 @@ export function FormContainer({ children, visible }) {
     <div
       className={
         styles["container--appear"] +
-        " border border-solid border-gray-500 rounded-md flex flex-col " +
+        " border border-solid border-gray-500 rounded-md flex flex-col fixed " +
         (visible ? "" : "oculto")
       }
     >

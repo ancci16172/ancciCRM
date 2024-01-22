@@ -83,7 +83,6 @@ export function MercadoPagoProvider({}) {
       getCuentas();
       return {error :false , msg : resultado.data.msg};
     } catch (error) {
-      console.log("error", error);
       return {error: true,msg : error.response.data.msg}
     }
   };

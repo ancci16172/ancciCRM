@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { ErrorMessage, Message, MessagesContainer, SuccessMessage } from "./Messages.jsx";
 
 export function AgregarCuentas() {
-  const { showAdd, setShowAdd, insertarCuenta, getCuentas } = useMercadoPago();
+  const { showAdd, setShowAdd, insertarCuenta } = useMercadoPago();
   const [messages, setMessages] = useState([]);
   const {
     register,
@@ -30,6 +30,7 @@ export function AgregarCuentas() {
     const msg = await insertarCuenta(values);
     console.log({ msg });
     setMessages([...messages, msg]);
+    if(!Array.isArray(msg) && !msg.error) reset()
   };
 
   return (
