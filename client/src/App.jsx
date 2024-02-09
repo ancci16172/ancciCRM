@@ -10,6 +10,8 @@ import {
   MercadoPagoContext,
   MercadoPagoProvider,
 } from "./mp/context/MercadoPagoContext.jsx";
+import { WhatsappProvider } from "./whatsapp/context/WhatsappContext.jsx";
+import { WhatsappMassiveMessaged } from "./whatsapp/pages/WhatsappMassiveMessages.jsx";
 
 function App() {
   return (
@@ -26,7 +28,12 @@ function App() {
           <Route path="/MercadoPago/*" element={<MercadoPagoProvider />}>
             <Route path="" element={<Mercadopago />} />
           </Route>
-          
+          <Route path="/Whatsapp/*" element={<WhatsappProvider />}>
+            <Route
+              path="MassiveMessages"
+              element={<WhatsappMassiveMessaged />}
+            />
+          </Route>
         </Route>
       </Routes>
     </AuthProvider>

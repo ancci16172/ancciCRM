@@ -6,7 +6,7 @@ import { FRONTEND_URL } from "./config.js";
 import cookieParser from "cookie-parser";
 import { isLoggedIn } from "./auth/middleware/isLoggedIn.js";
 import mpRouter from "./mp/routes/mp.routes.js";
-
+import whatsappRoutes from "./whatsapp/routes/whatsapp.routes.js"
 const app = express();
 
 
@@ -22,5 +22,6 @@ app.use(cookieParser())
 app.use("/api/auth", authRouter);
 // app.use("/api/mp",isLoggedIn,mpRouter)
 app.use("/api/mp",mpRouter)
+app.use("/api/whatsapp",whatsappRoutes)
 
 export default app

@@ -1,6 +1,4 @@
-.aside {
-  height: calc(100vh - var(--nav-height));
-}
+
 .container--cuentas{
   overflow-y: auto;
   overflow-x: hidden;

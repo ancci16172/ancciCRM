@@ -1,13 +1,14 @@
+import { AsideButton } from "../../../shared/components/ui/AsideButton";
 import styles from "./BtnCeleste.module.css"
 
 
 export function BtnCeleste({onClick,children}) {
   return (
-    <div
+    <AsideButton
       className={styles["btn--celeste"]}
       onClick={onClick}
     >
       {children}
-    </div>
+    </AsideButton>
   );
 }

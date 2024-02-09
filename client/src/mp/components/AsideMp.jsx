@@ -1,5 +1,4 @@
-import { getQuery } from "../../shared/lib/params.js";
-import { getParsedLs } from "../../shared/lib/storage.js";
+import { Aside } from "../../shared/components/Aside.jsx";
 import { useMercadoPago } from "../context/MercadoPagoContext";
 import styles from "./AsideMp.module.css";
 import { AsideMpCuenta } from "./AsideMpCuenta.jsx";
@@ -17,13 +16,7 @@ export function AsideMp() {
   };
 
   return (
-    <aside
-      className={
-        "w-44 fixed flex flex-col  border-r border-black border-solid left-0 " +
-        styles.aside
-      }
-    >
-      <h2 className="text-center text-2xl my-2 mb-2">Cuentas</h2>
+    <Aside title={"Cuentas"}>
       <div className={styles["container--cuentas"]}>
         {cuentas.map((cuenta) => (
           <AsideMpCuenta cuenta={cuenta} key={cuenta.ID_MP} />
@@ -71,6 +64,6 @@ export function AsideMp() {
           Administrar cuentas
         </BtnCeleste>
       </div>
-    </aside>
+    </Aside>
   );
 }

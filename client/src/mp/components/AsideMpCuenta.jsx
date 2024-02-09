@@ -1,18 +1,11 @@
-import { Link } from "react-router-dom";
 import styles from "./AsideMp.module.css";
-import { useEffect, useState } from "react";
-import {
-  getLimitDates,
-  getToday,
-  meses,
-  addMonth,
-} from "../../../../server/src/lib/dates.js";
+import { useState } from "react";
+import { getToday, addMonth } from "../../../../server/src/lib/dates.js";
 import { LinkConsultarMes } from "./ui/LinkConsultarMes.jsx";
 
 export function AsideMpCuenta({ cuenta }) {
   const [showItem, setShowItem] = useState(false);
   const currentMonth = getToday().today.substring(0, 7);
-
 
   return (
     <div className={"px-6 pb-2 " + styles["cuenta"]}>
@@ -20,7 +13,9 @@ export function AsideMpCuenta({ cuenta }) {
         className={" " + styles["cuenta__container--title"]}
         onClick={() => setShowItem(!showItem)}
       >
-        <span className={styles["cuenta__title"] + " cursor-pointer"}>{cuenta.ALIAS}</span>
+        <span className={styles["cuenta__title"] + " cursor-pointer"}>
+          {cuenta.ALIAS}
+        </span>
         <span
           className={
             styles["cuenta__flecha"] +
@@ -37,9 +32,13 @@ export function AsideMpCuenta({ cuenta }) {
           (showItem ? styles["text--item--show"] : "")
         }
       >
-        {Array.from({ length: 3 }, (_, i) => 
-          <LinkConsultarMes key={i} MonthString={addMonth(currentMonth, -i)} cuenta={cuenta} />
-        )}
+        {Array.from({ length: 3 }, (_, i) => (
+          <LinkConsultarMes
+            key={i}
+            MonthString={addMonth(currentMonth, -i)}
+            cuenta={cuenta}
+          />
+        ))}
       </ul>
     </div>
   );

@@ -1,4 +1,3 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { AsideMp } from "../../components/AsideMp";
 import styles from "./MercadoPago.module.css";
 import { useMercadoPago } from "../../context/MercadoPagoContext";
