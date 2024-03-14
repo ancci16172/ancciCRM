@@ -25,7 +25,7 @@ export function AgregarCuentas() {
     formState: { errors },
     reset,
   } = useForm();
-
+  
   const onSubmit = async (values) => {
     const msg = await insertarCuenta(values);
     console.log({ msg });

@@ -9,6 +9,13 @@ export default {
       colors : {
         celeste : "#3498DB",
         rojo : "#E74C3C",
+        verde : "#00A884",//#25D366,
+        verde_claro : "#82DAA2",
+        verde_wsp : "#228B22"
+
+      },
+      backgroundImage:{
+        "whatsapp-bg" : "url('/src/whatsapp/public/bg--whatsapp.png')"
       }
     },
   },

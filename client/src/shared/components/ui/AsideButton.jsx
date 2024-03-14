@@ -1,7 +1,7 @@
-export function AsideButton({ onClick, children,className }) {
+export function AsideButton({ onClick, children,className ,submitOnClick}) {
   return (
-    <div className={"cursor-pointer p-[5px] rounded-[0.3rem] inline-block " + className}>
+    <button className={"cursor-pointer p-[5px] rounded-[0.3rem] inline-block " + className} onClick={onClick} type={submitOnClick ? "submit" : "button"}>
       {children}
-    </div>
+    </button>
   );
 }

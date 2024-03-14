@@ -2,16 +2,13 @@ import { Route, Routes } from "react-router-dom";
 import Login from "./auth/pages/Login";
 import NavBar from "./shared/components/NavBar/NavBar.jsx";
 import { AuthProvider } from "./auth/context/AuthContext";
-import { useEffect } from "react";
 import { IsLoggedInRoutes, IsNotLoggedIntRoutes } from "./ProtectedRoute";
 import { DashBoard } from "./shared/pages/DashBoard";
 import { Mercadopago } from "./mp/pages/MercadoPago/MercadoPago.jsx";
-import {
-  MercadoPagoContext,
-  MercadoPagoProvider,
-} from "./mp/context/MercadoPagoContext.jsx";
+import { MercadoPagoProvider} from "./mp/context/MercadoPagoContext.jsx";
 import { WhatsappProvider } from "./whatsapp/context/WhatsappContext.jsx";
 import { WhatsappMassiveMessaged } from "./whatsapp/pages/WhatsappMassiveMessages.jsx";
+
 
 function App() {
   return (

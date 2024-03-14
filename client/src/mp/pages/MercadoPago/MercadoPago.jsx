@@ -16,6 +16,8 @@ import { SearchBar } from "../../../shared/components/Search/SeachBar.jsx";
 import { BtnCeleste } from "../../components/ui/BtnCeleste.jsx";
 import { getToday } from "../../../../../server/src/lib/dates.js";
 import { getQuery } from "../../../shared/lib/params.js";
+import { SectionContainer } from "../../../shared/components/SectionContainer.jsx";
+import Container from "../../../shared/components/Container.jsx";
 
 /*
   Local Storage for inputs:
@@ -60,13 +62,13 @@ export function Mercadopago() {
   }, [options, filtro, pagos]);
 
   return (
-    <main className={isLoadingPagos ? "cursor-wait" : ""}>
+    <Container className={isLoadingPagos ? "cursor-wait" : ""}>
       <AsideMp />
       <AdministrarCuentas />
       <AgregarCuentas />
       <EditarCuenta />
 
-      <section className={styles.section}>
+      <SectionContainer>
         <h2 className="text-3xl mb-2 flex justify-between">
           <span>{CUENTA ? CUENTA.ALIAS : "Sin cuenta evaluada"}</span>
           <span>
@@ -154,7 +156,7 @@ export function Mercadopago() {
             />
           ))}
         </div>
-      </section>
-    </main>
+      </SectionContainer>
+    </Container>
   );
 }

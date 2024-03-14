@@ -3,6 +3,7 @@ import { useAuth } from "../../auth/context/AuthContext.jsx";
 import styles from "../components/CardServicio/CardServicio.module.css";
 import { useState } from "react";
 import { Lupa } from "../icons/Lupa.jsx";
+import Container from "../components/Container.jsx";
 export function DashBoard() {
   const { user } = useAuth();
   const servicios_disponibles = [
@@ -41,7 +42,7 @@ export function DashBoard() {
   };
 
   return (
-    <main className="px-8">
+    <Container className={"py-1.5 px-5"}>
       <h1 className="text-center text-2xl my-2">Bienvenido {user.username}</h1>
       <div className="section__container--search flex gap-2">
         <span>Servicios disponibles</span>
@@ -64,6 +65,6 @@ export function DashBoard() {
           <CardServicio key={i} servicio={servicio} />
         ))}
       </section>
-    </main>
+    </Container>
   );
 }

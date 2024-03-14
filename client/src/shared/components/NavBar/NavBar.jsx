@@ -7,7 +7,10 @@ function NavBar() {
 
   return (
     <nav
-      className={styles["navbar--main"] + " flex justify-between items-center sticky top-0 bg-white z-50"}
+      className={
+        styles["navbar--main"] +
+        " flex justify-between items-center fixed w-full top-0 bg-white z-50"
+      }
     >
       {isAuthenticated && (
         <div className={styles["navbar--main__left"] + " flex items-center"}>

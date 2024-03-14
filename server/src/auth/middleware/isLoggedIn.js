@@ -13,6 +13,7 @@ export const isLoggedIn = async (req, res, next) => {
         if (!userFound) return res.sendStatus(401);
 
 
+        
         res.locals.user = userFound;
         next();
     });

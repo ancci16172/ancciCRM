@@ -1,4 +1,5 @@
-import app  from "./app.js";
+import server from "./http.js"
+import "./routes.js" //Carga las rutas en app
 
 
 
@@ -8,10 +9,7 @@ import app  from "./app.js";
 
 
 
-
-
-
-app.listen(3000,() => {console.log("SERVER ON PORT 3000");})
+server.listen(3000,() => {console.log("SERVER ON PORT 3000");})
 
 
 

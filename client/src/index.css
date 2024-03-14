@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/*ELIMINA LAS FLECHAS DE LOS INPUT TYPE FILE*/
+@layer base {
+    input[type='number']::-webkit-outer-spin-button,
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number'] {
+      -webkit-appearance: none;
+      margin: 0;
+      -moz-appearance: textfield !important;
+    }
+ }
+
+
 :root {
     --nav-height: 48px;
     --blue: #3498DB;

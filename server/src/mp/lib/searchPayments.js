@@ -10,7 +10,6 @@ export const searchPayments = async ({ START_DATE, END_DATE, accounts = [], most
     const results = await Promise.all(accounts.map(async account => {
         const payments = await searchPagosEnCuenta({ START_DATE, END_DATE, TOKEN: account.TOKEN });
         const paymentsFormated = await formatPayments(payments.results, mostrarTitulares, account.ALIAS);
-        console.log({paymentsFormated});
         return paymentsFormated
     }))
     return [].concat(...results).sort((a,b)=> {

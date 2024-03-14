@@ -4,7 +4,7 @@ export function Aside({ children, title }) {
   return (
     <aside
       className={
-        "w-44 fixed flex flex-col  border-r border-black border-solid left-0 " +
+        "w-48 fixed flex flex-col  border-r border-black border-solid left-0 " +
         styles.aside
       }
     >

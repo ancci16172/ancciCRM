@@ -1,6 +1,6 @@
 function Container({ children, className }) {
   return (
-    <div className={`h-[calc(100vh-var(--nav-height))] py-10 ${className}`}>
+    <div className={`${className} mt-[var(--nav-height)]`}>
       {children}
     </div>
   );
