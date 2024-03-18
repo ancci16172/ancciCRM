@@ -1,6 +1,5 @@
 import path from "path";
 import fs from "fs";
-import { fileURLToPath } from "url";
 import pool from "../../shared/model/mysql-pool.js";
 import { sessionsFolderPath } from "../constants/dir.js";
 

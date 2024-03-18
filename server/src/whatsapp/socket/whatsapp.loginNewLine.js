@@ -1,5 +1,5 @@
 import {
-  deleteLineFolder,
+
   getGeneratedLines,
 } from "../model/whatsapp.model.js";
 
@@ -8,6 +8,8 @@ import { WhatsappLogin } from "../classes/WhatsappLogin.js";
 /*Controller */
 export const insertLine = (socket) => async (data, sendResponse) => {
   const { clientId } = data;
+  const client = new WhatsappLogin({ clientId });
+
   try {
     const avaiableSessions = getGeneratedLines();
     if (avaiableSessions.includes(`session-${clientId}`)) {
@@ -16,8 +18,6 @@ export const insertLine = (socket) => async (data, sendResponse) => {
         msg: "El nombre de la sesion ya se encuentra logeada",
       });
     }
-
-    const client = new WhatsappLogin({ clientId });
 
     client.on("loading_screen", (percentage) => {
       socket.emit("loading_screen", percentage);
@@ -31,23 +31,23 @@ export const insertLine = (socket) => async (data, sendResponse) => {
     });
 
     client.on("bad_response", (message) => {
+      console.log("emit bad response");
       socket.emit("bad_response", message);
       sendResponse({ error: true, msg: message.msg });
     });
 
     client.on("good_response", (message) => {
+      console.log("emit good response");
       socket.emit("good_response", message);
     });
     client.on("authenticated", () => {
-      console.log("emit authenticated");
       socket.emit("authenticated");
     });
 
     socket.on("disconnect", async () => {
       try {
         console.log("Socket desconectado,destruyendo cliente");
-        await client.destroy();
-        deleteLineFolder(clientId);
+        if (!client.loggedIn) client.logoutClient();
       } catch (error) {
         console.log(error);
         console.log("no se pudo destruir el cliente");
@@ -61,6 +61,6 @@ export const insertLine = (socket) => async (data, sendResponse) => {
       error: true,
       msg: "Hubo un error al intentar generar una nueva linea",
     });
-    deleteLineFolder(clientId);
+    client.logoutClient();
   }
 };

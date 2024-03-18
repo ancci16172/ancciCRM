@@ -1,18 +1,19 @@
 import { useFieldArray, useForm } from "react-hook-form";
-import { GreenButtonBg } from "../../ui/GreenButtonBg";
+import { GreenButtonBg } from "../../../ui/GreenButtonBg.jsx";
 import {
   MessageContainer,
   MessageContainerHeader,
-} from "../../ui/Mensajes/ContainerMensaje";
-import { useWhatsapp } from "../../../context/WhatsappContext";
-import { useClipBoard } from "../../../../shared/hooks/useClipBoard";
+} from "../../../ui/Mensajes/ContainerMensaje.jsx";
+import { useWhatsapp } from "../../../../context/WhatsappContext.jsx";
+import { useClipBoard } from "../../../../../shared/hooks/useClipBoard.js";
 import { useEffect, useState } from "react";
 import { checkContactObjectFromClipboard } from "./ContactList.js";
-import { PError } from "../../../../shared/components/Form/PError.jsx";
-import {useTimeouts} from "../../../../shared/hooks/useTimeouts.js"
+import { PError } from "../../../../../shared/components/Form/PError.jsx";
+import {useTimeouts} from "../../../../../shared/hooks/useTimeouts.js"
+import { Table, TableContainer, TableHead, Td, TdInput, Tr } from "../../../ui/TableElements.jsx";
 
 export function ContactList() {
-  const { selectedLine, messageVariables, sendMessages, changedSaved } =
+  const { selectedLine, messageVariables, sendMessages, changedSaved,selectedMessageGroup ,toggleShowComponent} =
     useWhatsapp();
   const [rows, setRows] = useState([{}]);
   const { createObjectByClipboard } = useClipBoard();
@@ -30,7 +31,7 @@ export function ContactList() {
     name: "contacts",
   });
 
-  clearOnTimeout(errors.contacts,() => clearErrors(),3000)
+  clearOnTimeout(errors.contacts,clearErrors,3000)
 
   const handleFillTableFromClipboard = async () => {
     const objectFromClipboard = await createObjectByClipboard();
@@ -60,8 +61,10 @@ export function ContactList() {
       return;
     }
 
-    // console.log("errors", errors);
-    sendMessages(contacts);
+    console.log("contacts",contacts);
+    toggleShowComponent("MessagesSent");
+    toggleShowComponent("ContactList");
+    sendMessages(contacts,selectedMessageGroup.ID_MESSAGE_GROUP);
   };
 
   useEffect(() => {
@@ -77,20 +80,20 @@ export function ContactList() {
           title={`Enviar desde ${selectedLine}: `}
           toggleString={"ContactList"}
         />
-        <div className="overflow-auto p-4 ">
-          <table className="min-w-full odd:backdrop-red-800">
-            <thead className="bg-[#F2F2F2]">
+        <TableContainer>
+          <Table>
+            <TableHead>
               <tr>
                 <th>Telefono</th>
                 {messageVariables.map((variable, i) => (
                   <th key={i}>{variable}</th>
                 ))}
               </tr>
-            </thead>
+            </TableHead>
             <tbody>
               {rows.map((row, indexRow) => (
                 <Tr key={indexRow}>
-                  <Td>
+                  <TdInput>
                     <Input
                       name={`contacts.${indexRow}.phoneNumber`}
                       placeholder={"Numero de telefono"}
@@ -103,9 +106,9 @@ export function ContactList() {
                       type={"number"}
                       defaultValue={row["TELEFONO"]}
                     />
-                  </Td>
+                  </TdInput>
                   {messageVariables.map((variable, i) => (
-                    <Td key={i}>
+                    <TdInput key={i}>
                       <Input
                         name={`contacts.${indexRow}.${variable}`}
                         placeholder={variable.toLowerCase()}
@@ -114,19 +117,19 @@ export function ContactList() {
                         type={"text"}
                         defaultValue={row[variable.toUpperCase()]}
                       />
-                    </Td>
+                    </TdInput>
                   ))}
                 </Tr>
               ))}
             </tbody>
-          </table>
+          </Table>
   
           {errors.contacts && errors.contacts.map((contactError,i) =>
           <PError key={i}>{contactError.phoneNumber.message}</PError>
           )}
   
-        </div>
-        <div className="pb-3 px-4 flex">
+        </TableContainer>
+        <div className="pb-3 px-4 flex gap-4">
 
           <GreenButtonBg className={"flex-1"}>Enviar</GreenButtonBg>
           <GreenButtonBg
@@ -142,13 +145,8 @@ export function ContactList() {
   );
 }
 
-function Tr({ children }) {
-  return <tr className="border-t border-b border-gray-300">{children}</tr>;
-}
 
-function Td({ children }) {
-  return <td className="relative py-4 min-w-[5rem]">{children}</td>;
-}
+
 
 function Input({
   placeholder,

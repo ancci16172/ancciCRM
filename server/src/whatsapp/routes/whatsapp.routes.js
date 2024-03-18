@@ -2,14 +2,15 @@ import { Router } from "express";
 import {
   getAvailableLines,
   getMessages,
-  sendMessages,
+
   updateMessagesGroup,
   getAvailableMessageGroups,
   insertNewMessageGroup,
   deleteMessageGroup,
   deleteLine,
 } from "../controller/whatsapp.controller.js";
-import { insertLine } from "../socket/whatsapp.socket.js";
+import { insertLine } from "../socket/whatsapp.loginNewLine.js";
+import { sendMessages } from "../socket/whatsapp.sendMessages.js";
 import io from "../../services/socket/socket.js";
 
 
@@ -31,10 +32,9 @@ router.post("/insertNewMessageGroup", insertNewMessageGroup);
 router.delete("/deleteMessageGroup/:ID_MESSAGE_GROUP", deleteMessageGroup);
 
 /*WhatsappClient */
-router.post("/sendMessages", sendMessages);
-
 io.on("connection", (socket) => {
   socket.on("insertLine", insertLine(socket));
+  socket.on("sendMessages/start",sendMessages(socket));
 });
 
 export default router;

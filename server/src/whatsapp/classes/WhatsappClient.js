@@ -1,11 +1,12 @@
 import whatsapp from "whatsapp-web.js";
-const { Client, LocalAuth } = whatsapp;
+import { deleteLineFolder } from "../model/whatsapp.model.js";
+const { Client, LocalAuth,MessageAck } = whatsapp;
 
 
 export class WhatsappClient extends Client {
+  _clientId;
   constructor({ clientId }) {
-    console.log("Cliente generado", clientId);
-
+    console.log("Generando cliente", clientId);
     super({
       authStrategy: new LocalAuth({ clientId }),
       puppeteer: {
@@ -19,6 +20,18 @@ export class WhatsappClient extends Client {
         ],
       },
     });
+    this._clientId = clientId;
+
+    
   }
 
+  async destroyLine() {
+    try {
+      await this.destroy();
+      deleteLineFolder(this._clientId);
+    } catch (error) {
+      console.log("catch on destroyLine",error);
+    }
+  }
+  
 }

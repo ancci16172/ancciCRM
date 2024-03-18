@@ -8,7 +8,8 @@ import { useWhatsapp } from "../context/WhatsappContext.jsx";
 import { GruposDisponibles } from "../components/Mensajes/CargarMensajes.jsx";
 import { NuevoGrupoDeMensajes } from "../components/Mensajes/NuevoGrupoDeMensajes.jsx";
 import {EditMessage} from "../components/Mensajes/EditarMensaje.jsx"
-import { ContactList } from "../components/Mensajes/ContactList/ContactList.jsx";
+import { ContactList } from "../components/Mensajes/SendMessage/ContactList/ContactList.jsx";
+import { MessagesSent } from "../components/Mensajes/MessagesSent.jsx";
 
 export function WhatsappMassiveMessaged() {
   const { showComponents } = useWhatsapp();
@@ -24,6 +25,8 @@ export function WhatsappMassiveMessaged() {
       {showComponents.AvailableGroups && <GruposDisponibles />}
       {showComponents.NewMessageGroupForm && <NuevoGrupoDeMensajes/>}
       {showComponents.ContactList && <ContactList/>}
+      {showComponents.MessagesSent && <MessagesSent/>}
+
     </Container>
   );
 }

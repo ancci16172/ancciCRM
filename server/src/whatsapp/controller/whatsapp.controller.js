@@ -1,4 +1,3 @@
-import whatsapp from "whatsapp-web.js";
 
 import {
   getGeneratedLines,
@@ -8,7 +7,6 @@ import {
   insertNewMessageGroupDb,
   deleteMessageGroupDb,deleteLineFolder
 } from "../model/whatsapp.model.js";
-import { WhatsappSender } from "../classes/WhatsappSender.js";
 
 export const getAvailableLines = (req, res) => {
   try {
@@ -109,41 +107,42 @@ export const deleteMessageGroup = async (req, res) => {
 };
 
 /*Traducir con SOCKETS */
-export const sendMessages = async (req, res) => {
-  try {
-    const { clientId, contacts, ID_MESSAGE_GROUP } = req.body;
-    console.log("Recibe para enviar mensajes", req.body);
+// export const sendMessages = async (req, res) => {
+//   try {
+//     const { clientId, contacts, ID_MESSAGE_GROUP } = req.body;
+//     console.log("Recibe para enviar mensajes", req.body);
 
-    const messageGroup = await getMessageGroupDb(ID_MESSAGE_GROUP);
-    const messages = messageGroup.messages.map((m) => m.TEXT);
+//     const messageGroup = await getMessageGroupDb(ID_MESSAGE_GROUP);
+//     const messages = messageGroup.messages.map((m) => m.TEXT);
 
-    const avaiableSessions = getGeneratedLines();
+//     const avaiableSessions = getGeneratedLines();
 
-    if (!avaiableSessions.includes(clientId)) {
-      return res.status(404).json({ msg: "No se encontro la sesion." });
-    }
+//     if (!avaiableSessions.includes(clientId)) {
+//       return res.status(404).json({ msg: "No se encontro la sesion." });
+//     }
 
-    const client = new WhatsappSender({ clientId,contacts,messages });
+//     const client = new WhatsappSender({ clientId,contacts,messages });
 
-    client.on("loading_screen", (percentage) =>
-      console.log("Cargando...", percentage)
-    );
+//     client.on("loading_screen", (percentage) =>
+//       console.log("Cargando...", percentage)
+//     );
     
-    client.on("bad_response", (msg) => {
-      console.log("error en whatsappSender");
-      res.status(500).json(msg);
-    });
+//     client.on("bad_response", (msg) => {
+//       console.log("error en whatsappSender");
+//       res.status(500).json(msg);
+//     });
 
-    client.on("good_response", (msg) => {
-      console.log("good message", msg);
-      res.status(200).json(msg);
-    });
+//     client.on("good_response", (msg) => {
+//       console.log("good message", msg);
+//       res.status(200).json(msg);
+//     });
 
-    await client.initialize();
+//     await client.initialize();
 
-  } catch (error) {
-    console.log("ERROR al enviar mensajes", error);
+//   } catch (error) {
+//     console.log("ERROR al enviar mensajes", error);
 
-    res.status(500).json({ msg: "Error inesperado." });
-  }
-};
+//     res.status(500).json({ msg: "Error inesperado." });
+//   }
+// };
+

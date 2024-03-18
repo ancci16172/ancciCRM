@@ -16,7 +16,7 @@ export default {
       },
       backgroundImage:{
         "whatsapp-bg" : "url('/src/whatsapp/public/bg--whatsapp.png')"
-      }
+      },
     },
   },
   plugins: [],

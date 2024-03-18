@@ -44,35 +44,47 @@ export const useWhatsappSocket = ({ socket,fetchAvaiableLines }) => {
     } 
   };
 
-  //Cargando pagina de whatsapp
-  socket.on("loading_screen", (percentage) => {
-    console.log("CARGANDO WHATSAPP ", percentage, "%");
-    setQr({...qr,message : "Cargando QR...",isLoading : true});
-  });
+  const setEvents = ()=> {
+    //Cargando pagina de whatsapp
+    socket.on("loading_screen", (percentage) => {
+      console.log("CARGANDO WHATSAPP ", percentage, "%");
+      setQr({...qr,message : "Cargando QR...",isLoading : true});
+    });
 
-  socket.on("qr", (qrSv) => {
-    console.log("recibido desde el socket", qrSv);
-    setQr({ ...qr, data: qrSv, isLoading: false });
-  });
+    socket.on("qr", (qrSv) => {
+      console.log("recibido desde el socket", qrSv);
+      setQr({ ...qr, data: qrSv, isLoading: false });
+    });
 
+    //Reading qr...
+    socket.on("authenticated",() => {
+      console.log("Authenticated");
+      setQr({...qr,message : "Linea autenticada... cargando chats y contactos.",isLoading : true})
+    })
 
-  //Reading qr...
-  socket.on("authenticated",() => {
-    console.log("Authenticated");
-    setQr({...qr,message : "Linea autenticada... cargando chats y contactos.",isLoading : true})
-  })
+    socket.on("bad_response", (data) => {
+      console.log("ERROR BAD RESPONSE", data);
+      setQr({ ...qr, message : data.msg, isLoading : false,error: true, successful: false,data : "",qrProcessRunning : false });
+      fetchAvaiableLines()
+    });
 
-  socket.on("bad_response", (data) => {
-    console.log("ERROR BAD RESPONSE", data);
-    setQr({ ...qr, message : data.msg, isLoading : false,error: true, successful: false,data : "",qrProcessRunning : false });
-    fetchAvaiableLines()
-  });
+    socket.on("good_response", (data) => {
+      console.log("Good response", data);
+      setQr({ ...qr,message : data.msg, isLoading : false,error: false, successful: true ,data : "",qrProcessRunning : false});
+      fetchAvaiableLines()
+    });
+  }
 
-  socket.on("good_response", (data) => {
-    console.log("Good response", data);
-    setQr({ ...qr,message : data.msg, isLoading : false,error: false, successful: true ,data : "",qrProcessRunning : false});
-    fetchAvaiableLines()
-  });
+  useEffect(() => {
+    socket.connect();
+    setEvents();
+    return () => {
+      // socket.removeAllEvents();
+      // socket.disconnect();
+    }
+
+  },[])
+
 
   return { qr, newLineName, insertLine };
 };

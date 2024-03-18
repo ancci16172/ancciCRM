@@ -1,9 +1,8 @@
 import { useWhatsapp } from "../../context/WhatsappContext";
 import { QRCode } from "react-qr-code";
-import { ring2 } from "ldrs";
 import { PError } from "../../../shared/components/Form/PError.jsx";
 import { useEffect } from "react";
-
+import {Loading} from "../../../shared/components/ui/Loading.jsx"
 /*Si muestra si existe algun nombre escrito y la respuesta de la insercion del nombre este OK */
 export function ShowQr() {
   const { qr } = useWhatsapp();
@@ -44,20 +43,12 @@ export function ShowQr() {
 }
 
 function loadingQr({ message }) {
-  ring2.register();
 
   // Default values shown
-
+  
   return (
     <QrContainer className={"cursor-wait"}>
-      <l-ring-2
-        size="40"
-        stroke="5"
-        stroke-length="0.25"
-        bg-opacity="0.1"
-        speed="0.8"
-        color="black"
-      ></l-ring-2>
+      <Loading/>
       {message}
     </QrContainer>
   );

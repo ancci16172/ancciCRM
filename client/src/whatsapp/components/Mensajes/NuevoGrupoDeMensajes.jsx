@@ -34,7 +34,7 @@ export function NuevoGrupoDeMensajes() {
         
       >
         <InputContainer toggleString={"NewMessageGroupForm"}>
-          <Input register={register} name={"NAME"} errorMessage={"El nombre del grupo no puede estar vacio."}/>
+          <Input register={register} name={"NAME"} errorMessage={"El nombre del grupo no puede estar vacio."} placeholder={"Nombre del grupo..."}/>
         </InputContainer>
       </NewWhatsappData>
       <div className="px-3 pb-2">

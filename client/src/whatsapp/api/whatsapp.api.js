@@ -20,7 +20,7 @@ export const deleteMessageGroupRequest = async (ID_MESSAGE_GROUP) => await axios
 export const sendWhatsappMessages = async (data) => await axios.post("/whatsapp/sendMassiveMessages",data);
 
 //data : {clientId:{} ,contacts : [{phone : 541124659963},{phone:541124659963}]}
-export const sendMessagesRequest = async (data) => await axios.post(`/whatsapp/sendMessages`,data);
+// export const sendMessagesRequest = async (data) => await axios.post(`/whatsapp/sendMessages`,data);
 
 
 

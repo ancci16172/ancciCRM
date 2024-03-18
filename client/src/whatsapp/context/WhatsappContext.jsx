@@ -4,6 +4,7 @@ import { useLines } from "../hooks/useLines";
 import socket from "../../services/socket/socket.js";
 import { useMessages } from "../hooks/useMessages.js";
 import { useWhatsappSocket } from "../socket/whatsapp.socket.js";
+import { useWhatsappSocketSendMessages } from "../socket/socket.sendMessages.js";
 
 const WhatsappContext = createContext();
 
@@ -17,20 +18,13 @@ export const useWhatsapp = () => {
 };
 
 export function WhatsappProvider() {
-  socket.connect();
-
-  const {
-    
+  const {    
     availableLines,
-    selectedLine,
-    setSelectedLine,
     deleteLine,fetchAvaiableLines
   } = useLines();
-
   const {
     messages,
     addMessage,
-    sendMessages,
     updateMessagesGroup,
     availableMessageGroups,
     selectedMessageGroup,
@@ -44,12 +38,13 @@ export function WhatsappProvider() {
     messageVariables,
     setMessages,
     changedSaved,
-  } = useMessages(selectedLine);
-  
+  } = useMessages();
+
+  const {   selectedLine,setSelectedLine,sendMessages,trackedMessages,sendingMessagesData} = useWhatsappSocketSendMessages({socket})
   const { qr,insertLine,newLineName } = useWhatsappSocket({ socket ,fetchAvaiableLines});
 
   const [showComponents, setShowComponents] = useState({
-    NewPhoneLine: true,
+    NewPhoneLine: false,
     AvailableLines: false,
     SetName: true,
     ShowQr: false,
@@ -58,6 +53,7 @@ export function WhatsappProvider() {
     NewMessageGroupForm: false,
     EditMessage: false,
     ContactList: false,
+    MessagesSent : false
   });
 
   const toggleShowComponent = (ComponentName) => {
@@ -80,7 +76,7 @@ export function WhatsappProvider() {
         insertLine,
         qr,
         newLineName,
- 
+        sendingMessagesData,
         messages,
         addMessage,
         sendMessages,
@@ -99,7 +95,7 @@ export function WhatsappProvider() {
         messageVariables,
         setMessages,
         changedSaved,
-        deleteLine,
+        deleteLine,trackedMessages
       }}
     >
       <Outlet />

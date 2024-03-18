@@ -35,12 +35,12 @@ export function InputContainer({ children,toggleString }) {
     </div>
   );
 }
-export function Input({ register, name, errorMessage }) {
+export function Input({ register, name, errorMessage ,placeholder}) {
   return (
     <input
       type="text"
       className="bg-transparent outline-none placeholder:text-[#777777] flex-1"
-      placeholder="Nombre de la linea..."
+      placeholder={placeholder}
       {...register(name, { required: errorMessage })}
     />
   );

@@ -5,7 +5,7 @@ import { AbsoluteFormContainer } from "../ui/AbsoluteFormContainer";
 
 //Interfaz para agregar una nueva linea(renderizado)
 export function NewPhoneLine() {
-  const { showComponents,qr : {qrProcessRunning} } = useWhatsapp();
+  const { showComponents,qr  } = useWhatsapp();
 
   if (showComponents.NewPhoneLine)
     return (
@@ -13,7 +13,7 @@ export function NewPhoneLine() {
 
         {/* Selecionar un nombre */}
 
-        {showComponents.SetName && !qrProcessRunning && <SetName />}
+        {showComponents.SetName && !qr.qrProcessRunning && <SetName />}
 
         {/* Mostrar QR o error */}
         {<ShowQr />}

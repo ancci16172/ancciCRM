@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   getMessagesRequest,
-  sendMessagesRequest,
   getAvailableMessageGroupsRequest,
   insertNewMessageGroupRequest,
   deleteMessageGroupRequest,
   updateMessagesRequest,
 } from "../api/whatsapp.api";
 
-export const useMessages = (selectedLine) => {
+export const useMessages = () => {
   // El formato de los mensajes : {msg : "texto"}
   //   const [messages, setMessages] = useState([
   //     { ID_MESSAGE_GROUP: 0, ID_MESSAGE: 0, TEXT: "Mensaje1" },
@@ -16,10 +15,11 @@ export const useMessages = (selectedLine) => {
 
   const [selectedMessageGroup, setSelectedMessageGroup] = useState({});
   const [messages, setMessages] = useState([]);
-
+  const [prevMessages,setPrevMessages] = useState([]);
   const [changedSaved, setChangedSaved] = useState(true);
   const [availableMessageGroups, setAvaliableMessageGroups] = useState([]);
   const [editableMessage, setEditableMessage] = useState({});
+
 
   const messageVariables = useMemo(() => {
     console.log("Calculando variables de mensajes");
@@ -42,20 +42,20 @@ export const useMessages = (selectedLine) => {
     setMessages([...messages, message]);
   };
 
-  const sendMessages = async (contacts) => {
-    const messageData = {
-      clientId: selectedLine,
-      contacts,
-      ID_MESSAGE_GROUP: selectedMessageGroup.ID_MESSAGE_GROUP,
-    };
+  // const sendMessages = async (contacts) => {
+  //   const messageData = {
+  //     clientId: selectedLine,
+  //     contacts,
+  //     ID_MESSAGE_GROUP: selectedMessageGroup.ID_MESSAGE_GROUP,
+  //   };
 
-    try {
-      const res = await sendMessagesRequest(messageData);
-      console.log("respuesta al evniar mensajes", res);
-    } catch (error) {
-      console.log("error no pudo enviar los mensajes", error);
-    }
-  };
+  //   try {
+  //     const res = await sendMessagesRequest(messageData);
+  //     console.log("respuesta al evniar mensajes", res);
+  //   } catch (error) {
+  //     console.log("error no pudo enviar los mensajes", error);
+  //   }
+  // };
 
   const updateMessagesGroup = async () => {
     const { ID_MESSAGE_GROUP } = selectedMessageGroup;
@@ -74,6 +74,7 @@ export const useMessages = (selectedLine) => {
       console.log("new selected message group", groupData.data);
       setSelectedMessageGroup(groupData.data);
       setMessages(groupData.data.messages);
+      setPrevMessages(groupData.data.messages)
     } catch (error) {
       console.log("ERROR FETCHMESSAGES", error);
     }
@@ -122,38 +123,24 @@ export const useMessages = (selectedLine) => {
   };
 
   useEffect(() => {
-    if(messages.length > 0)
-      setChangedSaved(false);
-
+    if(JSON.stringify(prevMessages) != JSON.stringify(messages))
+      return setChangedSaved(false);
+    return setChangedSaved(true)
   }, [messages]);
 
-  // const setMessages = (setFunction) => {
-  //   console.log({prevDataToSend : selectedMessageGroup.messages});
-  //   const finalResult = setFunction(selectedMessageGroup.messages)
-  //   console.log({finalResult});
 
-  //   // setSelectedMessageGroup({
-  //   //   ...selectedMessageGroup,
-  //   //   messages: ,
-  //   // });
-  //   console.log("AFTER SET MESSAGES",selectedMessageGroup);
-
-  // };
 
   useEffect(() => {
-    // fetchGroupData(1);
+
     fetchAvailableMessageGroup();
   }, []);
 
-  useEffect(() => {
-    console.log("CAMBIO EN selectedMessageGroup", selectedMessageGroup);
-  }, [selectedMessageGroup]);
+ 
 
   return {
     messages,
     selectedMessageGroup,
     addMessage,
-    sendMessages,
     updateMessagesGroup,
     availableMessageGroups,
     fetchGroupData,

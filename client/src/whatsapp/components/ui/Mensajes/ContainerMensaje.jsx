@@ -2,10 +2,11 @@ import { RxCross2 } from "react-icons/rx";
 import { useWhatsapp } from "../../../context/WhatsappContext";
 import { AbsoluteFormContainer } from "../AbsoluteFormContainer";
 
-export function MessageContainer({ children }) {
+export function MessageContainer({ children,className}) {
+
   return (
     <AbsoluteFormContainer
-      className={"border border-solid border-gray-800 max-w-[min(90%,35rem)]"}
+      className={`border border-solid border-gray-800 max-w-[min(90%,35rem)] max-h-[85vh] overflow-y-auto ` + className }
     >
       {children}
     </AbsoluteFormContainer>
@@ -26,14 +27,14 @@ export function MessageContainerHeader({ toggleString, title }) {
   );
 }
 
-export function MessageContainerBody({ children, textAreaName, register,defaultValue }) {
+export function MessageContainerBody({ children, textAreaName, register,defaultValue,propsAtRegister = {required : true} }) {
   return (
     <div className="py-3 px-4">
       <textarea
         className="bg-[#F0F0F0] w-full min-h-[190px] resize-none outline-none px-2 py-1"
-        {...register(textAreaName, { required: true })} defaultValue={defaultValue}
+        {...register(textAreaName, propsAtRegister)} defaultValue={defaultValue}
       ></textarea>
-      <div className="my-2 flex">{children}</div>
+      <div className="my-2 flex flex-col">{children}</div>
     </div>
   );
 }

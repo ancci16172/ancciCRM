@@ -6,7 +6,7 @@ import { getAvailableLinesRequest,deleteLineRequest } from "../api/whatsapp.api"
 export const useLines = () => {
     const [availableLines, setavailableLines] = useState([]);
 
-    const [selectedLine,setSelectedLine] = useState("");
+   
 
 
 
@@ -50,7 +50,7 @@ export const useLines = () => {
 
 
 
-    return {  availableLines,selectedLine,setSelectedLine,deleteLine,fetchAvaiableLines : fetchData }
+    return {  availableLines,deleteLine,fetchAvaiableLines : fetchData }
 }
 
 
