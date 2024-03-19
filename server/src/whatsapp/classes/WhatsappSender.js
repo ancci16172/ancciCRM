@@ -59,6 +59,7 @@ export class WhatsappSender extends WhatsappClient {
 
           this.messagesToTrack.push({ phoneNumber, messages: [] });
           const isContactBlocked = blockedContacts.includes(contactPhone);
+          console.log("valida si el telefono es valido");
           const isWhatsappValid = await this.isRegisteredUser(contactPhone);
 
           
