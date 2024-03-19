@@ -8,8 +8,8 @@ export const useWhatsappSocket = ({ socket,fetchAvaiableLines }) => {
 
   const reset = () => {
     setQr(qrInitValues);
-    setNewLineName("")
-  };
+    setNewLineName("");
+  }
   useEffect(() => {
     console.log("mostrando qr",qr);
     if(qr.successful || qr.error){

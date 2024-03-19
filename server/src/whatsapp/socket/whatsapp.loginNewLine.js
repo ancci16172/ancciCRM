@@ -47,7 +47,7 @@ export const insertLine = (socket) => async (data, sendResponse) => {
     socket.on("disconnect", async () => {
       try {
         console.log("Socket desconectado,destruyendo cliente");
-        if (!client.loggedIn) client.logoutClient();
+        if (!client.loggedIn) await client.destroyLine();
       } catch (error) {
         console.log(error);
         console.log("no se pudo destruir el cliente");
@@ -61,6 +61,6 @@ export const insertLine = (socket) => async (data, sendResponse) => {
       error: true,
       msg: "Hubo un error al intentar generar una nueva linea",
     });
-    client.logoutClient();
+    await client.destroyLine();
   }
 };

@@ -2,13 +2,13 @@ import { WhatsappSender } from "../classes/WhatsappSender.js";
 import { getMessagesText } from "../lib/messages.js";
 
 export const sendMessages = (socket) => async ({clientId, contacts, ID_MESSAGE_GROUP},sendResponse) => {
-
+  let client;
   try {
     console.log("Apunto de enviar mensajes",{clientId,contacts,ID_MESSAGE_GROUP});
-
+    
     const messages = await getMessagesText(ID_MESSAGE_GROUP);
     console.log("messages",messages);
-    const client = new WhatsappSender({ clientId,contacts,messages });
+    client = new WhatsappSender({ clientId,contacts,messages });
     
     client.on("loading",msg => {
       socket.emit("sendMessages/loading",msg)
@@ -30,12 +30,20 @@ export const sendMessages = (socket) => async ({clientId, contacts, ID_MESSAGE_G
       sendResponse({error : false,...res})
     });
   
+    socket.on("disconnect",async () => {
+      console.log("Sockect desconectado al enviar mensajes, destruyendo cliente");
+      await client.destroy();
+    })
+
     await client.initialize()
 
   } catch (error) {
-    socket.emit("sendMessages/bad_response",{msg : "Error insperado, no se pudieron enviar los mensajes."})
-    console.log(error);
-    
+    await client?.destroy()
+    console.log("error catch general",error);
+    if(error.errno == 404){
+      return socket.emit("sendMessages/bad_response",{msg : `La linea '${clientId}' no existe, o no se encuentra logeada.`})
+    }
+     socket.emit("sendMessages/bad_response",{msg : "Error insperado, no se pudieron enviar los mensajes."})
   }
 
 

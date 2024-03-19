@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import socket from "../../services/socket/socket.js"
 
 import { getAvailableLinesRequest,deleteLineRequest } from "../api/whatsapp.api";
 

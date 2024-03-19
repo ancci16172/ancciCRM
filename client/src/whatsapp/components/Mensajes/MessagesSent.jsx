@@ -14,7 +14,7 @@ import {
   Tr,
 } from "../ui/TableElements";
 import { Loading } from "../../../shared/components/ui/Loading.jsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PError } from "../../../shared/components/Form/PError.jsx";
 import {MessageAckMessages} from "../../constants/MessageAck.js"
 export function MessagesSent() {
@@ -91,6 +91,7 @@ function ResponseMessage({ response }) {
 
 function ResponseResume({response}) {
   if (!response) return;
+  if(!response.isGood) return;
   // const response = {resume : {[-1]: 5,1 : 2,2 : 3,5 : 2}};
   const keys = Object.keys(response.resume.data)
   console.log({keys});

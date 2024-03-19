@@ -29,7 +29,7 @@ export const useWhatsappSocketSendMessages = ({ socket }) => {
   //Start to send messages
   const sendMessages = async (contacts, ID_MESSAGE_GROUP) => {
     resetSendingMessage();
-    
+
     const messageData = {
       clientId: selectedLine,
       contacts,

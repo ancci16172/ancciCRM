@@ -9,29 +9,43 @@ import { useClipBoard } from "../../../../../shared/hooks/useClipBoard.js";
 import { useEffect, useState } from "react";
 import { checkContactObjectFromClipboard } from "./ContactList.js";
 import { PError } from "../../../../../shared/components/Form/PError.jsx";
-import {useTimeouts} from "../../../../../shared/hooks/useTimeouts.js"
-import { Table, TableContainer, TableHead, Td, TdInput, Tr } from "../../../ui/TableElements.jsx";
+import { useTimeouts } from "../../../../../shared/hooks/useTimeouts.js";
+import {
+  Table,
+  TableContainer,
+  TableHead,
+  Td,
+  TdInput,
+  Tr,
+} from "../../../ui/TableElements.jsx";
 
 export function ContactList() {
-  const { selectedLine, messageVariables, sendMessages, changedSaved,selectedMessageGroup ,toggleShowComponent} =
-    useWhatsapp();
+  const {
+    selectedLine,
+    messageVariables,
+    sendMessages,
+    changedSaved,
+    selectedMessageGroup,
+    toggleShowComponent,
+  } = useWhatsapp();
   const [rows, setRows] = useState([{}]);
   const { createObjectByClipboard } = useClipBoard();
-  const {clearOnTimeout} = useTimeouts();
+  const { clearOnTimeout } = useTimeouts();
   const {
     register,
     control,
     formState: { errors },
     handleSubmit,
-    reset,clearErrors,
+    reset,
+    clearErrors,
   } = useForm();
-  
+
   const { fields, append } = useFieldArray({
     control,
     name: "contacts",
   });
 
-  clearOnTimeout(errors.contacts,clearErrors,3000)
+  clearOnTimeout(errors.contacts, clearErrors, 3000);
 
   const handleFillTableFromClipboard = async () => {
     const objectFromClipboard = await createObjectByClipboard();
@@ -61,17 +75,22 @@ export function ContactList() {
       return;
     }
 
-    console.log("contacts",contacts);
+    console.log("contacts", contacts);
+
+    if (!selectedMessageGroup.ID_MESSAGE_GROUP)
+      return alert(
+        "No hay ningun grupo de mensajes seleccionados, no se pueden enviar los mensajes."
+      );
+
     toggleShowComponent("MessagesSent");
     toggleShowComponent("ContactList");
-    sendMessages(contacts,selectedMessageGroup.ID_MESSAGE_GROUP);
+
+    sendMessages(contacts, selectedMessageGroup.ID_MESSAGE_GROUP);
   };
 
   useEffect(() => {
     console.log("contacts", errors.contacts);
   }, [errors.contacts]);
-
-
 
   return (
     <MessageContainer>
@@ -123,14 +142,13 @@ export function ContactList() {
               ))}
             </tbody>
           </Table>
-  
-          {errors.contacts && errors.contacts.map((contactError,i) =>
-          <PError key={i}>{contactError.phoneNumber.message}</PError>
-          )}
-  
+
+          {errors.contacts &&
+            errors.contacts.map((contactError, i) => (
+              <PError key={i}>{contactError.phoneNumber.message}</PError>
+            ))}
         </TableContainer>
         <div className="pb-3 px-4 flex gap-4">
-
           <GreenButtonBg className={"flex-1"}>Enviar</GreenButtonBg>
           <GreenButtonBg
             className={"flex-1"}
@@ -144,9 +162,6 @@ export function ContactList() {
     </MessageContainer>
   );
 }
-
-
-
 
 function Input({
   placeholder,

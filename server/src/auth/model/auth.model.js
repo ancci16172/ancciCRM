@@ -12,7 +12,7 @@ export const registrarUsuarioRequest = async ({usuario,contrasenia}) => {
 
 }
 export const getUsuario = async (searchObject) => {
-    const [response,query] = await pool.query(`SELECT * FROM usuarios where ?`,[searchObject]);
+    const [response,query] = await pool.query(`SELECT * FROM Usuarios where ?`,[searchObject]);
     return response[0];
 }
 

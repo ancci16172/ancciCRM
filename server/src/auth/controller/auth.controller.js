@@ -25,7 +25,7 @@ export const iniciarSesion = async (req, res) => {
 
         if (!userFound) return res.status(404).json({ error: true, msg: "No existe usuario con esas credenciales" })
 
-        const isMatch = contrasenia == userFound.contrasenia;
+        const isMatch = contrasenia == userFound.Contrasenia;
         if (!isMatch) return res.status(404).json({ msg: "No autorizado, credenciales invalidas" });
 
         const tk = await generateWebToken({ ID: userFound.ID });

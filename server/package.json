@@ -21,7 +21,7 @@
     "morgan": "^1.10.0",
     "mysql2": "^3.6.5",
     "socket.io": "^4.7.4",
-    "whatsapp-web.js": "^1.23.0",
+    "whatsapp-web.js": "^1.23.1-alpha.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
