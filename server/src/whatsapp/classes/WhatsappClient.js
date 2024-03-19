@@ -10,14 +10,14 @@ export class WhatsappClient extends Client {
     super({
       authStrategy: new LocalAuth({ clientId }),
       puppeteer: {
-        // args: [
-        //   "--no-sandbox",
-        //   "--disable-setuid-sandbox",
-        //   "--unhandled-rejections=strict",
-        //   "--disable-features=site-per-process",
-        //   "--disable-setuid-sandbox",
-        //   "--ignore-certificate-errors",
-        // ],
+        args: [
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--unhandled-rejections=strict",
+          "--disable-features=site-per-process",
+          "--disable-setuid-sandbox",
+          "--ignore-certificate-errors",
+        ]
       },
     });
     this._clientId = clientId;
