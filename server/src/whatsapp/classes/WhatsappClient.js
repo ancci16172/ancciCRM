@@ -11,7 +11,7 @@ export class WhatsappClient extends Client {
     super({
       authStrategy: new LocalAuth({ clientId }),
       puppeteer: {
-        headless : false,
+        headless : true,
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
