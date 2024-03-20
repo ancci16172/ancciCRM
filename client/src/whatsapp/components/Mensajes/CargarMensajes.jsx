@@ -9,7 +9,7 @@ import {
   WhatsappOptionsContainerOptions,
 } from "../ui/WhatsappOptions/WhatsappOptions";
 import { TbEdit } from "react-icons/tb";
-import { DeleteCross } from "../ui/icons/deleteCross";
+import { DeleteCross } from "../ui/icons/DeleteCross.jsx";
 // Convertir en renderizado e intentar separar la logica
 export function GruposDisponibles() {
   const {
