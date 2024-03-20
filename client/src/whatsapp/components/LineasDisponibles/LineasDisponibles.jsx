@@ -8,7 +8,7 @@ import {
   WhatsappOptionsContainerButton,
   WhatsappOptionsContainerOptions,
 } from "../ui/WhatsappOptions/WhatsappOptions";
-import { DeleteCross } from "../ui/icons/deleteCross";
+import { DeleteCross } from "../ui/icons/DeleteCross.jsx";
 
 // Convertir en renderizado e intentar separar la logica
 export function LineasDisponibles() {
