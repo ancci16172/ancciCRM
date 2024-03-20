@@ -5,11 +5,13 @@ const { Client, LocalAuth,MessageAck } = whatsapp;
 
 export class WhatsappClient extends Client {
   _clientId;
+  
   constructor({ clientId }) {
     console.log("Generando cliente", clientId);
     super({
       authStrategy: new LocalAuth({ clientId }),
       puppeteer: {
+        headless : false,
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
@@ -18,11 +20,21 @@ export class WhatsappClient extends Client {
           "--disable-setuid-sandbox",
           "--ignore-certificate-errors",
         ]
-      },
+      },webVersion : "2.2411.2"
     });
-    this._clientId = clientId;
-
     
+
+    this._clientId = clientId;
+    this.on("ready",async () => {
+      console.log("consultando version ready");
+      const version = await this.getWWebVersion();
+      console.log("version",version);
+    })
+    this.on("qr",async () => {
+      console.log("consultando version qr");
+      const version = await this.getWWebVersion();
+      console.log("version",version);
+    })
   }
 
   async destroyLine() {

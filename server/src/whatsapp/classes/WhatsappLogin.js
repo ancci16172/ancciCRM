@@ -6,7 +6,15 @@ export class WhatsappLogin extends WhatsappClient {
 
   constructor({ clientId }) {
     super({ clientId });
-    
+    this.on("auth_failure",() => {
+      console.log("auth failure on login");
+    })
+    this.on("authenticated",() =>{
+      console.log("authenticated on login");
+    })
+    this.on("disconnected",() => {
+      console.log("Disconected on login");
+    })
     this.on("auth_failure", async () => {
       try {
           console.log("auth_failure");

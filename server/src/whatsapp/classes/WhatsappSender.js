@@ -13,6 +13,7 @@ export class WhatsappSender extends WhatsappClient {
       super({ clientId });
 
       this.on("loading_screen", (percentage) => {
+        console.log("loading sending message");
         this.emit("loading", { msg: "Cargando...", percentage });
       });
       this.on("authenticated", () => {
@@ -60,8 +61,8 @@ export class WhatsappSender extends WhatsappClient {
           this.messagesToTrack.push({ phoneNumber, messages: [] });
           const isContactBlocked = blockedContacts.includes(contactPhone);
           console.log("valida si el telefono es valido");
-          const isWhatsappValid = await this.isRegisteredUser(contactPhone);
-
+          // const isWhatsappValid = await this.isRegisteredUser(contactPhone);
+          const isWhatsappValid = true
           
 
 
@@ -95,6 +96,7 @@ export class WhatsappSender extends WhatsappClient {
         this.emit("messages_tracked_ack", this.messagesToTrack);
         while (!this.hasAllMessagesSent()) {
           await new Promise((res) => setTimeout(() => res(), 5000));
+          console.log("Actualizando si se enviaron los mensajes");
           await this.updateMessagesStatus();
           this.emit("messages_tracked_ack", this.messagesToTrack);
           // console.log(this.messagesToTrack.map(m => m.messages));
