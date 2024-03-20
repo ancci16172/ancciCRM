@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useWhatsapp } from "../../context/WhatsappContext";
 import { RxCross2 } from "react-icons/rx";
 import { TbEdit } from "react-icons/tb";
-import { useJQueryOrder } from "../../../shared/hooks/useJqueryOrder";
+import { useJQueryOrder } from "../../../shared/hooks/useJQueryOrder.js";
 
 export function OrderMessages() {
   const {
