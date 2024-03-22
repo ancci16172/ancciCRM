@@ -19,7 +19,7 @@ export const useMessages = () => {
   const [changedSaved, setChangedSaved] = useState(true);
   const [availableMessageGroups, setAvaliableMessageGroups] = useState([]);
   const [editableMessage, setEditableMessage] = useState({});
-
+  
 
   const messageVariables = useMemo(() => {
     console.log("Calculando variables de mensajes");

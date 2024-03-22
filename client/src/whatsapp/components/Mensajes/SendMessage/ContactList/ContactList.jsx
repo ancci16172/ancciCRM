@@ -70,7 +70,7 @@ export function ContactList() {
     }
     if (!changedSaved) {
       alert(
-        `No se pueden enviar mensajes debido a cambios sin guardar. Por favor, guarde los cambios antes de intentar enviar los mensajes.`
+        `No se pueden enviar mensajes debido a que existen cambios sin guardar. Por favor, guarde los cambios antes de intentar enviar los mensajes.`
       );
       return;
     }

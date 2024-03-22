@@ -17,6 +17,11 @@ export function AsideWhatsapp() {
   };
   clearOnTimeout(savedMessagesMessage, () => setSavedMessagesMessage(""), 1500);
 
+
+  const handleShowAddMedia= () => {
+    toggleShowComponent("AvailableMedia")
+  }
+
   return (
     <Aside title={"Personalizar"}>
       <GreenButton
@@ -25,10 +30,8 @@ export function AsideWhatsapp() {
       >
         Agregar mensaje
       </GreenButton>
-
-      <GreenButton className={"mt-1.5"}>Agregar multimedia</GreenButton>
+      <GreenButton className={"mt-1.5"} onClick={handleShowAddMedia}>Agregar multimedia</GreenButton>
       <OrderMessages />
-
       <span className="mt-auto">
         {savedMessagesMessage && (
           <p className="text-verde_wsp text-center">Mensajes guardados.</p>
@@ -38,9 +41,8 @@ export function AsideWhatsapp() {
         className={"text-ellipsis overflow-hidden whitespace-nowrap"}
         onClick={handleSaveMessages}
       >
-        {!changedSaved && "*"}Guardar mensajes
+        {!changedSaved && "*"}Guardar cambios
       </GreenButton>
-
       <GreenButton
         className={"mt-1.5 mb-2"}
         onClick={() => toggleShowComponent("AvailableGroups")}

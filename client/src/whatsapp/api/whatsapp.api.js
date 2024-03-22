@@ -16,6 +16,15 @@ export const getAvailableMessageGroupsRequest = async () => await axios.get(`/wh
 export const insertNewMessageGroupRequest = async (newGroupMessageName) => await axios.post(`/whatsapp/insertNewMessageGroup`,{newGroupMessageName});
 export const deleteMessageGroupRequest = async (ID_MESSAGE_GROUP) => await axios.delete(`/whatsapp/deleteMessageGroup/${ID_MESSAGE_GROUP}`)
 
+
+/*Media  */
+
+export const getAvailableMediaRequest = async () => await axios.get(`/whatsapp/getAvailableMedia`);
+
+export const insertNewMediaRequest = async (data) => await axios.post("/whatsapp/addNewMedia",data);
+
+export const deleteMediaRequest = async (mediaName) => await axios.delete(`/whatsapp/deleteMedia/${mediaName}`)
+
 /* Whatsapp client*/
 export const sendWhatsappMessages = async (data) => await axios.post("/whatsapp/sendMassiveMessages",data);
 

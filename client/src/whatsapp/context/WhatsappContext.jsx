@@ -1,13 +1,13 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useLines } from "../hooks/useLines";
 import socket from "../../services/socket/socket.js";
 import { useMessages } from "../hooks/useMessages.js";
 import { useWhatsappSocket } from "../socket/whatsapp.socket.js";
 import { useWhatsappSocketSendMessages } from "../socket/socket.sendMessages.js";
+import {useMedia} from "../hooks/useMedia.js"
 
 const WhatsappContext = createContext();
-
 export const useWhatsapp = () => {
   const context = useContext(WhatsappContext);
   if (!context)
@@ -43,6 +43,12 @@ export function WhatsappProvider() {
   const {   selectedLine,setSelectedLine,sendMessages,trackedMessages,sendingMessagesData} = useWhatsappSocketSendMessages({socket})
   const { qr,insertLine,newLineName } = useWhatsappSocket({ socket ,fetchAvaiableLines});
 
+  const {availableMedia,submitNewFile,deleteMedia} = useMedia();
+
+  useEffect(() => {
+    console.log("available media",availableMedia);  
+  },[availableMedia])
+
   const [showComponents, setShowComponents] = useState({
     NewPhoneLine: false,
     AvailableLines: false,
@@ -53,7 +59,8 @@ export function WhatsappProvider() {
     NewMessageGroupForm: false,
     EditMessage: false,
     ContactList: false,
-    MessagesSent : false
+    MessagesSent : false,
+    AvailableMedia : true,
   });
 
   const toggleShowComponent = (ComponentName) => {
@@ -95,7 +102,7 @@ export function WhatsappProvider() {
         messageVariables,
         setMessages,
         changedSaved,
-        deleteLine,trackedMessages
+        deleteLine,trackedMessages,availableMedia,submitNewFile,deleteMedia
       }}
     >
       <Outlet />

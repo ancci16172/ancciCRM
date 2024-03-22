@@ -19,7 +19,7 @@ import { PError } from "../../../shared/components/Form/PError.jsx";
 import {MessageAckMessages} from "../../constants/MessageAck.js"
 export function MessagesSent() {
   // const { selectedLine, messageVariables, sendMessages, changedSaved,selectedMessageGroup } =  useWhatsapp();
-  const { trackedMessages, sendingMessagesData } = useWhatsapp();
+  const { trackedMessages, sendingMessagesData ,selectedLine} = useWhatsapp();
 
   useEffect(() => {
     console.log({ sendingMessagesData });
@@ -41,7 +41,7 @@ export function MessagesSent() {
     <MessageContainer>
       <div>
         <MessageContainerHeader
-          title={`Enviando mensajes desde Rodrigo : `}
+          title={`Enviando mensajes desde ${selectedLine} : `}
           toggleString={"MessagesSent"}
         />
         <TableContainer>
