@@ -13,7 +13,7 @@ export class WhatsappClient extends Client {
       authStrategy: new LocalAuth({ clientId }),
       puppeteer: {
         executablePath : process.env.CHROME_EXECUTABLE,
-        headless: false,
+        headless: true,
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
