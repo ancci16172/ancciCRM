@@ -60,7 +60,7 @@ export function WhatsappProvider() {
     EditMessage: false,
     ContactList: false,
     MessagesSent : false,
-    AvailableMedia : true,
+    AvailableMedia : false,
   });
 
   const toggleShowComponent = (ComponentName) => {
