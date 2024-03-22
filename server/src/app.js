@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors"
 import path from "path"
-import { getDirName } from "./lib/dirname.js";
+import { _dirname } from "./lib/dirname.js";
 
 
 const app = express();
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cookieParser())
 
-const cliendServerPath = path.join(getDirName(import.meta.url),"..","..","client","dist");
+const cliendServerPath = path.join(_dirname(import.meta.url),"..","..","client","dist");
 app.use(express.static(cliendServerPath))
 
 

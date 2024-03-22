@@ -2,6 +2,8 @@ import { formatMessages } from "../lib/formatMessages.js";
 import { WhatsappClient } from "./WhatsappClient.js";
 import { existsLineFolder } from "../lib/lines.js";
 
+
+
 export class WhatsappSender extends WhatsappClient {
   messagesToTrack = [];
   messagesSend = false;
@@ -60,6 +62,7 @@ export class WhatsappSender extends WhatsappClient {
 
           this.messagesToTrack.push({ phoneNumber, messages: [] });
           const isContactBlocked = blockedContacts.includes(contactPhone);
+
           console.log("valida si el telefono es valido");
           // const isWhatsappValid = await this.isRegisteredUser(contactPhone);
           const isWhatsappValid = true
@@ -82,7 +85,9 @@ export class WhatsappSender extends WhatsappClient {
               ].messages.push({ ack: 6 });
               continue;
             }
+
             const msg = await this.sendMessage(contactPhone, message);
+            
 
             this.messagesToTrack[this.messagesToTrack.length - 1].messages.push(
               {
@@ -99,7 +104,7 @@ export class WhatsappSender extends WhatsappClient {
           console.log("Actualizando si se enviaron los mensajes");
           await this.updateMessagesStatus();
           this.emit("messages_tracked_ack", this.messagesToTrack);
-          // console.log(this.messagesToTrack.map(m => m.messages));
+
         }
 
         this.destroy();

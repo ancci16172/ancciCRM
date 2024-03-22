@@ -47,7 +47,7 @@ export const deleteMessageGroupDb = async (ID_GROUP_MESSAGE) => {
 };
 
 export const updateMessagesGroupDb = async (messages, groupId) => {
-  const formatedMessages = messages.map((message) => [message.TEXT, groupId]);
+  const formatedMessages = messages.map((message) => [message.TEXT,message.ES_MULTIMEDIA, groupId]);
 
   const connection = await pool.getConnection();
   try {
@@ -58,7 +58,7 @@ export const updateMessagesGroupDb = async (messages, groupId) => {
     ]);
 
     await connection.query(
-      `INSERT INTO Messages (TEXT,ID_MESSAGE_GROUP) VALUES ?`,
+      `INSERT INTO Messages (TEXT,ES_MULTIMEDIA,ID_MESSAGE_GROUP) VALUES ?`,
       [formatedMessages]
     );
 
