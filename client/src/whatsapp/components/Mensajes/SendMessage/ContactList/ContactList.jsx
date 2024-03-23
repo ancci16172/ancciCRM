@@ -103,7 +103,7 @@ export function ContactList() {
           <Table>
             <TableHead>
               <tr>
-                <th>Telefono</th>
+                <th className="min-w-[13ch]">Telefono</th>
                 {messageVariables.map((variable, i) => (
                   <th key={i}>{variable}</th>
                 ))}
@@ -148,7 +148,7 @@ export function ContactList() {
               <PError key={i}>{contactError.phoneNumber.message}</PError>
             ))}
         </TableContainer>
-        <div className="pb-3 px-4 flex gap-4">
+        <div className="py-3 px-4 flex gap-4">
           <GreenButtonBg className={"flex-1"}>Enviar</GreenButtonBg>
           <GreenButtonBg
             className={"flex-1"}

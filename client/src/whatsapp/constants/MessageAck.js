@@ -1,4 +1,6 @@
 export const MessageAckList = {
+  [-3] : "ENVIADO, ESTADO DESCONOCIDO",
+  [-2] : "ERROR INESPERADO", //Error respecto a whatsapp
   [-1]: "ERROR",
   0: "PENDIENTE",
   1: "ENVIADO",
@@ -8,7 +10,9 @@ export const MessageAckList = {
 };
 
 export const  MessageAckMessages = {
-  [-1]: "Error",
+  [-3] : "Error, enviado, estado desconocido",
+  [-2] : "Error, no enviado", //No se pudo enviar el mensaje
+  [-1]: "Error al enviar",
   0: "Enviando...",
   [5]: "Bloqueado",
   [6]: "Sin whatsapp",

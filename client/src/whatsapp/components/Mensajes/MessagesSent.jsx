@@ -94,15 +94,14 @@ function ResponseResume({response}) {
   if(!response.isGood) return;
   // const response = {resume : {[-1]: 5,1 : 2,2 : 3,5 : 2}};
   const keys = Object.keys(response.resume.data)
-  console.log({keys});
   // grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Columnas dinámicas */
 
   return (
     <div>
       <div className="text-2xl mb-1">Total : {response.resume.total}</div>
       <div className="grid gap-1.5 grid-cols-[repeat(auto-fill,minmax(150px,1fr))] whitespace-nowrap ">
-        {keys.map(k => 
-        <div className="flex-1">{MessageAckMessages[k] || "Enviado"} : {response.resume.data[k]}</div>
+        {keys.map((k,i) => 
+        <div className="flex-1" key={i}>{MessageAckMessages[k] || "Enviado"} : {response.resume.data[k]}</div>
         )}
       </div>
     </div>

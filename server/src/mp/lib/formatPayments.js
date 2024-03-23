@@ -14,14 +14,14 @@ export const formatPayments = async (results, mostrarTitulares = false,alias) =>
         const date_approvedDate = new Date(date_approved);
 
 
-        const contribuyente = (CUIT && mostrarTitulares) ? await getContribuyente({ CUIT }) : null;
+        const contribuyente = (CUIT && mostrarTitulares ) ? await getContribuyente({ CUIT }) : null;
         return {
             id,
             date_created: date_createdDate.toISOString(),
             date_approved: date_approvedDate.toISOString(),
             operation_type, transaction_details, payer_id, status, payer,
             esIngreso: !payer_id, esEgreso: !!payer_id,
-            titular: (CUIT && mostrarTitulares) ? nomPropio(contribuyente.nombre) : null,
+            titular: (CUIT && mostrarTitulares && contribuyente) ? nomPropio(contribuyente.nombre) : null,
             alias 
         }
 

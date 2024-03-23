@@ -37,8 +37,17 @@ router.use(mediaRouter)
 
 /*WhatsappClient */
 io.on("connection", (socket) => {
+  
+  
   socket.on("insertLine", insertLine(socket));
   socket.on("sendMessages/start",sendMessages(socket));
+  
+
+
+  socket.on("disconnect",() => {
+    console.log("socket desconectado");
+  })
+
 });
 
 

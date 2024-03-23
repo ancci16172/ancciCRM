@@ -1,5 +1,5 @@
 export function Td({ children }) {
-  return <td className="pl-3 ">{children}</td>;
+  return <td className="pl-3 z-10">{children}</td>;
 }
 export function Th({ children }) {
   return (
@@ -19,9 +19,9 @@ export function Table({ children }) {
 }
 
 export function TableHead({ children }) {
-  return <thead className="bg-[#F2F2F2] ">{children}</thead>;
+  return <thead className="bg-[#F2F2F2] sticky top-0 z-20">{children}</thead>;
 }
 
 export function TableContainer({ children }) {
-  return <div className="overflow-auto p-4 max-h-[60vh]"> {children}</div>;
+  return <div className="overflow-auto px-1 py-[3px] max-h-[60vh]"> {children}</div>;
 }

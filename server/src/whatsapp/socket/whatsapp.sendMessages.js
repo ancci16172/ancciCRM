@@ -2,20 +2,26 @@ import { WhatsappSender } from "../classes/WhatsappSender.js";
 import { getMessagesText } from "../lib/messages.js";
 import {checkMediaMessagesExists} from "../lib/media.js"
 import { WhatsappClient } from "../classes/WhatsappClient.js";
+
+
+import { checkExistsInActiveSessions } from "../lib/activeSessions.js";
+
 // export const sendMessages = (socket) => async ({clientId, contacts, ID_MESSAGE_GROUP},sendResponse) => {
 
 //   const client = new WhatsappClient({clientId})
-//   client.initialize()
-// }
+//   await client.initialize()
 
+
+// }
  export const sendMessages = (socket) => async ({clientId, contacts, ID_MESSAGE_GROUP},sendResponse) => {
-  let client;
+  let client = {};
   try {
     console.log("Apunto de enviar mensajes",{clientId,contacts,ID_MESSAGE_GROUP});
 
     const [messages,messagesRaw] = await getMessagesText(ID_MESSAGE_GROUP);
-    console.log({messages});
-    checkMediaMessagesExists(messagesRaw)
+
+    checkMediaMessagesExists(messagesRaw);
+    checkExistsInActiveSessions(clientId);
 
     client = new WhatsappSender({ clientId,contacts,messages : messagesRaw });
 
@@ -44,24 +50,25 @@ import { WhatsappClient } from "../classes/WhatsappClient.js";
       await client.destroy();
     })
 
-    await client.initialize()
-
-  } catch (error) {
-    await client?.destroy()
-    console.log("error catch general",error);
-   
-    if(error.type == "file" && error.errno == 404)
-      return socket.emit("sendMessages/bad_response",{msg : error.msg})
     
-
+    await client.initialize()
+    
+  } catch (error) {
+    console.log("error catch general",error);
+    console.log("pup browser exists",!!client.pupBrowser);
+    if(client.pupBrowser)
+      await client.destroy()
+    
+   
+    if((error.type == "file" && error.errno == 404) || error.type == "unavailable")
+      return socket.emit("sendMessages/bad_response",{msg : error.msg})
 
     if(error.errno == 404){
       return socket.emit("sendMessages/bad_response",{msg : `La linea '${clientId}' no existe, o no se encuentra logeada.`})
     }
-     socket.emit("sendMessages/bad_response",{msg : "Error insperado, no se pudieron enviar los mensajes."})
+    socket.emit("sendMessages/bad_response",{msg : "Error insperado, no se pudieron enviar los mensajes."})
 
   }
-
 
 }
 

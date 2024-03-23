@@ -2,17 +2,20 @@ import whatsapp from "whatsapp-web.js";
 import { deleteLineFolder } from "../model/whatsapp.model.js";
 import { join } from "path";
 import { mediaDirPath } from "../constants/dir.js";
+import { addInActiveSessions, deleteFromActiveSessions } from "../lib/activeSessions.js";
 const { Client, LocalAuth, MessageAck, MessageMedia } = whatsapp;
 
 export class WhatsappClient extends Client {
   _clientId;
+
   constructor({ clientId }) {
-    
     console.log("Generando cliente", clientId);
     super({
-      authStrategy: new LocalAuth({ clientId }),
+      
+      authStrategy: new LocalAuth({ clientId }),  
       puppeteer: {
-        executablePath : process.env.CHROME_EXECUTABLE,
+
+        executablePath: process.env.CHROME_EXECUTABLE,
         headless: true,
         args: [
           "--no-sandbox",
@@ -27,16 +30,24 @@ export class WhatsappClient extends Client {
     });
 
     this._clientId = clientId;
-    this.on("ready", async () => {
-      console.log("consultando version ready");
-      const version = await this.getWWebVersion();
-      console.log("version", version);
+
+    this.on("ready", () => {
+      console.log("ready event");
     });
-    this.on("qr", async () => {
-      console.log("consultando version qr");
-      const version = await this.getWWebVersion();
-      console.log("version", version);
+
+    this.on("qr", () => {
+      console.log("qr event");
     });
+  }
+
+  async initialize(){
+    addInActiveSessions(this._clientId)
+    await super.initialize() 
+  }
+
+  async destroy(){
+    deleteFromActiveSessions(this._clientId)
+    super.destroy()
   }
 
   async destroyLine() {
@@ -49,13 +60,24 @@ export class WhatsappClient extends Client {
   }
 
   async sendMessage(chatId, message) {
-    //Send regular message
-    if (!message.ES_MULTIMEDIA)
-      return await super.sendMessage(chatId, message.TEXT);
+    try {
+      //Send regular message
+      if (!message.ES_MULTIMEDIA)
+        return await super.sendMessage(chatId, message.TEXT);
 
-    //Send media
-    const filePath = join(mediaDirPath, message.TEXT);
-    const media = MessageMedia.fromFilePath(filePath);
-    return await super.sendMessage(chatId, media);
+      //Send media
+      const filePath = join(mediaDirPath, message.TEXT);
+      const media = MessageMedia.fromFilePath(filePath);
+      return await super.sendMessage(chatId, media);
+
+    } catch (error) {
+
+      console.log("error at sendMessage",error);
+      
+      return {ack : -2,id : {_serialized : null}}
+
+    }
   }
+
+  
 }

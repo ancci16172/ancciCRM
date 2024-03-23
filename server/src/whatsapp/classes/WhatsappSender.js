@@ -8,16 +8,18 @@ export class WhatsappSender extends WhatsappClient {
   messagesToTrack = [];
   messagesSend = false;
   constructor({ clientId, contacts, messages }) {
-    try {
-      if (!existsLineFolder(clientId))
-        throw { errno: 404, msg: `La linea '${clientId}' no existe.` };
+
+    
+      if (!existsLineFolder(clientId)) throw { errno: 404 };
 
       super({ clientId });
+
 
       this.on("loading_screen", (percentage) => {
         console.log("loading sending message");
         this.emit("loading", { msg: "Cargando...", percentage });
       });
+
       this.on("authenticated", () => {
         console.log("Autenticado al enviar mensajes");
         this.emit("loading", {
@@ -25,6 +27,7 @@ export class WhatsappSender extends WhatsappClient {
           percentage: 100,
         });
       });
+
       this.on("qr", async () => {
         await this.destroyLine();
         this.emit("bad_response", {
@@ -67,9 +70,11 @@ export class WhatsappSender extends WhatsappClient {
           // const isWhatsappValid = await this.isRegisteredUser(contactPhone);
           const isWhatsappValid = true
           
-
+          
 
           for (const message of formatedMessages) {
+            
+
             console.log("enviando mensaje a ",contactPhone);
             //CODIGO 5 para contactos bloqueados
             if (isContactBlocked) {
@@ -86,15 +91,20 @@ export class WhatsappSender extends WhatsappClient {
               continue;
             }
 
-            const msg = await this.sendMessage(contactPhone, message);
             
+            const msg = await this.sendMessage(contactPhone, message);
 
-            this.messagesToTrack[this.messagesToTrack.length - 1].messages.push(
+            this.messagesToTrack[
+              this.messagesToTrack.length - 1
+            ].messages.push(
               {
                 messageId: msg.id._serialized,
                 ack: msg.ack,
               }
             );
+
+       
+
           }
         }
 
@@ -104,20 +114,21 @@ export class WhatsappSender extends WhatsappClient {
           console.log("Actualizando si se enviaron los mensajes");
           await this.updateMessagesStatus();
           this.emit("messages_tracked_ack", this.messagesToTrack);
-
         }
 
         this.destroy();
         //Resumen de los mensajes enviados
         const resume = this.generateResume();
+        console.log("mensajes enviados \n",this.messagesToTrack);
         this.emit("good_response", {
           msg: "Mensajes enviados correctamente",
           resume,
         });
       });
-    } catch (error) {
-      console.log("CATCH EN CONSTRUCTOR", error);
-    }
+
+
+
+
   }
 
   /*OPTIMIZAR */
@@ -128,18 +139,30 @@ export class WhatsappSender extends WhatsappClient {
 
     await Promise.all(
       messages.map(async (message) => {
-        if (message.ack != 0) return; //Si ya esta definido el ACK no consulta nuevamente
-        const messageData = await this.getMessageById(message.messageId);
-        const ack = messageData.ack <= 0 ? messageData.ack : 1;
-        message.ack = ack;
+        //Consulta el valor de ACK en los mensajes
+        //Si la instancia esta cerrada y no se pudo conocer el nuevo valor de ACK
+        //=> ack == -3, "valor desconocido"
+        try {
+          if (message.ack != 0 || message.isAbleToKnow == false) return; //Si ya esta definido el ACK no consulta nuevamente
+          const messageData = await this.getMessageById(message.messageId);
+          const ack = messageData.ack <= 0 ? messageData.ack : 1;
+          message.ack = ack;
+          
+        } catch (error) {
+          console.log("error at updateMessagesStatus", error);
+          message.isAbleToKnow = false;
+          message.ack = -3;
+        }
+
       })
     );
   }
 
   hasAllMessagesSent() {
-    return !this.messagesToTrack.some((contact) =>
-      contact.messages.some((messages) => messages.ack == 0)
-    );
+    const messagesTracked = this.getMessagesTracked();
+
+    return !messagesTracked.some((message) => message.ack == 0 && message.isAbleToKnow != false)
+    
   }
   getMessagesTracked() {
     return this.messagesToTrack.map((contacts) => contacts.messages).flat();

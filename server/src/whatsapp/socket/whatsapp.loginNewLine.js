@@ -12,6 +12,7 @@ export const insertLine = (socket) => async (data, sendResponse) => {
 
   try {
     const avaiableSessions = getGeneratedLines();
+
     if (avaiableSessions.includes(`session-${clientId}`)) {
       return sendResponse({
         error: true,
@@ -53,7 +54,7 @@ export const insertLine = (socket) => async (data, sendResponse) => {
         console.log("no se pudo destruir el cliente");
       }
     });
-
+    
     await client.initialize();
   } catch (error) {
     console.log("Hubo un error al intentar generar una nueva linea", error);

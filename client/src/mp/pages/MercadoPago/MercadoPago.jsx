@@ -148,9 +148,9 @@ export function Mercadopago() {
         {isLoadingPagos && <div className="my-2">Cargando pagos...</div>}
 
         <div className={styles["list--pagos"]}>
-          {pagosFiltrados.map((pago) => (
+          {pagosFiltrados.map((pago,i) => (
             <PagoMp
-              key={pago.id}
+              key={i}
               pago={pago}
               mostrarTitulares={options.mostrarTitulares}
             />

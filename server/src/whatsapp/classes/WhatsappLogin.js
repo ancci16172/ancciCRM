@@ -6,9 +6,7 @@ export class WhatsappLogin extends WhatsappClient {
 
   constructor({ clientId }) {
     super({ clientId });
-    this.on("auth_failure",() => {
-      console.log("auth failure on login");
-    })
+
     this.on("authenticated",() =>{
       console.log("authenticated on login");
     })
@@ -17,7 +15,7 @@ export class WhatsappLogin extends WhatsappClient {
     })
     this.on("auth_failure", async () => {
       try {
-          console.log("auth_failure");
+          console.log("auth_failure on login");
           await this.destroyLine();
           this.emit("bad_response", { msg: "No se pudo autenticar el usuario." });
         } catch (error) {
@@ -43,7 +41,6 @@ export class WhatsappLogin extends WhatsappClient {
     this.on("change_state", (connectionState) => {
       console.log("connectionStateChanged", connectionState);
     });
-
 
 
   }

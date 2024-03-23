@@ -22,8 +22,8 @@ export function WhatsappOption({ onClick, children, isSelected  }) {
   return (
     <div
       className={
-        "bg-[#00000050] px-3.5 py-2.5 w-[90%] rounded-md cursor-pointer text-verde_wsp font-medium flex justify-between " +
-        (isSelected && " outline outline-verde outline-2")
+      ` ${!isSelected && "text-verde_wsp "}  bg-[#00000050] px-3.5 py-2.5 w-[90%] rounded-md cursor-pointer  font-medium flex justify-between transition duration-[0.3s] hover:text-verde_claro hover:bg-[#00000080] ` +
+        (isSelected && " text-xl text-verde_claro bg-[#00000080]")
       }
       onClick={onClick}
     >

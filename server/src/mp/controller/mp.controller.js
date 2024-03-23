@@ -1,6 +1,5 @@
 
 import { editarCuentaDB, getCuentasDisponibles, insertarCuentaDB, searchPagosEnCuenta } from "../model/mp.model.js";
-import { formatPayments } from "../lib/formatPayments.js";
 import { searchPayments } from "../lib/searchPayments.js";
 
 export const getPagos = async (req, res) => {
