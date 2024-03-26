@@ -19,7 +19,6 @@ export const useWhatsapp = () => {
 };
 
 export function WhatsappProvider() {
-  initLocalStorage()
 
   const {socket} = useSocket()
   const {    
