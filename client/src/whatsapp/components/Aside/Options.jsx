@@ -7,16 +7,25 @@ export function Options() {
       shouldCheckWhatsapps: false,
     }
   );
+  
+  useEffect(() => {
+    localStorage.setItem("whatsapp-options", JSON.stringify(options));
+  }, [options]);
 
   const handleChangeCheckWhatsapp = (key) => (ev) => {
     const isChecked = ev.target.checked;
 
-    if(isChecked && !confirm("Validar los numeros de telefono puede afectar el rendimiento\n¿Continuar de todos modos?")) return;
+    if (
+      isChecked &&
+      !confirm(
+        "Validar los numeros de telefono puede afectar el rendimiento\n¿Continuar de todos modos?"
+      )
+    )
+      return;
 
     const stringOptions = JSON.stringify({ ...options, [key]: isChecked });
     localStorage.setItem("whatsapp-options", stringOptions);
     setOptions(JSON.parse(localStorage.getItem("whatsapp-options")));
-    
   };
 
   return (
