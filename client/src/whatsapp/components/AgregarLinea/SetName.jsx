@@ -7,16 +7,21 @@ import { useTimeouts } from "../../../shared/hooks/useTimeouts.js";
 import { PError } from "../../../shared/components/Form/PError.jsx";
 //Agregar nuevo nombre o volver en la linea
 export function SetName() {
-  const { toggleShowComponent, insertLine } = useWhatsapp();
+  const { toggleShowComponent, insertLine,cancelQr } = useWhatsapp();
   const {
     register,
     handleSubmit,
     clearErrors,
     formState: { errors },
-    // reset,
   } = useForm();
   const { clearOnTimeout } = useTimeouts();
-  clearOnTimeout(errors.clientId, () => clearErrors(), 2500);
+  clearOnTimeout(errors.clientId, clearErrors, 2500);
+
+  const handleBack = () => {
+    cancelQr()
+    toggleShowComponent("NewPhoneLine");
+  };
+
 
   return (
     <form onSubmit={handleSubmit(insertLine)} className="px-2.5">
@@ -24,7 +29,7 @@ export function SetName() {
         <div className="bg-[#F0F2F5] flex-1 flex gap-1 px-2 rounded-md">
           <span
             className="grid place-items-center text-verde_claro cursor-pointer"
-            onClick={() => toggleShowComponent("NewPhoneLine")}
+            onClick={handleBack}
           >
             <BackWhatsappButton />
           </span>
@@ -32,14 +37,16 @@ export function SetName() {
             type="text"
             className="bg-transparent outline-none placeholder:text-[#777777] flex-1"
             placeholder="Nombre de la linea..."
-            {...register("clientId", { required: "El nombre de la linea no puede estar vacio." })}
+            {...register("clientId", {
+              required: "El nombre de la linea no puede estar vacio.",
+            })}
           />
         </div>
         <button className="grid place-items-center text-verde_claro rounded-md bg-[#F0F2F5] p-1.5  cursor-pointer hover:bg-[#D4D7DA] ">
           <FaCheck />
         </button>
       </div>
-        <PError>{errors.clientId && errors.clientId.message }</PError>
+      <PError>{errors.clientId && errors.clientId.message}</PError>
     </form>
   );
 }

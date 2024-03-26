@@ -47,12 +47,13 @@ export class WhatsappClient extends Client {
 
   async destroy(){
     deleteFromActiveSessions(this._clientId)
-    super.destroy()
+    await super.destroy()
   }
 
   async destroyLine() {
     try {
       await this.destroy();
+
       deleteLineFolder(this._clientId);
     } catch (error) {
       console.log("catch on destroyLine", error);

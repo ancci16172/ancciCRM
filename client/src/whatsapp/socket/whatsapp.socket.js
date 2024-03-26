@@ -1,29 +1,43 @@
 import { useEffect, useState } from "react";
 
-
-export const useWhatsappSocket = ({ socket,fetchAvaiableLines }) => {
-  const qrInitValues = { data: "", isLoading: false, error: false , successful : false,message : "" ,qrProcessRunning : false};
+export const useWhatsappSocket = ({ socket, fetchAvaiableLines }) => {
+  const qrInitValues = {
+    data: "",
+    isLoading: false,
+    error: false,
+    successful: false,
+    message: "",
+    qrProcessRunning: false,
+  };
   const [qr, setQr] = useState(qrInitValues);
   const [newLineName, setNewLineName] = useState("");
 
   const reset = () => {
     setQr(qrInitValues);
     setNewLineName("");
-  }
+  };
   useEffect(() => {
-    console.log("mostrando qr",qr);
-    if(qr.successful || qr.error){
-      setTimeout(() => reset(),3000)    
+    console.log("mostrando qr", qr);
+    if (qr.successful || qr.error) {
+      setTimeout(() => reset(), 3000);
     }
+  }, [qr]);
 
-  },[qr])
+  const cancelQr = () => {
+    reset();
+    socket.emit("cancel");
+  }
 
-
-
+  /*Start */
   const insertLine = async ({ clientId }) => {
     try {
-      reset()
-      setQr({...qr,isLoading : true,message : "Solicitando QR...",qrProcessRunning : true})
+      reset();
+      setQr({
+        ...qr,
+        isLoading: true,
+        message: "Solicitando QR...",
+        qrProcessRunning: true,
+      });
 
       console.log("datos por enviar para nueva linea", { clientId });
 
@@ -35,56 +49,79 @@ export const useWhatsappSocket = ({ socket,fetchAvaiableLines }) => {
 
       setNewLineName(clientId);
     } catch (error) {
-      /*reset?*/
-      console.log("ERROR EN insertLine",error);
+      console.log("ERROR EN insertLine", error);
       setNewLineName("");
-      setQr({ ...qr, error: true ,isLoading : false,message : error,qrProcessRunning : false});
-      
-      console.log({ error });
-    } 
+      setQr({
+        ...qr,
+        error: true,
+        isLoading: false,
+        message: error,
+        qrProcessRunning: false,
+      });
+    }
   };
 
-  const setEvents = ()=> {
-    //Cargando pagina de whatsapp
-    socket.on("loading_screen", (percentage) => {
-      console.log("CARGANDO WHATSAPP ", percentage, "%");
-      setQr({...qr,message : "Cargando QR...",isLoading : true});
+
+  /*Listeners*/   
+  const onLoadingScreen = (percentage) => {
+    console.log("CARGANDO WHATSAPP ", percentage, "%");
+    setQr({ ...qr, message: "Cargando QR...", isLoading: true });
+  };
+  const onQr = (qrSv) => {
+    console.log("recibido desde el socket", qrSv);
+    setQr({ ...qr, data: qrSv, isLoading: false });
+  };
+  const onAuthenticated = () => {
+    setQr({
+      ...qr,
+      message: "Linea autenticada... cargando chats y contactos.",
+      isLoading: true,
     });
+  };
 
-    socket.on("qr", (qrSv) => {
-      console.log("recibido desde el socket", qrSv);
-      setQr({ ...qr, data: qrSv, isLoading: false });
+  const onBadResponse = (data) => {
+    setQr({
+      ...qr,
+      message: data.msg,
+      isLoading: false,
+      error: true,
+      successful: false,
+      data: "",
+      qrProcessRunning: false,
     });
+    fetchAvaiableLines();
+  };
 
-    //Reading qr...
-    socket.on("authenticated",() => {
-      console.log("Authenticated");
-      setQr({...qr,message : "Linea autenticada... cargando chats y contactos.",isLoading : true})
-    })
-
-    socket.on("bad_response", (data) => {
-      console.log("ERROR BAD RESPONSE", data);
-      setQr({ ...qr, message : data.msg, isLoading : false,error: true, successful: false,data : "",qrProcessRunning : false });
-      fetchAvaiableLines()
+  const onGoodResponse = (data) => {
+    setQr({
+      ...qr,
+      message: data.msg,
+      isLoading: false,
+      error: false,
+      successful: true,
+      data: "",
+      qrProcessRunning: false,
     });
+    fetchAvaiableLines();
+  };
 
-    socket.on("good_response", (data) => {
-      console.log("Good response", data);
-      setQr({ ...qr,message : data.msg, isLoading : false,error: false, successful: true ,data : "",qrProcessRunning : false});
-      fetchAvaiableLines()
-    });
-  }
-
+  /*Routes */
   useEffect(() => {
-    socket.connect();
-    setEvents();
+    console.log("AGREGA EVENTOS EN EL SOCKET");
+    socket.on("loading_screen", onLoadingScreen);
+    socket.on("qr", onQr);
+    socket.on("authenticated", onAuthenticated);
+    socket.on("bad_response", onBadResponse);
+    socket.on("good_response", onGoodResponse);
+
     return () => {
-      // socket.removeAllEvents();
-      // socket.disconnect();
-    }
+      socket.off("loading_screen", onLoadingScreen);
+      socket.off("qr", onQr);
+      socket.off("authenticated", onAuthenticated);
+      socket.off("bad_response", onBadResponse);
+      socket.off("good_response", onGoodResponse);
+    };
+  }, []);
 
-  },[])
-
-
-  return { qr, newLineName, insertLine };
+  return { qr, newLineName, insertLine ,cancelQr};
 };

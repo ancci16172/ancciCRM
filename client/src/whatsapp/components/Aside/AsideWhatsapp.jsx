@@ -2,8 +2,10 @@ import { Aside } from "../../../shared/components/Aside";
 import { useWhatsapp } from "../../context/WhatsappContext";
 import { GreenButton } from "../ui/GreenButton";
 import { OrderMessages } from "../Mensajes/OrderMessages";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useTimeouts } from "../../../shared/hooks/useTimeouts.js";
+import { OptionsCheckBox } from "../../../shared/components/ui/CheckBox/OptionsCheckBox.jsx";
+import { Options } from "./Options.jsx";
 
 export function AsideWhatsapp() {
   const { toggleShowComponent, updateMessagesGroup, changedSaved } =
@@ -17,10 +19,11 @@ export function AsideWhatsapp() {
   };
   clearOnTimeout(savedMessagesMessage, () => setSavedMessagesMessage(""), 1500);
 
+  const handleShowAddMedia = () => {
+    toggleShowComponent("AvailableMedia");
+  };
 
-  const handleShowAddMedia= () => {
-    toggleShowComponent("AvailableMedia")
-  }
+  
 
   return (
     <Aside title={"Personalizar"}>
@@ -30,8 +33,15 @@ export function AsideWhatsapp() {
       >
         Agregar mensaje
       </GreenButton>
-      <GreenButton className={"mt-1.5"} onClick={handleShowAddMedia}>Agregar multimedia</GreenButton>
+      <GreenButton className={"mt-1.5"} onClick={handleShowAddMedia}>
+        Agregar multimedia
+      </GreenButton>
       <OrderMessages />
+
+
+      <Options/>
+
+
       <span className="mt-auto">
         {savedMessagesMessage && (
           <p className="text-verde_wsp text-center">Mensajes guardados.</p>

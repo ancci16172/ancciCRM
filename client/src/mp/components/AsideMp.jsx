@@ -4,7 +4,7 @@ import styles from "./AsideMp.module.css";
 import { AsideMpCuenta } from "./AsideMpCuenta.jsx";
 import { BtnCeleste } from "./ui/BtnCeleste.jsx";
 import { LinkConsultarMes } from "./ui/LinkConsultarMes.jsx";
-import { OptionsCheckBox } from "./ui/OptionsCheckBox.jsx";
+import { OptionsCheckBox } from "../../shared/components/ui/CheckBox/OptionsCheckBox.jsx";
 
 export function AsideMp() {
   const { cuentas, setShowAdmin, setParams, setOptions, options } =
@@ -30,7 +30,7 @@ export function AsideMp() {
       </div>
       <div className={styles.division} />
 
-      <div>
+      <div className="px-7">
         <h2 className="text-center text-2xl my-2 mb-2">Opciones</h2>
         <OptionsCheckBox
           onChange={handleCheckBox("mostrarEgresos")}

@@ -62,23 +62,7 @@
   height: 0.0625rem;
   margin: 0.5rem 1.4rem;
 }
-.check--options {
-  outline: none;
-}
-.check--options::before {
-  content: ""; /* Elimina cualquier contenido predeterminado */
-  display: inline-block;
-  width: 16px; /* Ancho deseado del checkbox */
-  height: 16px; /* Altura deseada del checkbox */
-  border: 1px solid #ccc; /* Color del borde del checkbox */
-  background-color: #ececec; /* Color de fondo del checkbox (no seleccionado) */
-  border-radius: 4px; /* Bordes redondeados */
-}
 
-.check--options:checked::before {
-  background-color: #27ae60; /* Color de fondo del checkbox cuando está seleccionado */
-  border-color: #1976d2; /* Color del borde del checkbox cuando está seleccionado */
-}
 
 
 

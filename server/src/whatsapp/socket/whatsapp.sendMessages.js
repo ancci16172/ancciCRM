@@ -13,7 +13,7 @@ import { checkExistsInActiveSessions } from "../lib/activeSessions.js";
 
 
 // }
- export const sendMessages = (socket) => async ({clientId, contacts, ID_MESSAGE_GROUP},sendResponse) => {
+ export const sendMessages = (socket) => async ({clientId, contacts, ID_MESSAGE_GROUP,shouldCheckWhatsapps},sendResponse) => {
   let client = {};
   try {
     console.log("Apunto de enviar mensajes",{clientId,contacts,ID_MESSAGE_GROUP});
@@ -23,7 +23,13 @@ import { checkExistsInActiveSessions } from "../lib/activeSessions.js";
     checkMediaMessagesExists(messagesRaw);
     checkExistsInActiveSessions(clientId);
 
-    client = new WhatsappSender({ clientId,contacts,messages : messagesRaw });
+    client = new WhatsappSender({ clientId,contacts,messages : messagesRaw,shouldCheckWhatsapps });
+
+    const onSocketDisconected = async () => {
+      console.log("Sockect desconectado al enviar mensajes, destruyendo cliente");
+      await client.destroy();
+    }
+
 
     client.on("loading",msg => {
       socket.emit("sendMessages/loading",msg)
@@ -34,28 +40,31 @@ import { checkExistsInActiveSessions } from "../lib/activeSessions.js";
     client.on("messages_tracked_ack",trackedMessages => {
       socket.emit("sendMessages/messages_tracked_ack",trackedMessages)
     })
+
     client.on("bad_response", (message) => {
+      console.log("bad response",message);
       socket.emit("sendMessages/bad_response",message)
+      socket.off("disconnect",onSocketDisconected);
       sendResponse({error :true,msg : message.msg})
     });
 
     client.on("good_response", (res) => {
       console.log("good_response", res);
       socket.emit("sendMessages/good_response",res)
+      socket.off("disconnect",onSocketDisconected);
       sendResponse({error : false,...res})
     });
   
-    socket.on("disconnect",async () => {
-      console.log("Sockect desconectado al enviar mensajes, destruyendo cliente");
-      await client.destroy();
-    })
+
+
+    socket.on("disconnect",onSocketDisconected)
 
     
     await client.initialize()
     
   } catch (error) {
     console.log("error catch general",error);
-    console.log("pup browser exists",!!client.pupBrowser);
+    console.log("pup browser exists:",!!client.pupBrowser);
     if(client.pupBrowser)
       await client.destroy()
     

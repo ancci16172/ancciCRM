@@ -34,6 +34,7 @@ export const useWhatsappSocketSendMessages = ({ socket }) => {
       clientId: selectedLine,
       contacts,
       ID_MESSAGE_GROUP,
+      shouldCheckWhatsapps : !!JSON.parse(localStorage.getItem("whatsapp-options")).shouldCheckWhatsapps
     };
     setSendingMessagesData({ ...sendingMessagesData, isLoading: true });
     

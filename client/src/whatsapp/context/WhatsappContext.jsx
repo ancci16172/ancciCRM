@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useLines } from "../hooks/useLines";
-import socket from "../../services/socket/socket.js";
 import { useMessages } from "../hooks/useMessages.js";
 import { useWhatsappSocket } from "../socket/whatsapp.socket.js";
 import { useWhatsappSocketSendMessages } from "../socket/socket.sendMessages.js";
 import {useMedia} from "../hooks/useMedia.js"
+import {useSocket} from "../../shared/hooks/useSocket.js";
 
 const WhatsappContext = createContext();
 export const useWhatsapp = () => {
@@ -18,6 +18,8 @@ export const useWhatsapp = () => {
 };
 
 export function WhatsappProvider() {
+  const { socket } = useSocket();
+
   const {    
     availableLines,
     deleteLine,fetchAvaiableLines
@@ -40,8 +42,8 @@ export function WhatsappProvider() {
     changedSaved,
   } = useMessages();
 
-  const {   selectedLine,setSelectedLine,sendMessages,trackedMessages,sendingMessagesData} = useWhatsappSocketSendMessages({socket})
-  const { qr,insertLine,newLineName } = useWhatsappSocket({ socket ,fetchAvaiableLines});
+  const { selectedLine,setSelectedLine,sendMessages,trackedMessages,sendingMessagesData} = useWhatsappSocketSendMessages({socket})
+  const { qr,insertLine,newLineName,cancelQr } = useWhatsappSocket({ socket ,fetchAvaiableLines});
 
   const {availableMedia,submitNewFile,deleteMedia} = useMedia();
 
@@ -102,7 +104,7 @@ export function WhatsappProvider() {
         messageVariables,
         setMessages,
         changedSaved,
-        deleteLine,trackedMessages,availableMedia,submitNewFile,deleteMedia
+        deleteLine,trackedMessages,availableMedia,submitNewFile,deleteMedia,cancelQr
       }}
     >
       <Outlet />

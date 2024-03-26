@@ -3,17 +3,20 @@ import { useForm } from "react-hook-form";
 import { AbsoluteFormContainer } from "../ui/AbsoluteFormContainer.jsx";
 import { GreenButtonBg } from "../ui/GreenButtonBg.jsx";
 import { useWhatsapp } from "../../context/WhatsappContext.jsx";
+import { MessageContainerBody } from "../ui/Mensajes/ContainerMensaje.jsx";
+import { useTimeouts } from "../../../shared/hooks/useTimeouts.js";
+import { PError } from "../../../shared/components/Form/PError.jsx";
 
 export function AgregarMensaje() {
   const { addMessage, toggleShowComponent } = useWhatsapp();
-  const { register, handleSubmit, reset } = useForm();
-
+  const { register, handleSubmit, reset,formState : {errors},clearErrors } = useForm();
+  const {clearOnTimeout} = useTimeouts()
   const handleForm = (values) => {
     const { TEXT } = values;
     addMessage({ TEXT });
     reset();
   };
-
+  clearOnTimeout(errors.TEXT,clearErrors,3000);
   return (
     <AbsoluteFormContainer
       className={"border border-solid border-gray-800 max-w-[min(90%,35rem)]"}
@@ -26,17 +29,16 @@ export function AgregarMensaje() {
             className="hover:text-[#FF6C5C] text-rojo text-3xl cursor-pointer stroke-1"
           />
         </header>
-        <div className="py-3 px-4">
-          <div>
-            <textarea
-              className="bg-[#F0F0F0] w-full min-h-[190px] resize-none outline-none px-2 py-1"
-              {...register("TEXT", { required: true })}
-            ></textarea>
+        <MessageContainerBody
+          register={register}
+          textAreaName={"TEXT"}
+          propsAtRegister={{ required: "El mensaje no puede estar vacio" }}
+        >
+          <div className="grid">
+            <GreenButtonBg>Agregar mensaje</GreenButtonBg>
           </div>
-          <div className="my-2 flex">
-            <GreenButtonBg className={"flex-1"}>Agregar mensaje</GreenButtonBg>
-          </div>
-        </div>
+          {errors.TEXT && <PError>{errors.TEXT.message}</PError>}
+        </MessageContainerBody>
       </form>
     </AbsoluteFormContainer>
   );

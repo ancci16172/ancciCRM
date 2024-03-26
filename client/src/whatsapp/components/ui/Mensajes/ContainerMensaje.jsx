@@ -31,7 +31,7 @@ export function MessageContainerBody({ children, textAreaName, register,defaultV
   return (
     <div className="py-3 px-4">
       <textarea
-        className="bg-[#F0F0F0] w-full min-h-[190px] resize-none outline-none px-2 py-1"
+        className="bg-[#F0F0F0] w-full min-h-[min(320px,80vh)] resize-none outline-none px-2 py-1"
         {...register(textAreaName, propsAtRegister)} defaultValue={defaultValue}
       ></textarea>
       <div className="my-2 flex flex-col">{children}</div>
