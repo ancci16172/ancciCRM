@@ -6,7 +6,7 @@ import { useWhatsappSocket } from "../socket/whatsapp.socket.js";
 import { useWhatsappSocketSendMessages } from "../socket/socket.sendMessages.js";
 import {useMedia} from "../hooks/useMedia.js"
 import {useSocket} from "../../shared/hooks/useSocket.js"
-import { initLocalStorage } from "../lib/initLocalStorage.js";
+
 
 const WhatsappContext = createContext();
 export const useWhatsapp = () => {
