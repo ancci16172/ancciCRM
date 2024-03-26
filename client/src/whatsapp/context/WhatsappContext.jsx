@@ -5,7 +5,7 @@ import { useMessages } from "../hooks/useMessages.js";
 import { useWhatsappSocket } from "../socket/whatsapp.socket.js";
 import { useWhatsappSocketSendMessages } from "../socket/socket.sendMessages.js";
 import {useMedia} from "../hooks/useMedia.js"
-import {useSocket} from "../../shared/hooks/useSocket.js";
+import {useSocket} from "../../shared/hooks/useSocket.js"
 
 const WhatsappContext = createContext();
 export const useWhatsapp = () => {
@@ -18,8 +18,7 @@ export const useWhatsapp = () => {
 };
 
 export function WhatsappProvider() {
-  const { socket } = useSocket();
-
+  const {socket} = useSocket()
   const {    
     availableLines,
     deleteLine,fetchAvaiableLines

@@ -10,9 +10,9 @@ import { checkExistsInActiveSessions } from "../lib/activeSessions.js";
 
 //   const client = new WhatsappClient({clientId})
 //   await client.initialize()
-
-
 // }
+
+
  export const sendMessages = (socket) => async ({clientId, contacts, ID_MESSAGE_GROUP,shouldCheckWhatsapps},sendResponse) => {
   let client = {};
   try {

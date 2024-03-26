@@ -17,17 +17,25 @@ export function WhatsappMassiveMessaged() {
 
   return (
     <Container>
+      {/* SOCKET QR */}
       <NewPhoneLine />
+      {/* SOCKET QR */}
+
+
+
       <AsideWhatsapp />
       <WhatsappMessagePreview />
+
       {showComponents.AvailableLines && <LineasDisponibles />}
       {showComponents.AddMessage && <AgregarMensaje />}
       {showComponents.EditMessage && <EditMessage/>}
       {showComponents.AvailableGroups && <GruposDisponibles />}
       {showComponents.NewMessageGroupForm && <NuevoGrupoDeMensajes/>}
+
       {showComponents.ContactList && <ContactList/>}
       {showComponents.MessagesSent && <MessagesSent/>}
       {showComponents.AvailableMedia && <AvailableMedia/>}
+
     </Container>
   );
 }

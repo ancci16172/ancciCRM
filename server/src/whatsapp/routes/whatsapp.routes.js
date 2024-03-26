@@ -35,6 +35,7 @@ router.delete("/deleteMessageGroup/:ID_MESSAGE_GROUP", deleteMessageGroup);
 router.use(mediaRouter)
 
 
+
 /*WhatsappClient */
 io.on("connection", (socket) => {
   
@@ -45,10 +46,11 @@ io.on("connection", (socket) => {
 
 
   socket.on("disconnect",() => {
-    console.log("socket desconectado");
+    console.log("socket desconectado ",socket.id);
   })
 
 });
+
 
 
 export default router;

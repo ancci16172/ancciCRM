@@ -8,9 +8,9 @@ export const insertLine = (socket) => async (data, sendResponse) => {
   const client = new WhatsappLogin({ clientId });
 
   try {
-    const avaiableSessions = getGeneratedLines();
+    const avaiableSessions = getGeneratedLines().map(l => l.toUpperCase());
 
-    if (avaiableSessions.includes(`session-${clientId}`)) {
+    if (avaiableSessions.includes(clientId.toUpperCase())) {
       return sendResponse({
         error: true,
         msg: "El nombre de la sesion ya se encuentra logeada",

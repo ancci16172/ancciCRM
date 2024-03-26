@@ -101,7 +101,7 @@ export class WhatsappSender extends WhatsappClient {
         this.emit("messages_tracked_ack", this.messagesToTrack);
       }
 
-      this.destroy();
+      await this.destroy();
       //Resumen de los mensajes enviados
       const resume = this.generateResume();
       console.log("mensajes enviados \n", this.messagesToTrack);

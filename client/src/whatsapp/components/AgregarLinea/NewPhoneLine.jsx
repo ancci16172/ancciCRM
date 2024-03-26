@@ -6,7 +6,7 @@ import { AbsoluteFormContainer } from "../ui/AbsoluteFormContainer";
 //Interfaz para agregar una nueva linea(renderizado)
 export function NewPhoneLine() {
   const { showComponents,qr  } = useWhatsapp();
-
+  
   if (showComponents.NewPhoneLine)
     return (
       <AbsoluteFormContainer className={"max-w-[min(90%,26rem)]"}>
