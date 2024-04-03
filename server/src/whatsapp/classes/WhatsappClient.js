@@ -19,7 +19,7 @@ export class WhatsappClient extends Client {
       puppeteer: {
 
         executablePath: process.env.CHROME_EXECUTABLE,
-        headless: false,
+        headless: process.env.NODE_ENV=="production",
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
