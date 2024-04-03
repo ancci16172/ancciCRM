@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useWhatsappSocket = ({ socket, fetchAvaiableLines }) => {
+export const useWhatsappSocketAddLines = ({ socket, fetchAvaiableLines }) => {
   const qrInitValues = {
     data: "",
     isLoading: false,
@@ -61,12 +61,29 @@ export const useWhatsappSocket = ({ socket, fetchAvaiableLines }) => {
     }
   };
 
+  const activatePersistentLine = ({clientId}) => {
+    try {
+      reset();
+      setQr({
+        ...qr,
+        isLoading: true,
+        message: "Activando linea persistente...",
+        qrProcessRunning: true,
+      });
+      socket.emit("activatePersistentLine",{clientId})
+    } catch (error) { 
+      console.log(error);
+    }
+  }
 
   /*Listeners*/   
   const onLoadingScreen = (percentage) => {
     console.log("CARGANDO WHATSAPP ", percentage, "%");
     setQr({ ...qr, message: "Cargando QR...", isLoading: true });
   };
+  const onLoading = ({msg,percentage}) => {
+    setQr({...qr,message : msg,percentage,isLoading : true})
+  }
   const onQr = (qrSv) => {
     console.log("recibido desde el socket", qrSv);
     setQr({ ...qr, data: qrSv, isLoading: false });
@@ -113,15 +130,16 @@ export const useWhatsappSocket = ({ socket, fetchAvaiableLines }) => {
     socket.on("authenticated", onAuthenticated);
     socket.on("bad_response", onBadResponse);
     socket.on("good_response", onGoodResponse);
-
+    socket.on("loading",onLoading)
     return () => {
       socket.off("loading_screen", onLoadingScreen);
       socket.off("qr", onQr);
       socket.off("authenticated", onAuthenticated);
       socket.off("bad_response", onBadResponse);
       socket.off("good_response", onGoodResponse);
+      socket.off("loading",onLoading)
     };
   }, []);
 
-  return { qr, newLineName, insertLine ,cancelQr};
+  return { qr, newLineName, insertLine ,cancelQr,activatePersistentLine};
 };

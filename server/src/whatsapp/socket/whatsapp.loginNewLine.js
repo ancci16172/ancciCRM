@@ -50,10 +50,12 @@ export const insertLine = (socket) => async (data, sendResponse) => {
       socket.off("disconnect", onSocketDisconnected);
       socket.emit("good_response", message);
     });
+
     client.on("authenticated", () => {
       socket.emit("authenticated");
     });
 
+    
     socket.on("disconnect", onSocketDisconnected);
 
     await client.initialize();

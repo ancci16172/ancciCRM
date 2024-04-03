@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import pool from "../../shared/model/mysql-pool.js";
 import { sessionsFolderPath } from "../constants/dir.js";
+import { existsInActiveSessions } from "../lib/activeSessions.js";
 
 export const deleteLineFolder = (cliendId) => {
   return fs.rmSync(path.join(sessionsFolderPath, `session-${cliendId}`),{recursive :true,force : true});
@@ -11,9 +12,22 @@ export const getGeneratedLines = () => {
   return avaiableSessions.map((clientId) => clientId.replace("session-", ""));
 };
 
+export const getAvailableLinesFromFolders = () => {
+  const avaiableSessions = getGeneratedLines();
+  const availableLines =  avaiableSessions.map(clientId => {
+  const isActive = existsInActiveSessions(clientId)
+    return {
+      isActive,
+      clientId
+    }
+  })
+  return availableLines
+}
+
 export const getMessageGroupDb = async (groupId) => {
+  /*Convertir a transaction */
   const [messages] = await pool.query(
-    `SELECT * from Messages where ID_MESSAGE_GROUP = ?`,
+    `SELECT * from Messages where ID_MESSAGE_GROUP = ? ORDER BY ID_MESSAGE ASC`,
     [groupId]
   );
   const [group] = await pool.query(

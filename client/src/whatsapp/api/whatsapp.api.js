@@ -7,6 +7,11 @@ export const insertLineRequest = async (data) => await axios.post("/whatsapp/ins
 
 export const deleteLineRequest = async (clientId) => await axios.delete(`/whatsapp/deleteLine/${clientId}`)
 
+export const activatePersistentLineRequest = async (data) => await axios.post(`/whatsapp/persistentLine/activate`,data)
+
+export const removePersistentLineRequest = async (clientId) => await axios.delete(`/whatsapp/persistentLine/${clientId}`)
+
+
 /*Messages */
 export const getMessagesRequest = async (groupId) => await axios.get(`/whatsapp/getMessages/${groupId}`);
 export const updateMessagesRequest = async (messages,groupId) => await axios.post(`/whatsapp/updateMessagesGroup`,{messages,groupId});

@@ -8,6 +8,7 @@ export const checkMediaMessagesExists = (messages) => {
     if (!availableMedia.includes(message.TEXT))
       throw {
         errno: 404,
+        status : 404,
         type: "file",
         msg: `El archivo ${message.TEXT} no existe.`,
       };

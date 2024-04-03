@@ -37,7 +37,7 @@ export function LineasDisponibles() {
       toggleString={"AvailableLines"}
     >
       <WhatsappOptionsContainerOptions>
-        {availableLines.map((line, i) => (
+        {availableLines.map(({clientId : line}, i) => (
           <WhatsappOption
             key={i}
             isSelected={line == selectedLine}

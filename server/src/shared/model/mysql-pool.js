@@ -6,6 +6,7 @@ import mysql2 from "mysql2/promise"
 //     port : 3306,
 //     database : 'ancci'
 // };
+
 const mysqlCredentials = {
     host: 'srv815.hstgr.io',
     user: 'u970133903_BGMAdmin',

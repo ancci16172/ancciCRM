@@ -1,17 +1,21 @@
 
+import { existsInActiveSessions } from "../lib/activeSessions.js";
 import {
   getGeneratedLines,
   getMessageGroupDb,
   updateMessagesGroupDb,
   getMessageGroupsDb,
   insertNewMessageGroupDb,
-  deleteMessageGroupDb,deleteLineFolder
+  deleteMessageGroupDb,deleteLineFolder, getAvailableLinesFromFolders
 } from "../model/whatsapp.model.js";
 
 export const getAvailableLines = (req, res) => {
   try {
-    const avaiableSessions = getGeneratedLines();
-    res.status(200).json(avaiableSessions);
+
+    const availableLines = getAvailableLinesFromFolders();
+    
+    res.status(200).json(availableLines);
+
   } catch (error) {
     console.log(error);
     res

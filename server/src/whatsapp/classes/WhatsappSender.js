@@ -149,7 +149,7 @@ export class WhatsappSender extends WhatsappClient {
         //=> ack == -3, "valor desconocido"
         try {
           if (message.ack != 0 || message.isAbleToKnow == false) return; //Si ya esta definido el ACK no consulta nuevamente
-          const messageData = await this.getMessageById(message.messageId);
+          const messageData = await this.getMessageById(message.messageSendedId);
           const ack = messageData.ack <= 0 ? messageData.ack : 1;
           message.ack = ack;
         } catch (error) {

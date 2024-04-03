@@ -2,11 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useLines } from "../hooks/useLines";
 import { useMessages } from "../hooks/useMessages.js";
-import { useWhatsappSocket } from "../socket/whatsapp.socket.js";
+import { useWhatsappSocketAddLines } from "../socket/socket.addLine.js";
 import { useWhatsappSocketSendMessages } from "../socket/socket.sendMessages.js";
-import {useMedia} from "../hooks/useMedia.js"
-import {useSocket} from "../../shared/hooks/useSocket.js"
-
+import { useMedia } from "../hooks/useMedia.js";
+import { useSocket } from "../../shared/hooks/useSocket.js";
 
 const WhatsappContext = createContext();
 export const useWhatsapp = () => {
@@ -19,12 +18,14 @@ export const useWhatsapp = () => {
 };
 
 export function WhatsappProvider() {
-
-  const {socket} = useSocket()
-  const {    
+  const { socket } = useSocket();
+  const {
     availableLines,
-    deleteLine,fetchAvaiableLines
-  } = useLines();
+    deleteLine,
+    fetchAvaiableLines,
+    // activatePersistentLine,
+    removePersistentLine,
+  } = useLines({ socket });
   const {
     messages,
     addMessage,
@@ -43,14 +44,25 @@ export function WhatsappProvider() {
     changedSaved,
   } = useMessages();
 
-  const { selectedLine,setSelectedLine,sendMessages,trackedMessages,sendingMessagesData} = useWhatsappSocketSendMessages({socket})
-  const { qr,insertLine,newLineName,cancelQr } = useWhatsappSocket({ socket ,fetchAvaiableLines});
+  const {
+    selectedLine,
+    setSelectedLine,
+    sendMessages,
+    trackedMessages,
+    sendingMessagesData,
+  } = useWhatsappSocketSendMessages({ socket });
 
-  const {availableMedia,submitNewFile,deleteMedia} = useMedia();
+  const { activatePersistentLine, qr, insertLine, newLineName, cancelQr } =
+    useWhatsappSocketAddLines({
+      socket,
+      fetchAvaiableLines,
+    });
+
+  const { availableMedia, submitNewFile, deleteMedia } = useMedia();
 
   useEffect(() => {
-    console.log("available media",availableMedia);  
-  },[availableMedia])
+    console.log("available media", availableMedia);
+  }, [availableMedia]);
 
   const [showComponents, setShowComponents] = useState({
     NewPhoneLine: false,
@@ -62,8 +74,8 @@ export function WhatsappProvider() {
     NewMessageGroupForm: false,
     EditMessage: false,
     ContactList: false,
-    MessagesSent : false,
-    AvailableMedia : false,
+    MessagesSent: false,
+    AvailableMedia: false,
   });
 
   const toggleShowComponent = (ComponentName) => {
@@ -105,7 +117,14 @@ export function WhatsappProvider() {
         messageVariables,
         setMessages,
         changedSaved,
-        deleteLine,trackedMessages,availableMedia,submitNewFile,deleteMedia,cancelQr
+        deleteLine,
+        trackedMessages,
+        availableMedia,
+        submitNewFile,
+        deleteMedia,
+        cancelQr,
+        activatePersistentLine,
+        removePersistentLine,
       }}
     >
       <Outlet />

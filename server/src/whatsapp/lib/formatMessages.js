@@ -17,9 +17,9 @@ export const formatMessages = (contact, messages) => {
       const keyValue = toReplace.slice(1, toReplace.length - 1);
       const data = contact[keyValue];
       return data;
-    }) ;
+    });
 
-    return {TEXT : newText,ES_MULTIMEDIA}
+    return {...message,TEXT : newText}
 
   });
 

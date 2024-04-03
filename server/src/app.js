@@ -13,6 +13,11 @@ app.use(cors({
     credentials: true,
     origin: "http://localhost:5173"
 }))
+
+// app.use(cors({
+//     origin : "https://localhost:3000"
+// }))
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(morgan("dev"));

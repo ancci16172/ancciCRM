@@ -1,6 +1,6 @@
 import Container from "../../shared/components/Container.jsx";
 import { AsideWhatsapp } from "../components/Aside/AsideWhatsapp";
-import { WhatsappMessagePreview } from "./WhatsappMessagePreview";
+import { MainSection } from "./MainSection.jsx";
 import { LineasDisponibles } from "../components/LineasDisponibles/LineasDisponibles";
 import { NewPhoneLine } from "../components/AgregarLinea/NewPhoneLine";
 import { AgregarMensaje } from "../components/Mensajes/AgregarMensaje.jsx";
@@ -24,7 +24,7 @@ export function WhatsappMassiveMessaged() {
 
 
       <AsideWhatsapp />
-      <WhatsappMessagePreview />
+      <MainSection />
 
       {showComponents.AvailableLines && <LineasDisponibles />}
       {showComponents.AddMessage && <AgregarMensaje />}
