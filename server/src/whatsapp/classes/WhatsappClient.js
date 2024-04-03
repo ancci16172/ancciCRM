@@ -89,13 +89,14 @@ export class WhatsappClient extends Client {
     const formatedPhoneNumber = phoneNumber + "@c.us";
 
     
-    //Si el whatsapp no es valido Retorna ACK = 6
+    //Si el whatsapp no es valido Retorna ACK = -4
     const isValidContact = await this.isRegisteredUser(formatedPhoneNumber)
+    // const isValidContact = true
     if(!isValidContact) return messages.map(message => ({ 
       messageId : message.ID_MESSAGE,
       to : formatedPhoneNumber,
       from : this.info.wid.user,
-      ack: 6,
+      ack: -4,
     }))
     
 
@@ -163,11 +164,34 @@ export class WhatsappClient extends Client {
     } catch (error) {
 
       console.log("error at sendMessage",error);
-      
-      return {ack : -2,id : {_serialized : null}}
+
+      return {
+        ack : -2,id : {_serialized : null} ,_data : {
+        to : {user : chatId } ,
+        from : {user : this.info.wid.user}
+      }}
 
     }
   }
   
+
+  async isRegisteredUser(contactPhone){
+
+    try {
+      console.log(`validando telefono ${contactPhone}`);
+      console.time(`get number validation for ${contactPhone}`)
+      const isRegisteredUser = await super.isRegisteredUser(contactPhone);
+      console.timeEnd(`get number validation for ${contactPhone}`)
+      return isRegisteredUser;
+    } catch (error) {
+      console.log(
+        `Error at getting isRegisteredUser for ${contactPhone} \n`,
+        error
+      );
+      //Si no pudimos validar el whatsapp, informarlo
+      return true
+    }
+
+  }
   
 }

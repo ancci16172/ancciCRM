@@ -13,7 +13,7 @@ export function AgregarMensaje() {
   const {clearOnTimeout} = useTimeouts()
   const handleForm = (values) => {
     const { TEXT } = values;
-    addMessage({ TEXT });
+    addMessage({ TEXT,ES_MULTIMEDIA : false });
     reset();
   };
   clearOnTimeout(errors.TEXT,clearErrors,3000);

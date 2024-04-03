@@ -79,7 +79,7 @@ export class WhatsappSender extends WhatsappClient {
           //CODIGO 6 para contactos sin whatsapp
           if (!isWhatsappValid) {
             this.messagesToTrack[this.messagesToTrack.length - 1].messages.push(
-              { ack: 6 }
+              { ack: -4 }
             );
             continue;
           }
@@ -115,25 +115,13 @@ export class WhatsappSender extends WhatsappClient {
   async isRegisteredUser(contactPhone) {
     if (!this.shouldCheckWhatsapps) return true;
 
-    const value = this.isWhatsappValidMap.get(contactPhone);
-    if (value != undefined) return value;
+    const isValid = this.isWhatsappValidMap.get(contactPhone);
+    if (isValid != undefined) return isValid;
 
-    try {
-      console.log(`validando telefono ${contactPhone}`);
-      console.time(`get number validation for ${contactPhone}`)
       const isRegisteredUser = await super.isRegisteredUser(contactPhone);
-      console.timeEnd(`get number validation for ${contactPhone}`)
       
       this.isWhatsappValidMap.set(contactPhone, isRegisteredUser);
       return isRegisteredUser;
-    } catch (error) {
-      console.log(
-        `Error at getting isRegisteredUser for ${contactPhone} \n`,
-        error
-      );
-      //Si no pudimos validar el whatsapp, informarlo
-      return true
-    }
   }
 
   /*OPTIMIZAR */

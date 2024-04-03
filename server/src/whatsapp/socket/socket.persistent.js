@@ -76,7 +76,7 @@ const { clientId,contact,ID_MESSAGE_GROUP } = req.body;
   } catch (error) {
 
     console.log("error intentando enviar mensajes desde linea persistente",error);
-    res.status(error.status || 500).json(error.msg ? error.msg : {msg : `Error intenando activa la linea `});
+    res.status(error.status || 500).json(error.msg ? error.msg : {msg : `Error desconocido en lineas persistentes `});
 
   }
 };
