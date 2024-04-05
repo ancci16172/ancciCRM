@@ -37,6 +37,7 @@ export function OrderMessages() {
       >
         {messages.map((message, id) => {
           return (
+            !message.IS_DELETED &&
             <MessageContainer key={id} sortId={id}>
               <span className="overflow-hidden text-ellipsis max-w-[80%]">
                 {message.TEXT}

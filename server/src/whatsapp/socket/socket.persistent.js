@@ -51,17 +51,16 @@ export const activatePersistentLineBySocket = (socket) => async ({clientId}) => 
 
 export const sendMessageFromPersistentLine = async (req, res) => {
 
-
+  console.log("body",req.body);
 const { clientId,contact,ID_MESSAGE_GROUP } = req.body;
 
   try {
-    const isAvailable = existsInActiveSessions(clientId);
-    if (!isAvailable) throw{ status : 404, msg: `La sesion '${clientId}' no se encuentra activa` };
+    const client = getFromActiveSessions(clientId);
+    if (!client) throw{ status : 404, msg: `La sesion '${clientId}' no se encuentra activa` };
 
     const {messages} = await getMessageGroupDb(ID_MESSAGE_GROUP);
-    if(!messages) throw {status : 404 , msg : "El grupo de mensaje no existe o no contiene mensajes."}
+    if(!messages.length) throw {status : 404 , msg : "El grupo de mensaje no existe o no contiene mensajes."}
 
-    const client = getFromActiveSessions(clientId);
 
     checkMediaMessagesExists(messages);
     

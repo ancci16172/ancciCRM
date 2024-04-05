@@ -1,0 +1,15 @@
+{
+    "MODE" : "desarrollo",
+    "DB_CREDENTIALS" : {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "",
+        "database": "bgm_db",
+        "timezone" : "+00:00"
+    },
+    "PUPPETEER" : {
+        "headless" : false
+    }
+
+}

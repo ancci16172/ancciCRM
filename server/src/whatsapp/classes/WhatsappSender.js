@@ -15,7 +15,6 @@ export class WhatsappSender extends WhatsappClient {
     super({ clientId });
     this.shouldCheckWhatsapps = shouldCheckWhatsapps
     this.on("loading_screen", (percentage) => {
-      console.log("loading sending message");
       this.emit("loading", { msg: "Cargando...", percentage });
     });
 
@@ -87,7 +86,7 @@ export class WhatsappSender extends WhatsappClient {
           const msg = await this.sendMessage(contactPhone, message);
 
           this.messagesToTrack[this.messagesToTrack.length - 1].messages.push({
-            messageId: msg.id._serialized,
+            messageSendedId: msg.id._serialized,
             ack: msg.ack,
           });
         }
@@ -137,6 +136,7 @@ export class WhatsappSender extends WhatsappClient {
         //=> ack == -3, "valor desconocido"
         try {
           if (message.ack != 0 || message.isAbleToKnow == false) return; //Si ya esta definido el ACK no consulta nuevamente
+          console.log(message);
           const messageData = await this.getMessageById(message.messageSendedId);
           const ack = messageData.ack <= 0 ? messageData.ack : 1;
           message.ack = ack;

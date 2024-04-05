@@ -27,7 +27,6 @@ export const deleteLine = (req,res) => {
   const {clientId} = req.params;
   try {
     const response = deleteLineFolder(clientId);
-    console.log({response});
     res.status(200).json({msg : "Linea eliminada correctamente."})
   } catch (error) {
     
@@ -59,8 +58,9 @@ export const updateMessagesGroup = async (req, res) => {
   const { messages, groupId } = req.body;
 
   try {
+
     await updateMessagesGroupDb(messages, groupId);
-    res.status(200).json({ msg: "Los mensajes se actualizaron correctamente" });
+    res.status(200).json({ msg: "Cambios guardados" });
   } catch (error) {
     console.log(error);
     res.status(500).json({

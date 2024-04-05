@@ -39,29 +39,17 @@ export const useMessages = () => {
 
 
   const addMessage = (message) => {
-    setMessages([...messages, message]);
+    setMessages([...messages, {ES_MULTIMEDIA : 0,IS_DELETED : false,...message}]);
   };
 
-  // const sendMessages = async (contacts) => {
-  //   const messageData = {
-  //     clientId: selectedLine,
-  //     contacts,
-  //     ID_MESSAGE_GROUP: selectedMessageGroup.ID_MESSAGE_GROUP,
-  //   };
 
-  //   try {
-  //     const res = await sendMessagesRequest(messageData);
-  //     console.log("respuesta al evniar mensajes", res);
-  //   } catch (error) {
-  //     console.log("error no pudo enviar los mensajes", error);
-  //   }
-  // };
 
   const updateMessagesGroup = async () => {
     const { ID_MESSAGE_GROUP } = selectedMessageGroup;
     try {
       const res = await updateMessagesRequest(messages, ID_MESSAGE_GROUP);
       setChangedSaved(true);
+      fetchGroupData(ID_MESSAGE_GROUP)
       console.log("Respuesta al actaulizar mensajes", res);
     } catch (error) {
       console.log("Error no se pudieron guardar los mensajes.", error);
@@ -108,7 +96,7 @@ export const useMessages = () => {
   };
 
   const deleteMessage = (messageToDelete) => {
-    setMessages(messages.filter((msg) => msg != messageToDelete));
+    setMessages([...messages.filter((msg) => msg != messageToDelete),{...messageToDelete,IS_DELETED : true}]);
   };
 
   const editMessage = (messageToEdit, newMessageData) => {
@@ -123,6 +111,7 @@ export const useMessages = () => {
   };
 
   useEffect(() => {
+
     if(JSON.stringify(prevMessages) != JSON.stringify(messages))
       return setChangedSaved(false);
     return setChangedSaved(true)

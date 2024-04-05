@@ -31,7 +31,11 @@ router.delete("/persistentLine/:clientId",removePersistentLine)
 
 /*Messages Group */
 router.get("/getMessages/:groupId", getMessages);
+
+
 router.post("/updateMessagesGroup", updateMessagesGroup);
+
+
 router.get("/getAvailableMessageGroups", getAvailableMessageGroups);
 router.post("/insertNewMessageGroup", insertNewMessageGroup);
 router.delete("/deleteMessageGroup/:ID_MESSAGE_GROUP", deleteMessageGroup);

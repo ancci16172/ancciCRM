@@ -22,7 +22,7 @@ import { checkExistsInActiveSessions } from "../lib/activeSessions.js";
 
     checkMediaMessagesExists(messagesRaw);
     checkExistsInActiveSessions(clientId);
-
+    
     client = new WhatsappSender({ clientId,contacts,messages : messagesRaw,shouldCheckWhatsapps });
 
     const onSocketDisconected = async () => {

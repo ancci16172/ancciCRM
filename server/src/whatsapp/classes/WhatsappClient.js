@@ -4,6 +4,7 @@ import { join } from "path";
 import { mediaDirPath } from "../constants/dir.js";
 import { addInActiveSessions, deleteFromActiveSessions } from "../lib/activeSessions.js";
 import { formatMessages } from "../lib/formatMessages.js";
+import config from "config"
 const { Client, LocalAuth, MessageAck, MessageMedia ,} = whatsapp;
 
 export class WhatsappClient extends Client {
@@ -19,7 +20,7 @@ export class WhatsappClient extends Client {
       puppeteer: {
 
         executablePath: process.env.CHROME_EXECUTABLE,
-        headless: process.env.NODE_ENV=="production",
+        headless: config.get("PUPPETEER").headless,
         args: [
           "--no-sandbox",
           "--disable-setuid-sandbox",
@@ -152,6 +153,9 @@ export class WhatsappClient extends Client {
 
   async sendMessage(chatId, message) {
     try {
+      
+      await new Promise(res => setTimeout(res,Math.floor(Math.random() * (4000 - 2000 + 1) + 2000)));
+
       //Send regular message
       if (!message.ES_MULTIMEDIA)
         return await super.sendMessage(chatId, message.TEXT);
