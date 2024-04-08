@@ -55,7 +55,6 @@ export function AvailableMedia() {
   };
 
   const onSubmit = (values) => {
-    console.log("values on form submit", values);
     const formData = new FormData();
     formData.append("media", fileToSubmit);
     submitNewFile(formData);

@@ -81,8 +81,10 @@ export const updateMessagesGroupDb = async (messages, groupId) => {
   const formatedMessages = messages.map((message) => [
     message.TEXT,
     message.ES_MULTIMEDIA,
+    message.IS_CONTACT,
     message.IS_DELETED,
     message.ID_MESSAGE,
+    
     groupId,
   ]);
 
@@ -92,11 +94,12 @@ export const updateMessagesGroupDb = async (messages, groupId) => {
 
     const [response] = await connection.query(
       `
-    INSERT INTO Messages (TEXT,ES_MULTIMEDIA,IS_DELETED,ID_MESSAGE,ID_MESSAGE_GROUP) 
+    INSERT INTO Messages (TEXT,ES_MULTIMEDIA,IS_CONTACT,IS_DELETED,ID_MESSAGE,ID_MESSAGE_GROUP) 
     VALUES ?  ON DUPLICATE KEY UPDATE 
     TEXT = VALUES(TEXT),
     ES_MULTIMEDIA = VALUES(ES_MULTIMEDIA),
-    IS_DELETED = VALUES(IS_DELETED)`,
+    IS_DELETED = VALUES(IS_DELETED),
+    IS_CONTACT = VALUES(IS_CONTACT)`,
       [formatedMessages]
     );
 

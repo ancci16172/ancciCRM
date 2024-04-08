@@ -45,16 +45,11 @@ export const useWhatsappSocketSendMessages = ({ socket }) => {
     try {
       const res = await socket.emitWithAck("sendMessages/start", messageData);
 
-      console.log("respuesta al evniar mensajes", res);
     } catch (error) {
       console.log("error no pudo enviar los mensajes", error);
     }
   };
 
-
-  useEffect(() => {
-    console.log("tracked messages",trackedMessages);
-  },[trackedMessages])
 
 
 

@@ -10,12 +10,10 @@ export function PersistentLines() {
   const handleInactiveLine = (line) => async () => {
     toggleShowComponent("NewPhoneLine");
     const response = await activatePersistentLine(line);
-    console.log("🚀 ~ handleUnactiveLine ~ response:", response)
   };
 
   const handleActiveLine = (line) => async () => {
     const response = await removePersistentLine(line);
-    console.log("🚀 ~ handleActiveLine ~ response:", response)
   };
 
   return (

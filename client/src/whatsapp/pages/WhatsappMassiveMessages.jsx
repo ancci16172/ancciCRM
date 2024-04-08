@@ -11,6 +11,7 @@ import {EditMessage} from "../components/Mensajes/EditarMensaje.jsx"
 import { ContactList } from "../components/Mensajes/SendMessage/ContactList/ContactList.jsx";
 import { MessagesSent } from "../components/Mensajes/MessagesSent.jsx";
 import { AvailableMedia } from "../components/Media/AvailableMedia.jsx";
+import { AddContactMessage } from "../components/Mensajes/AddContactMessage.jsx";
 
 export function WhatsappMassiveMessaged() {
   const { showComponents } = useWhatsapp();
@@ -35,6 +36,7 @@ export function WhatsappMassiveMessaged() {
       {showComponents.ContactList && <ContactList/>}
       {showComponents.MessagesSent && <MessagesSent/>}
       {showComponents.AvailableMedia && <AvailableMedia/>}
+      {showComponents.AddContactMessage && <AddContactMessage/>}
 
     </Container>
   );

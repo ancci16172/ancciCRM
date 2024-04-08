@@ -26,7 +26,6 @@ export function GruposDisponibles() {
   };
 
   const handleSubmitSelection = () => {
-    // console.log({innerSelectedMessageGroup});
     fetchGroupData(innerSelectedMessageGroup.ID_MESSAGE_GROUP);
   };
   const handleShowAddNewMessageGroup = () => {

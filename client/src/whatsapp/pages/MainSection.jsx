@@ -7,7 +7,6 @@ export function MainSection() {
   const { toggleShowComponent } = useWhatsapp();
   return (
     <SectionContainer>
-      Vista previa:
       <GreenButtonBg onClick={() => toggleShowComponent("AvailableLines")}>
         Enviar mensajes
       </GreenButtonBg>

@@ -1,5 +1,5 @@
 
 
 .aside {
-    height: calc(100vh - var(--nav-height));
+    height: calc(100svh - var(--nav-height));
   }

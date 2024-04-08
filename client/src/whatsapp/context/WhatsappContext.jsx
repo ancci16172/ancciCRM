@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useLines } from "../hooks/useLines";
 import { useMessages } from "../hooks/useMessages.js";
@@ -23,7 +23,6 @@ export function WhatsappProvider() {
     availableLines,
     deleteLine,
     fetchAvaiableLines,
-    // activatePersistentLine,
     removePersistentLine,
   } = useLines({ socket });
   const {
@@ -60,9 +59,7 @@ export function WhatsappProvider() {
 
   const { availableMedia, submitNewFile, deleteMedia } = useMedia();
 
-  useEffect(() => {
-    console.log("available media", availableMedia);
-  }, [availableMedia]);
+
 
   const [showComponents, setShowComponents] = useState({
     NewPhoneLine: false,
@@ -76,6 +73,7 @@ export function WhatsappProvider() {
     ContactList: false,
     MessagesSent: false,
     AvailableMedia: false,
+    AddContactMessage : false
   });
 
   const toggleShowComponent = (ComponentName) => {

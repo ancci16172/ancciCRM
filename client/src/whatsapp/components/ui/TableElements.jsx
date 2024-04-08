@@ -4,7 +4,7 @@ export function Td({ children }) {
 export function Th({ children }) {
   return (
     // <th className=" [&:not(:first-child)]:pr-3">
-    <th className="">{children}</th>
+    <th>{children}</th>
   );
 }
 export function TdInput({ children }) {

@@ -4,7 +4,6 @@ import { GreenButton } from "../ui/GreenButton";
 import { OrderMessages } from "../Mensajes/OrderMessages";
 import { useState } from "react";
 import { useTimeouts } from "../../../shared/hooks/useTimeouts.js";
-import { OptionsCheckBox } from "../../../shared/components/ui/CheckBox/OptionsCheckBox.jsx";
 import { Options } from "./Options.jsx";
 
 export function AsideWhatsapp() {
@@ -19,28 +18,28 @@ export function AsideWhatsapp() {
   };
   clearOnTimeout(savedMessagesMessage, () => setSavedMessagesMessage(""), 1500);
 
-  const handleShowAddMedia = () => {
-    toggleShowComponent("AvailableMedia");
-  };
+  const handleAddMessage = () => toggleShowComponent("AddMessage");
 
-  
+  const handleShowAddMedia = () => toggleShowComponent("AvailableMedia");
+
+  const handleAddContact = () => toggleShowComponent("AddContactMessage")
 
   return (
     <Aside title={"Personalizar"}>
-      <GreenButton
-        className={"mt-1"}
-        onClick={() => toggleShowComponent("AddMessage")}
-      >
+      <GreenButton className={"mt-1"} onClick={handleAddMessage}>
         Agregar mensaje
       </GreenButton>
+
       <GreenButton className={"mt-1.5"} onClick={handleShowAddMedia}>
         Agregar multimedia
       </GreenButton>
+
+      <GreenButton className={"mt-1.5"} onClick={handleAddContact}>
+        Agregar contacto
+      </GreenButton>
+
       <OrderMessages />
-
-
-      <Options/>
-
+      <Options />
 
       <span className="mt-auto">
         {savedMessagesMessage && (

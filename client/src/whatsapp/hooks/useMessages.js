@@ -22,7 +22,6 @@ export const useMessages = () => {
   
 
   const messageVariables = useMemo(() => {
-    console.log("Calculando variables de mensajes");
     const matches = messages.reduce((acum, msg) => {
       const matches = msg.TEXT.match(/\{[^{}]+\}/g);
       if (matches) return [...acum, ...matches];
@@ -39,7 +38,7 @@ export const useMessages = () => {
 
 
   const addMessage = (message) => {
-    setMessages([...messages, {ES_MULTIMEDIA : 0,IS_DELETED : false,...message}]);
+    setMessages([...messages, {ES_MULTIMEDIA : 0,IS_DELETED : false,IS_CONTACT : false,...message}]);
   };
 
 
@@ -50,7 +49,6 @@ export const useMessages = () => {
       const res = await updateMessagesRequest(messages, ID_MESSAGE_GROUP);
       setChangedSaved(true);
       fetchGroupData(ID_MESSAGE_GROUP)
-      console.log("Respuesta al actaulizar mensajes", res);
     } catch (error) {
       console.log("Error no se pudieron guardar los mensajes.", error);
     }
@@ -59,7 +57,6 @@ export const useMessages = () => {
   const fetchGroupData = async (groupId) => {
     try {
       const groupData = await getMessagesRequest(groupId);
-      console.log("new selected message group", groupData.data);
       setSelectedMessageGroup(groupData.data);
       setMessages(groupData.data.messages);
       setPrevMessages(groupData.data.messages)
@@ -88,7 +85,6 @@ export const useMessages = () => {
   const deleteMessageGroup = async (ID_MESSAGE_GROUP) => {
     try {
       const response = await deleteMessageGroupRequest(ID_MESSAGE_GROUP);
-      console.log("Elimina grupo de mensajes ", response);
       fetchAvailableMessageGroup();
     } catch (error) {
       console.log(error);
