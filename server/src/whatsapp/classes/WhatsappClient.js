@@ -12,6 +12,7 @@ const { Client, LocalAuth, MessageAck, MessageMedia } = whatsapp;
 
 export class WhatsappClient extends Client {
   _clientId;
+  validatedUsers = {};
 
   constructor({ clientId }) {
     console.log("Generando cliente", clientId);
@@ -80,37 +81,41 @@ export class WhatsappClient extends Client {
     }
   }
 
-  async sendMessagesWithFormat(contact, messages) {
+  async sendMessagesWithFormat(contacts, messages) {
     const sendedMessagesData = [];
-    const { phoneNumber } = contact;
-    const formatedPhoneNumber = phoneNumber + "@c.us";
+    console.log(contacts[0]);
+    for await (const contact of contacts) {
+      const { phoneNumber } = contact;
+      const formatedPhoneNumber = phoneNumber + "@c.us";
 
-    //Si el whatsapp no es valido Retorna ACK = -4
-    const isValidContact = await this.isRegisteredUser(formatedPhoneNumber);
-    // const isValidContact = true
-    if (!isValidContact)
-      return messages.map((message) => ({
-        messageId: message.ID_MESSAGE,
-        to: formatedPhoneNumber,
-        from: this.info.wid.user,
-        ack: -4,
-      }));
+      //Si el whatsapp no es valido Retorna ACK = -4
+      const isValidContact = await this.isRegisteredUser(formatedPhoneNumber);
+      // const isValidContact = true
+      if (!isValidContact)
+        return messages.map((message) => ({
+          messageId: message.ID_MESSAGE,
+          to: formatedPhoneNumber,
+          from: this.info.wid.user,
+          ack: -4,
+        }));
 
-    //Envia los mensajes
-    const formatedMessages = formatMessages(contact, messages);
-    for (const message of formatedMessages) {
-      const msgProperties = await this.sendMessage(
-        formatedPhoneNumber,
-        message
-      );
+      //Envia los mensajes
+      const formatedMessages = formatMessages(contact, messages);
+      for (const message of formatedMessages) {
+        const msgProperties = await this.sendMessage(
+          formatedPhoneNumber,
+          message
+        );
 
-      sendedMessagesData.push({
-        messageSendedId: msgProperties.id._serialized,
-        messageId: message.ID_MESSAGE,
-        to: msgProperties._data.to.user,
-        from: msgProperties._data.from.user,
-        ack: msgProperties.ack,
-      });
+        sendedMessagesData.push({
+          messageSendedId: msgProperties.id._serialized,
+          messageId: message.ID_MESSAGE,
+          to: msgProperties._data.to.user,
+          from: msgProperties._data.from.user,
+          ack: msgProperties.ack,
+          contact,
+        });
+      }
     }
 
     //Rastrea si los mensajes se enviaron correctamente
@@ -159,7 +164,10 @@ export class WhatsappClient extends Client {
       //Send regular messag
       if (message.IS_CONTACT) {
         const contacts = await this.getContactsById(message.TEXT.split(","));
-        return await super.sendMessage(chatId, contacts.length > 1 ? contacts : contacts[0] );
+        return await super.sendMessage(
+          chatId,
+          contacts.length > 1 ? contacts : contacts[0]
+        );
       }
 
       //Send media
@@ -185,12 +193,14 @@ export class WhatsappClient extends Client {
     }
   }
 
+  //Almacena en cache los contactos que ya valide anteriormente en la instancia
   async isRegisteredUser(contactPhone) {
     try {
+
       console.log(`validando telefono ${contactPhone}`);
-      console.time(`get number validation for ${contactPhone}`);
+      if(this.validatedUsers[contactPhone]) return this.validatedUsers[contactPhone]      
       const isRegisteredUser = await super.isRegisteredUser(contactPhone);
-      console.timeEnd(`get number validation for ${contactPhone}`);
+      this.validatedUsers[contactPhone] = isRegisteredUser;
       return isRegisteredUser;
     } catch (error) {
       console.log(
@@ -198,6 +208,7 @@ export class WhatsappClient extends Client {
         error
       );
       //Si no pudimos validar el whatsapp, informarlo
+      this.validatedUsers[contactPhone] = true;
       return true;
     }
   }
@@ -207,9 +218,11 @@ export class WhatsappClient extends Client {
   }
 
   async getContactsById(numbers) {
-    return await Promise.all(numbers.map(async (rawPhone) => {
-      const formattedPhone = this.formatNumber(rawPhone);
-      return this.getContactById(formattedPhone);
-    }));
+    return await Promise.all(
+      numbers.map(async (rawPhone) => {
+        const formattedPhone = this.formatNumber(rawPhone);
+        return this.getContactById(formattedPhone);
+      })
+    );
   }
 }

@@ -1,27 +1,10 @@
 import { WhatsappPersistent } from "../classes/WhatsappPersistent.js";
 import {
-  existsInActiveSessions,
   getFromActiveSessions,
 } from "../lib/activeSessions.js";
 import { getMessageGroupDb } from "../model/whatsapp.model.js";
 import {checkMediaMessagesExists} from "../lib/media.js";
 
-export const activatePersistentLine = async (req, res) => {
-  const { clientId } = req.body;
-  try {
-    
-    /*Debe checkear que exista la carpeta con el clientId */
-    const persistentClient = new WhatsappPersistent({ clientId });
-    await persistentClient.initialize();
-    res.status(200).json({msg : `Linea persistente ${clientId} generada correctamente.`})
-
-    } catch (error) {
-    
-    console.log("General catch in persistent line", error);
-    res.status(500).json({msg : "Error inesperado intentango agregar una linea persistente"})
-    
-  }
-};
 
 export const activatePersistentLineBySocket = (socket) => async ({clientId}) => {
   try { 
@@ -51,8 +34,8 @@ export const activatePersistentLineBySocket = (socket) => async ({clientId}) => 
 
 export const sendMessageFromPersistentLine = async (req, res) => {
 
-  console.log("body",req.body);
-const { clientId,contact,ID_MESSAGE_GROUP } = req.body;
+
+const { clientId,contacts,ID_MESSAGE_GROUP } = req.body;
 
   try {
     const client = getFromActiveSessions(clientId);
@@ -66,7 +49,7 @@ const { clientId,contact,ID_MESSAGE_GROUP } = req.body;
     
 
     console.log("Enviando mensaje");
-    const response = await client.sendMessagesWithFormat(contact,messages);
+    const response = await client.sendMessagesWithFormat(contacts,messages);
     console.log("MensajeS enviados",response);
 
   
