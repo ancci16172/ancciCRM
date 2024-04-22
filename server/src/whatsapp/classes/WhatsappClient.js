@@ -83,7 +83,7 @@ export class WhatsappClient extends Client {
 
   async sendMessagesWithFormat(contacts, messages) {
     const sendedMessagesData = [];
-    console.log(contacts[0]);
+
     for await (const contact of contacts) {
       const { phoneNumber } = contact;
       const formatedPhoneNumber = phoneNumber + "@c.us";
@@ -91,13 +91,20 @@ export class WhatsappClient extends Client {
       //Si el whatsapp no es valido Retorna ACK = -4
       const isValidContact = await this.isRegisteredUser(formatedPhoneNumber);
       // const isValidContact = true
-      if (!isValidContact)
-        return messages.map((message) => ({
+      if (!isValidContact){
+        
+        messages.forEach((message) => {
+        sendedMessagesData.push({
+          messageSendedId: "NOT_SENT",
           messageId: message.ID_MESSAGE,
           to: formatedPhoneNumber,
           from: this.info.wid.user,
           ack: -4,
-        }));
+          contact,
+        });
+      })
+        continue;
+      }
 
       //Envia los mensajes
       const formatedMessages = formatMessages(contact, messages);
