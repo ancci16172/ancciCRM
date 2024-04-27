@@ -113,3 +113,10 @@ export const updateMessagesGroupDb = async (messages, groupId) => {
     connection.release();
   }
 };
+
+
+export const updateMessageGroupDb =async (NAME,ID_MESSAGE_GROUP) => {
+  const [res] = await pool.query("UPDATE MessageGroups SET NAME = ? where ID_MESSAGE_GROUP = ?",[NAME,ID_MESSAGE_GROUP]);
+  return res
+  
+}

@@ -8,7 +8,7 @@ import {
 import { GreenButtonBg } from "../ui/GreenButtonBg";
 import { useWhatsapp } from "../../context/WhatsappContext";
 import {useTimeouts} from "../../../shared/hooks/useTimeouts.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {PError} from "../../../shared/components/Form/PError.jsx"
 export function EditMessage() {
   
@@ -19,6 +19,9 @@ export function EditMessage() {
 
   // clearOnTimeout(successMessage,() => setSuccessMessage(null),2500)
   // clearOnTimeout(errors.TEXT,() => clearErrors(),2500)
+  useEffect(() => {
+    console.log("RENDERIZAOD DE EDIT MESSAGE")
+  },[])
 
   const onSubmit = (messageNewData) => {
     editMessage(message,messageNewData);

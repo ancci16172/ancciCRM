@@ -7,7 +7,7 @@ import {
   getAvailableMessageGroups,
   insertNewMessageGroup,
   deleteMessageGroup,
-  deleteLine,
+  deleteLine,updateMessageGroup
 } from "../controller/whatsapp.controller.js";
 import { insertLine } from "../socket/whatsapp.loginNewLine.js";
 import { sendMessages } from "../socket/whatsapp.sendMessages.js";
@@ -38,7 +38,7 @@ router.post("/updateMessagesGroup", updateMessagesGroup);
 router.get("/getAvailableMessageGroups", getAvailableMessageGroups);
 router.post("/insertNewMessageGroup", insertNewMessageGroup);
 router.delete("/deleteMessageGroup/:ID_MESSAGE_GROUP", deleteMessageGroup);
-
+router.post("/updateMessageGroup",updateMessageGroup)
 
 
 

@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import { PError } from "../../../shared/components/Form/PError.jsx";
 import {MessageAckMessages} from "../../constants/MessageAck.js"
 export function MessagesSent() {
-  // const { selectedLine, messageVariables, sendMessages, changedSaved,selectedMessageGroup } =  useWhatsapp();
+
   const { trackedMessages, sendingMessagesData ,selectedLine} = useWhatsapp();
 
   useEffect(() => {

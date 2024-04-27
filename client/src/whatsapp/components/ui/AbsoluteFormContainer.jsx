@@ -9,7 +9,7 @@ export function AbsoluteFormContainer({className, children }) {
         <>
             <TransparentBackground />
 
-            <div className={"absolute top-12 right-0 left-0 mx-auto border border-solid border-[#666]  max-w-[min(90%,22rem)] bg-white rounded-md z-[60] " + className}>
+            <div className={"absolute top-12 right-0 left-0 mx-auto border border-solid border-[#666]  max-w-[min(90vw,22rem)] bg-white rounded-md z-[60] " + className}>
                 {children}
             </div>
         </>

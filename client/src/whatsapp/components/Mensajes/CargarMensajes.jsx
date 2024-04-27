@@ -10,6 +10,8 @@ import {
 } from "../ui/WhatsappOptions/WhatsappOptions";
 import { TbEdit } from "react-icons/tb";
 import { DeleteCross } from "../ui/icons/DeleteCross.jsx";
+import { EditMessage } from "./EditarMensaje.jsx";
+import { EditMessageGroupName } from "./EditMessageGroupName.jsx";
 // Convertir en renderizado e intentar separar la logica
 export function GruposDisponibles() {
   const {
@@ -18,9 +20,12 @@ export function GruposDisponibles() {
     fetchGroupData,
     toggleShowComponent,deleteMessageGroup
   } = useWhatsapp();
-  const [innerSelectedMessageGroup, setInnerSelectedMessageGroup] =
-    useState(selectedMessageGroup);
+  const [innerSelectedMessageGroup, setInnerSelectedMessageGroup] = useState(selectedMessageGroup);
+  const [showEditName,setShowEditName] = useState(false);
+  const [editableMessageGroup,setEditableMessageGroup] = useState(null);
 
+
+  
   const handleChangeGroupButton = (group) => () => {
     setInnerSelectedMessageGroup(group);
   };
@@ -35,6 +40,14 @@ export function GruposDisponibles() {
     if(confirm(`¿Estas seguro de eliminar el grupo de mensajes '${NAME}'?\nse eliminar todos los registros y los mensajes asociados`))  
     deleteMessageGroup(ID_MESSAGE_GROUP)
   }
+
+  const handleShowEditName = (group) => () =>{
+    setEditableMessageGroup(group);
+    setShowEditName(true);
+  }
+
+  const handleBack = () =>  setShowEditName(false)
+  
 
 
   return (
@@ -51,7 +64,7 @@ export function GruposDisponibles() {
           >
             <span>{group.NAME}</span>
             <WhatsappIconsContainer>
-              <TbEdit title="Editar" className="text-blue-800 hover:text-blue-600" />
+              <TbEdit title="Editar" className="text-blue-800 hover:text-blue-600" onClick={handleShowEditName(group)} />
               <DeleteCross onClick={handleDeleteMessageGroup(group)}/>
             </WhatsappIconsContainer>
 
@@ -73,6 +86,7 @@ export function GruposDisponibles() {
           Nuevo
         </GreenButtonBg>
       </WhatsappOptionsContainerButton>
+      {showEditName && <EditMessageGroupName handleBack={handleBack} editableMessageGroup={editableMessageGroup}/>}
     </WhatsappOptions>
   );
 }

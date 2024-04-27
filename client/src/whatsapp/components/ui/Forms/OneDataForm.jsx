@@ -24,9 +24,10 @@ export function OneDataFormContainer({ children }) {
   return <div className="px-2 py-3">{children}</div>;
 }
 
-export function OneDataInput({registration,type,placeholder}) {
+export function OneDataInput({registration,type,placeholder,defaultValue}) {
   return (
     <input
+      defaultValue={defaultValue}
       type={type}
       className="bg-transparent outline-none placeholder:text-[#777777] flex-1"
       placeholder={placeholder}

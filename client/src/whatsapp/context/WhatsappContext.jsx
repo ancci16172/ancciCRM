@@ -41,6 +41,8 @@ export function WhatsappProvider() {
     messageVariables,
     setMessages,
     changedSaved,
+    updateMessageGroupName,
+    setEditableMessageGroup
   } = useMessages();
 
   const {
@@ -74,7 +76,7 @@ export function WhatsappProvider() {
     MessagesSent: false,
     AvailableMedia: false,
     AddContactMessage : false
-  });
+ });
 
   const toggleShowComponent = (ComponentName) => {
     if (showComponents[ComponentName] == undefined)
@@ -123,6 +125,8 @@ export function WhatsappProvider() {
         cancelQr,
         activatePersistentLine,
         removePersistentLine,
+        updateMessageGroupName,
+        setEditableMessageGroup
       }}
     >
       <Outlet />

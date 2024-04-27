@@ -19,7 +19,7 @@ export const getAvailableMessageGroupsRequest = async () => await axios.get(`/wh
 
 export const insertNewMessageGroupRequest = async (newGroupMessageName) => await axios.post(`/whatsapp/insertNewMessageGroup`,{newGroupMessageName});
 export const deleteMessageGroupRequest = async (ID_MESSAGE_GROUP) => await axios.delete(`/whatsapp/deleteMessageGroup/${ID_MESSAGE_GROUP}`)
-
+export const updateMessageGroupRequest = async (NAME,ID_MESSAGE_GROUP) => await axios.post(`/whatsapp/updateMessageGroup`,{NAME,ID_MESSAGE_GROUP})
 
 /*Media  */
 

@@ -6,7 +6,8 @@ import {
   updateMessagesGroupDb,
   getMessageGroupsDb,
   insertNewMessageGroupDb,
-  deleteMessageGroupDb,deleteLineFolder, getAvailableLinesFromFolders
+  deleteMessageGroupDb,deleteLineFolder, getAvailableLinesFromFolders,
+  updateMessageGroupDb
 } from "../model/whatsapp.model.js";
 
 export const getAvailableLines = (req, res) => {
@@ -109,6 +110,19 @@ export const deleteMessageGroup = async (req, res) => {
     });
   }
 };
+
+export const updateMessageGroup = async (req,res) =>{
+  try {
+    const {ID_MESSAGE_GROUP,NAME} = req.body;
+    const response = await updateMessageGroupDb(NAME,ID_MESSAGE_GROUP);
+    console.log(response);
+    res.status(200).json({msg : "Cambios guardados"});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({msg : "Hubo un error no se pudo cambiar el nombre del grupo"})
+  }
+}
+
 
 /*Traducir con SOCKETS */
 // export const sendMessages = async (req, res) => {

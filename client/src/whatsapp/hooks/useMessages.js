@@ -4,7 +4,7 @@ import {
   getAvailableMessageGroupsRequest,
   insertNewMessageGroupRequest,
   deleteMessageGroupRequest,
-  updateMessagesRequest,
+  updateMessagesRequest,updateMessageGroupRequest
 } from "../api/whatsapp.api";
 
 export const useMessages = () => {
@@ -19,7 +19,7 @@ export const useMessages = () => {
   const [changedSaved, setChangedSaved] = useState(true);
   const [availableMessageGroups, setAvaliableMessageGroups] = useState([]);
   const [editableMessage, setEditableMessage] = useState({});
-  
+  const [editableMessageGroup,setEditableMessageGroup] = useState(null);// : number = ID_MESSAGE_GROUP
 
   const messageVariables = useMemo(() => {
     const matches = messages.reduce((acum, msg) => {
@@ -59,7 +59,7 @@ export const useMessages = () => {
       const groupData = await getMessagesRequest(groupId);
       setSelectedMessageGroup(groupData.data);
       setMessages(groupData.data.messages);
-      setPrevMessages(groupData.data.messages)
+      setPrevMessages(groupData.data.messages);
     } catch (error) {
       console.log("ERROR FETCHMESSAGES", error);
     }
@@ -69,6 +69,7 @@ export const useMessages = () => {
     try {
       const messageGroups = await getAvailableMessageGroupsRequest();
       setAvaliableMessageGroups(messageGroups.data);
+      console.log("AVAILABLE GROUPS",messageGroups.data)
     } catch (error) {
       console.log(error);
     }
@@ -106,6 +107,19 @@ export const useMessages = () => {
     );
   };
 
+  const updateMessageGroupName = async (NAME,ID_MESSAGE_GROUP) =>{
+    try {
+
+        const response = await updateMessageGroupRequest(NAME,ID_MESSAGE_GROUP);
+        fetchAvailableMessageGroup()
+        return response.data
+
+      } catch (error) {
+        console.log(error);
+        return {isError : true,msg : error?.response.data?.msg || "Error inesperado."}
+      }
+  }
+
   useEffect(() => {
 
     if(JSON.stringify(prevMessages) != JSON.stringify(messages))
@@ -138,5 +152,7 @@ export const useMessages = () => {
     messageVariables,
     setMessages,
     changedSaved,
+    updateMessageGroupName,
+    setEditableMessageGroup
   };
 };
