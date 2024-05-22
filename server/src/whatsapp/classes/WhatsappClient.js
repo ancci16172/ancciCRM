@@ -17,9 +17,18 @@ export class WhatsappClient extends Client {
   constructor({ clientId }) {
     console.log("Generando cliente", clientId);
 
-    super({
+    //Version vieja nueva cache
+
+    super({ 
+      webVersion: "2.2411.2",
       authStrategy: new LocalAuth({ clientId }),
-      puppeteer: {
+
+      webVersionCache: {
+        type: 'remote',
+        remotePath: 'https://raw.githubusercontent.com/guigo613/alternative-wa-version/main/html/2.2411.2.html',
+      },
+      restartOnAuthFail: true,
+      puppeteer: { 
         executablePath: process.env.CHROME_EXECUTABLE,
         headless: config.get("PUPPETEER").headless,
         args: [
@@ -31,8 +40,43 @@ export class WhatsappClient extends Client {
           "--ignore-certificate-errors",
         ],
       },
-      webVersion: "2.2411.2",
     });
+
+
+    //Nueva version web
+
+    /* super({ 
+      webVersion: "2.2412.54v2",
+      authStrategy: new LocalAuth({ clientId }),
+
+      webVersionCache: {
+        type: 'remote',
+        remotePath: 'https://raw.githubusercontent.com/guigo613/alternative-wa-version/main/html/2.2412.54v2.html',
+      },
+      restartOnAuthFail: true,
+      puppeteer: { 
+        executablePath: process.env.CHROME_EXECUTABLE,
+        headless: config.get("PUPPETEER").headless,
+
+      },
+   });*/
+
+    // super({
+    //   authStrategy: new LocalAuth({ clientId }),
+    //   puppeteer: {
+    //     executablePath: process.env.CHROME_EXECUTABLE,
+    //     headless: config.get("PUPPETEER").headless,
+    //     args: [
+    //       "--no-sandbox",
+    //       "--disable-setuid-sandbox",
+    //       "--unhandled-rejections=strict",
+    //       "--disable-features=site-per-process",
+    //       "--disable-setuid-sandbox",
+    //       "--ignore-certificate-errors",
+    //     ],
+    //   },
+    //   webVersion: "2.2411.2",
+    // });
 
     this._clientId = clientId;
 
