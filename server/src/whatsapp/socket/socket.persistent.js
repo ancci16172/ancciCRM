@@ -48,11 +48,12 @@ const { clientId,contacts,ID_MESSAGE_GROUP } = req.body;
     checkMediaMessagesExists(messages);
     
 
-    console.log("Enviando mensaje");
+//    console.log("Enviando mensaje");
+    console.log("apunto de enviar mensajes",req.body)
     const response = await client.sendMessagesWithFormat(contacts,messages);
     console.log("MensajeS enviados",response);
-
-  
+    
+    
     res.status(200).json(response);
 
   } catch (error) {

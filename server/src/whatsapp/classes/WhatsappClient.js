@@ -20,12 +20,12 @@ export class WhatsappClient extends Client {
     //Version vieja nueva cache
 
     super({ 
-      webVersion: "2.2411.2",
+      webVersion: "2.2412.54v2",
       authStrategy: new LocalAuth({ clientId }),
 
       webVersionCache: {
         type: 'remote',
-        remotePath: 'https://raw.githubusercontent.com/guigo613/alternative-wa-version/main/html/2.2411.2.html',
+        remotePath: 'https://raw.githubusercontent.com/guigo613/alternative-wa-version/main/html/2.2412.54v2.html',
       },
       restartOnAuthFail: true,
       puppeteer: { 
