@@ -10,8 +10,9 @@ export const activatePersistentLineBySocket = (socket) => async ({clientId}) => 
   try { 
 
     /*Debe checkear que exista la carpeta con el clientId */
+    
     const persistentClient = new WhatsappPersistent({ clientId });
-     
+    
     persistentClient.on("loading", (payload) => {
       socket.emit("loading", payload);
     });
@@ -21,8 +22,10 @@ export const activatePersistentLineBySocket = (socket) => async ({clientId}) => 
     })
 
       
+    console.log("inizializando")
+    await persistentClient.initialize();
+    console.log("inizializado")
 
-    persistentClient.initialize();
   } catch (error) {
     
     console.log("General catch in persistent line", error);

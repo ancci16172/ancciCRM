@@ -15,6 +15,7 @@ export class WhatsappClient extends Client {
   validatedUsers = {};
 
   constructor({ clientId }) {
+
     console.log("Generando cliente", clientId);
 
     //Version vieja nueva cache
@@ -35,7 +36,6 @@ export class WhatsappClient extends Client {
         executablePath: process.env.CHROME_EXECUTABLE,
         headless: config.get("PUPPETEER").headless,
         args: [
-          "--no-sandbox",
           "--disable-setuid-sandbox",
           "--unhandled-rejections=strict",
           "--disable-features=site-per-process",
@@ -46,40 +46,7 @@ export class WhatsappClient extends Client {
     });
 
 
-    //Nueva version web
-
-    /* super({ 
-      webVersion: "2.2412.54v2",
-      authStrategy: new LocalAuth({ clientId }),
-
-      webVersionCache: {
-        type: 'remote',
-        remotePath: 'https://raw.githubusercontent.com/guigo613/alternative-wa-version/main/html/2.2412.54v2.html',
-      },
-      restartOnAuthFail: true,
-      puppeteer: { 
-        executablePath: process.env.CHROME_EXECUTABLE,
-        headless: config.get("PUPPETEER").headless,
-
-      },
-   });*/
-
-    // super({
-    //   authStrategy: new LocalAuth({ clientId }),
-    //   puppeteer: {
-    //     executablePath: process.env.CHROME_EXECUTABLE,
-    //     headless: config.get("PUPPETEER").headless,
-    //     args: [
-    //       "--no-sandbox",
-    //       "--disable-setuid-sandbox",
-    //       "--unhandled-rejections=strict",
-    //       "--disable-features=site-per-process",
-    //       "--disable-setuid-sandbox",
-    //       "--ignore-certificate-errors",
-    //     ],
-    //   },
-    //   webVersion: "2.2411.2",
-    // });
+    
 
     this._clientId = clientId;
 
@@ -92,11 +59,14 @@ export class WhatsappClient extends Client {
       });
     });
 
+
+
+
     this.on("qr", () => {
       console.log("qr event");
     });
     this.on("disconnected", () => {
-      console.log("disconnected");
+      console.log("De desconecto la linea de whatsapp");
     });
     this.on("auth_failure", () => {
       console.log("auth_failure");
@@ -107,8 +77,13 @@ export class WhatsappClient extends Client {
   }
 
   async initialize() {
-    await super.initialize();
-    addInActiveSessions(this._clientId, this);
+    try{
+
+      await super.initialize();
+      addInActiveSessions(this._clientId, this);
+    }catch(error){
+      console.log("catch on initialize", error);
+    }
   }
 
   async destroy() {
