@@ -41,6 +41,7 @@ export class WhatsappClient extends Client {
           "--disable-features=site-per-process",
           "--disable-setuid-sandbox",
           "--ignore-certificate-errors",
+          "--no-sandbox",
         ],
       },
     });
