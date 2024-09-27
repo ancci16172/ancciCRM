@@ -107,9 +107,9 @@ export class WhatsappClient extends Client {
     const sendedMessagesData = [];
 
     for await (const contact of contacts) {
-      const { phoneNumber } = contact;
-      const formatedPhoneNumber = phoneNumber + "@c.us";
-
+      const { phoneNumber,isGroup } = contact;
+      const formatedPhoneNumber = phoneNumber + (isGroup ? "@g.us" : "@c.us");
+      console.log({formatedPhoneNumber})
       //Si el whatsapp no es valido Retorna ACK = -4
       const isValidContact = await this.isRegisteredUser(formatedPhoneNumber);
       // const isValidContact = true
